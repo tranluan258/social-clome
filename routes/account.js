@@ -29,8 +29,9 @@ router.post('/login', async function (req, res, next) {
   } else if (!emailValidator.validate(acc.email)) {
     error = "Email không đúng định dạng"
   } else {
-    var account = await accountModel.findOne({ email: acc.email, password: acc.password })
-    if (account) {
+    var account = await accountModel.findOne({ email: acc.email })
+    let match = bcrypt.compareSync(acc.password, account.password)
+    if (match) {
       if (acc.remember == 'on') {
         res.cookie("email", account.email, { maxAge: 36000000, httpOnly: true })
       }
@@ -46,18 +47,11 @@ router.post('/login', async function (req, res, next) {
   }
 })
 
+
 router.get('/logout', (req, res, next) => {
   req.session.destroy(function (err) {
     res.redirect('login')
   })
-})
-
-router.get('/register', (req, res, next) => {
-  res.render('register', { error: "" })
-})
-
-router.post('/register', async (req, res, next) => {
-  
 })
 
 module.exports = router

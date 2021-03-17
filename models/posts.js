@@ -11,3 +11,7 @@ const postSchema = mongo.Schema({
     urlImg: String,
     idVideos: String
 })
+
+const postModel = mongo.model('post', postSchema)
+
+module.exports = postModel

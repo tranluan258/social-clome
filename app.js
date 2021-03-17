@@ -11,9 +11,8 @@ const passport = require('passport');
 const flash = require('express-flash')
 require('./services/passport');
 
-const indexRouter = require('./routes/index');
+const siteRouter = require('./routes/site');
 const accountRouter = require('./routes/account');
-const testRouter = require('./routes/test');
 
 const app = express();
 
@@ -32,9 +31,13 @@ app.use(passport.session());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({ secret: 'password_secret', path: '/', httpOnly: true, secure: false, maxAge: null }))
 
-app.use('/', indexRouter);
+app.use((req, res, next) => {
+  req.vars =  {root: __dirname}
+  next()
+})
+
+app.use('/', siteRouter);
 app.use('/account', accountRouter);
-app.use('/test', testRouter);
 require('./routes/authRoutes')(app);
 
 // catch 404 and forward to error handler

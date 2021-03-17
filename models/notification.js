@@ -7,5 +7,6 @@ const notificationSchema = mongo.Schema({
         name: String,
     },
     title: String,
-    body: String
+    body: String,
+    urlFile: String,
 })
