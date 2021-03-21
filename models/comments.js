@@ -1,16 +1,13 @@
-const mongo = require('mongoose')
+const mongoose = require('mongoose')
 
-const commentsSchema = mongo.Schema({
+const commentsSchema = mongoose.Schema({
     id: String,
-    user:{
-        id: String,
-        name: String,
-    },
+    email: String,
     idPost: String,
     time: Date,
     body: String,
 })
 
-const commentsModel = mongo.model('comments', commentsSchema)
+const commentsModel = mongoose.model('comments', commentsSchema)
 
 module.exports = commentsModel

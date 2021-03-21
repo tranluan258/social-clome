@@ -4,7 +4,7 @@ const keys = require('../configs/keys')
 const User = require('../models/user')
 
 passport.serializeUser((user, done) => {
-    done(null, user.id)
+    done(null, user._id)
 });
 
 passport.deserializeUser((id, done) => {
@@ -18,15 +18,15 @@ passport.use(new GoogleStrategy({
     clientSecret: keys.clientSecret,
     callbackURL: '/auth/google/callback'
 }, (accessToken, refreshToken, profile, done) => {
-    User.findOne({googleId: profile.id}).then(existingUser => {
+    User.findOne({id: profile.id}).then(existingUser => {
         if(profile._json.hd == "student.tdtu.edu.vn"){
             if (existingUser) {
                 done(null, existingUser);
             } else {
-                new User({googleId: profile.id, name: profile._json.name, email: profile._json.email,img: profile._json.picture, type: '0'}).save().then(user => done(null, user));
+                new User({id: profile.id, name: profile._json.name, email: profile._json.email,img: profile._json.picture, type: '0'}).save().then(user => done(null, user));
             }
         }else{
             done(null, null)
         }
-    });
-}));
+    })
+}))

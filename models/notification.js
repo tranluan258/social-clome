@@ -1,12 +1,13 @@
-const mongo = require('mongoose')
+const mongoose = require('mongoose')
 
-const notificationSchema = mongo.Schema({
+const notificationSchema = mongoose.Schema({
     id: String,
-    user: {
-        id: String,
-        name: String,
-    },
+    email: String,
     title: String,
     body: String,
     urlFile: String,
 })
+
+const notificationsModel = mongoose.model('notification', notificationSchema)
+
+module.exports = notificationsModel

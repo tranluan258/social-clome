@@ -1,10 +1,10 @@
-const mongo = require('mongoose')
+const mongoose = require('mongoose')
 
-const facultySchema = mongo.Schema({
+const facultySchema = mongoose.Schema({
     id: String,
     name : String,
 })
 
-const facultyModel = mongo.model('faculty', facultySchema)
+const facultyModel = mongoose.model('faculty', facultySchema)
 
 module.exports = facultyModel

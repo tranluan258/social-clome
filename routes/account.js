@@ -2,11 +2,12 @@ const express = require('express');
 const uuid = require('short-uuid');
 const bcrypt = require('bcrypt')
 const accountModel = require('../models/accounts')
+const userModel = require('../models/user')
 const emailValidator = require('email-validator')
 const router = express.Router();
 
 /* GET users listing. */
-router.get('/login', function (req, res, next) {
+router.get('/login', (req, res, next) => {
   var error = req.flash('error')
   if (req.session.passport) {
     res.redirect('../')
@@ -17,9 +18,9 @@ router.get('/login', function (req, res, next) {
       res.redirect('../')
     }
   }
-});
+})
 
-router.post('/login', async function (req, res, next) {
+router.post('/login', async (req, res, next) => {
   var error = req.flash('error')
   var acc = req.body
   if (acc.email === "") {
@@ -47,6 +48,15 @@ router.post('/login', async function (req, res, next) {
   }
 })
 
+router.get('/profile/:id', async (req, res) => {
+  let id = req.params.id
+  let user = await accountModel.findOne({ id: id}) || await userModel.findOne({ googleId: id})
+  res.json({user: user})
+})
+
+router.post('/profile/:id', async (req, res) => {
+  
+})
 
 router.get('/logout', (req, res, next) => {
   req.session.destroy(function (err) {

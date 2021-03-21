@@ -1,17 +1,14 @@
-const mongo = require('mongoose')
+const mongoose = require('mongoose')
 
-const postSchema = mongo.Schema({
-    user: {
-        id: String,
-        name: String,
-    },
-    title: String,
-    body: String,
+const postSchema = mongoose.Schema({
+    id: String,
+    email: String,
+    data: String,
     time: Date,
-    urlImg: String,
+    urlFile: String,
     idVideos: String
 })
 
-const postModel = mongo.model('post', postSchema)
+const postModel = mongoose.model('post', postSchema)
 
 module.exports = postModel

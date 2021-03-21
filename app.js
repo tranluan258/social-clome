@@ -13,6 +13,7 @@ require('./services/passport');
 
 const siteRouter = require('./routes/site');
 const accountRouter = require('./routes/account');
+const postRouter = require('./routes/post')
 
 const app = express();
 
@@ -36,9 +37,10 @@ app.use((req, res, next) => {
   next()
 })
 
-app.use('/', siteRouter);
+app.use('/post',postRouter)
 app.use('/account', accountRouter);
 require('./routes/authRoutes')(app);
+app.use('/', siteRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

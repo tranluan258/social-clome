@@ -9,9 +9,11 @@
 <body>
     <p><%= user.name %></p>
     <p><%= user.email %></p>
-    <p><%= user._id %></p>
+    <p><%= user.id %></p>
     <% if (user.img) { %>
         <img src="<%= user.img %>" alt="">
+    <% } else {%>
+        <img src="" alt="">
     <% } %>
 </body>
 </html>
