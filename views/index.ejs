@@ -15,5 +15,15 @@
     <% } else {%>
         <img src="" alt="">
     <% } %>
+
+    <% post.forEach(p => { %>
+        <p><%= p.data %></p>
+        <% if (p.urlFile.length > 0) { %>
+            <img src="<%= p.urlFile %>" alt="">
+        <% } %>
+        <% if (p.idVideos.length > 0) { %>
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/<%= p.idVideos %>" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`)
+        <% } %>    
+    <% }) %>
 </body>
 </html>

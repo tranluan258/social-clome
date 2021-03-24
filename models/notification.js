@@ -2,9 +2,11 @@ const mongoose = require('mongoose')
 
 const notificationSchema = mongoose.Schema({
     id: String,
+    idFaculty: String,
     email: String,
+    time: Date,
     title: String,
-    body: String,
+    data: String,
     urlFile: String,
 })
 

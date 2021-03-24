@@ -3,6 +3,7 @@ const router = express.Router();
 const userModel = require('../models/user')
 const fs = require('fs')
 const accountModel = require('../models/accounts')
+const postModel = require('../models/posts')
 /* GET home page. */
 router.get('/', async function (req, res, next) {
   if (!req.session.passport && !req.session.email) {
@@ -23,9 +24,8 @@ router.get('/', async function (req, res, next) {
       let email = req.session.email
       user = await accountModel.findOne({ email: email })
     }
-
-    /// query data render 
-    res.render('index', { user })
+    const post = await postModel.find({ email: user.email })
+    res.render('index', { user,post })
 
   }
 })

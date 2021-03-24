@@ -12,6 +12,7 @@ const flash = require('express-flash')
 require('./services/passport');
 
 const siteRouter = require('./routes/site');
+const commentRouter = require('./routes/comments')
 const accountRouter = require('./routes/account');
 const postRouter = require('./routes/post')
 
@@ -39,6 +40,7 @@ app.use((req, res, next) => {
 
 app.use('/post',postRouter)
 app.use('/account', accountRouter);
+app.use('/comments', commentRouter);
 require('./routes/authRoutes')(app);
 app.use('/', siteRouter);
 

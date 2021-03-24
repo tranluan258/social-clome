@@ -5,49 +5,48 @@ const upload = multer({ dest: __dirname + '/uploads/' })
 const userModel = require('../models/user')
 const accountModel = require('../models/accounts')
 const postModel = require('../models/posts')
+const commentsModel = require('../models/comments')
 const fs = require('fs')
 const uuid = require('short-uuid')
 const validator = require('youtube-validator')
 
 router.post('/upload', upload.single('attachment'), async (req, res) => {
-  const { email, path, YoutubeId, data } = req.body
+  const { email, YoutubeId, data } = req.body
   const file = req.file
   if (!email || !data) {
     res.json({ code: 1, message: 'Du lieu khong hop le' })
   }
 
-  const user = await accountModel.findOne({ email: email}) || userModel.findOne({ email: email })
+  const user = await accountModel.findOne({ email: email }) || userModel.findOne({ email: email })
 
-  if(user){
+  if (user) {
     if (file) {
       const { root } = req.vars
-      const currentPath = `${root}/users/${email}/${path}`
-  
+      const currentPath = `${root}/users/${email}`
+
       if (!fs.existsSync(currentPath)) {
         res.json({ code: 2, message: "Duong dan hong hop le" })
       }
-  
+
       let name = file.originalname
       let newPath = currentPath + "/" + name
       fs.renameSync(file.path, newPath)
-  
       new postModel({
         id: uuid.generate(),
         email: email,
         data: data,
         time: new Date().getTime(),
         urlFile: newPath,
+        nameFile: name,
         idVideos: ""
       }).save()
         .then(() => res.json({ code: 0, message: "Them thanh cong" }))
         .catch(() => res.json({ code: 3, message: "Them that bai" }))
-    }
-  
-    if (YoutubeId != "") {
-      validator.validateVideoID(YoutubeId, (result,err) => {
-        if(err){
-  
-        }else{
+    } else if (YoutubeId != "") {
+      validator.validateVideoID(YoutubeId, (result, err) => {
+        if (err) {
+          res.json({ code: 1, message: "Du lieu khong hop le" })
+        } else {
           new postModel({
             id: uuid.generate(),
             email: email,
@@ -56,12 +55,38 @@ router.post('/upload', upload.single('attachment'), async (req, res) => {
             urlFile: "",
             idVideos: YoutubeId
           }).save()
-          .then(() => res.json({ code: 0, message: "Them thanh cong" }))
-          .catch(() => res.json({ code: 3, message: "Them that bai" }))
+            .then(() => res.json({ code: 0, message: "Them thanh cong" }))
+            .catch(() => res.json({ code: 3, message: "Them that bai" }))
         }
       })
+    } else {
+      new postModel({
+        id: uuid.generate(),
+        email: email,
+        data: data,
+        time: new Date().getTime(),
+        urlFile: "",
+        idVideos: YoutubeId
+      }).save()
+        .then(() => res.json({ code: 0, message: "Them thanh cong" }))
+        .catch(() => res.json({ code: 3, message: "Them that bai" }))
     }
+
   }
+})
+
+router.delete('/delete/:id', (req, res) => {
+  const id = req.params.id
+  postModel.deleteOne({ id: id })
+    .then(() => {
+      commentsModel.deleteMany({ idPost: id })
+        .then(() => res.json({ code: 0, message: "Xoa thanh cong" }))
+    }).catch(() => res.json({ code: 1, message: "Xoa that bai" }))
+    .catch((err) => res.json({ code: 1, message: "Xoa that bai" }))
+})
+
+router.put('/update',(req, res) => {
+  
 })
 
 module.exports = router

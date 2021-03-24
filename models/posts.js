@@ -6,6 +6,7 @@ const postSchema = mongoose.Schema({
     data: String,
     time: Date,
     urlFile: String,
+    nameFile: String,
     idVideos: String
 })
 

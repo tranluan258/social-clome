@@ -31,14 +31,19 @@ router.post('/login', async (req, res, next) => {
     error = "Email không đúng định dạng"
   } else {
     var account = await accountModel.findOne({ email: acc.email })
-    let match = bcrypt.compareSync(acc.password, account.password)
-    if (match) {
-      if (acc.remember == 'on') {
-        res.cookie("email", account.email, { maxAge: 36000000, httpOnly: true })
+    if (account) {
+      let match = bcrypt.compareSync(acc.password, account.password)
+      if (match) {
+        if (acc.remember == 'on') {
+          res.cookie("email", account.email, { maxAge: 36000000, httpOnly: true })
+        }
+        req.session.email = acc.email
+        req.app.use(express.static(`${req.vars.root}/users/${account.email}`))
+        res.redirect("/")
+      } else {
+        error = "Sai email hoặc mật khẩu"
       }
-      req.session.email = acc.email
-      res.redirect("../")
-    } else {
+    }else{
       error = "Sai email hoặc mật khẩu"
     }
   }
@@ -50,12 +55,12 @@ router.post('/login', async (req, res, next) => {
 
 router.get('/profile/:id', async (req, res) => {
   let id = req.params.id
-  let user = await accountModel.findOne({ id: id}) || await userModel.findOne({ googleId: id})
-  res.json({user: user})
+  let user = await accountModel.findOne({ id: id }) || await userModel.findOne({ googleId: id })
+  res.json({ user: user })
 })
 
 router.post('/profile/:id', async (req, res) => {
-  
+
 })
 
 router.get('/logout', (req, res, next) => {

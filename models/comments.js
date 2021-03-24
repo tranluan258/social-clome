@@ -5,7 +5,7 @@ const commentsSchema = mongoose.Schema({
     email: String,
     idPost: String,
     time: Date,
-    body: String,
+    data: String,
 })
 
 const commentsModel = mongoose.model('comments', commentsSchema)
