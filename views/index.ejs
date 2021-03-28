@@ -17,13 +17,22 @@
     <% } %>
 
     <% post.forEach(p => { %>
+        <p><%= p.user.name %></p>
         <p><%= p.data %></p>
         <% if (p.urlFile.length > 0) { %>
-            <img src="<%=p.email %>/<%= p.nameFile %>" alt="">
+            <img src="<%=p.user.email %>/<%= p.nameFile %>" alt="">
         <% } %>
         <% if (p.idVideos.length > 0) { %>
             <iframe width="560" height="315" src="https://www.youtube.com/embed/<%= p.idVideos %>" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`)
-        <% } %>    
+        <% } %>
+        <div>Đây là phần cmt</div>
+        <% comments.forEach(cmt => { %>
+            <% if (cmt.idPost == p.id) { %>
+                <p><%= cmt.user.name %></p>
+                <p><%= cmt.data %></p>
+            <% } %>
+        <% }) %>
+        <div>Phân cách 2 post</div>
     <% }) %>
 </body>
 </html>

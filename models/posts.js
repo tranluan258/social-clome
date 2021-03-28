@@ -2,7 +2,11 @@ const mongoose = require('mongoose')
 
 const postSchema = new mongoose.Schema({
     id: String,
-    email: String,
+    user: {
+        id: String,
+        email: String,
+        name: String,
+    },
     data: String,
     time: Date,
     urlFile: String,

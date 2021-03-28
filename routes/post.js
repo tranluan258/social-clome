@@ -10,7 +10,7 @@ const fs = require('fs')
 const uuid = require('short-uuid')
 const validator = require('youtube-validator')
 
-router.post('/upload', upload.single('attachment'), async (req, res) => {
+router.post('/add', upload.single('attachment'), async (req, res) => {
   const { email, YoutubeId, data } = req.body
   const file = req.file
   if (!email || !data) {
@@ -33,7 +33,11 @@ router.post('/upload', upload.single('attachment'), async (req, res) => {
       fs.renameSync(file.path, newPath)
       new postModel({
         id: uuid.generate(),
-        email: email,
+        user: {
+          id: user.id,
+          email: user.email,
+          name: user.name,
+        },
         data: data,
         time: new Date().getTime(),
         urlFile: newPath,
@@ -49,7 +53,11 @@ router.post('/upload', upload.single('attachment'), async (req, res) => {
         } else {
           new postModel({
             id: uuid.generate(),
-            email: email,
+            user: {
+              id: user.id,
+              email: user.email,
+              name: user.name,
+            },
             data: data,
             time: new Date().getTime(),
             urlFile: "",
@@ -62,11 +70,15 @@ router.post('/upload', upload.single('attachment'), async (req, res) => {
     } else {
       new postModel({
         id: uuid.generate(),
-        email: email,
+        user: {
+          id: user.id,
+          email: user.email,
+          name: user.name,
+        },
         data: data,
         time: new Date().getTime(),
         urlFile: "",
-        idVideos: YoutubeId
+        idVideos: ""
       }).save()
         .then(() => res.json({ code: 0, message: "Them thanh cong" }))
         .catch(() => res.json({ code: 3, message: "Them that bai" }))
@@ -75,17 +87,25 @@ router.post('/upload', upload.single('attachment'), async (req, res) => {
   }
 })
 
-router.delete('/delete/:id', (req, res) => {
+router.delete('/delete/:id', async (req, res) => {
   const id = req.params.id
-  postModel.deleteOne({ id: id })
+  const post = await postModel.findOne({id : id})
+  if(post){
+    postModel.deleteOne({ id: id })
     .then(() => {
       commentsModel.deleteMany({ idPost: id })
-        .then(() => res.json({ code: 0, message: "Xoa thanh cong" }))
+        .then(() =>{
+          if(fs.existsSync(post.urlFile)){
+            fs.unlinkSync(post.urlFile)
+          }
+          res.json({ code: 0, message: "Xoa thanh cong" })
+        })
     }).catch(() => res.json({ code: 1, message: "Xoa that bai" }))
     .catch((err) => res.json({ code: 1, message: "Xoa that bai" }))
+  }
 })
 
-router.put('/update',(req, res) => {
+router.post('/update',(req, res) => {
   
 })
 

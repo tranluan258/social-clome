@@ -2,6 +2,7 @@ const express = require('express')
 const uuid  = require('short-uuid')
 const router = express.Router()
 const notificationModel = require('../models/notification')
+const accountModel = require('../models/accounts')
 
 router.get('/:id', async (req, res) => {
     const id = req.params.id
@@ -14,10 +15,19 @@ router.post('/add', async (req, res) => {
     if(!idFaculty || !email || !title || !data) {
         res.json({code: 2,  message: "Du lieu khong hop le"})
     }
+    const user = await accountModel.findOne({ email: email })
+    const faculty =  await facultyModel.findOne({id: idFaculty})
     new notificationModel({
         id: uuid.generate(),
-        idFaculty: idFaculty,
-        email: email,
+        faculty: {
+            idFaculty: faculty.id,
+            name: faculty.name
+        },
+        user: {
+            id: user.id,
+            email: user.email,
+            name: user.name,
+        },
         time: new Date().getTime(),
         title: title,
         data: data

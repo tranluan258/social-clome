@@ -2,7 +2,11 @@ const mongoose = require('mongoose')
 
 const commentsSchema = new mongoose.Schema({
     id: String,
-    email: String,
+    user: {
+        id: String,
+        email: String,
+        name: String,
+    },
     idPost: String,
     time: Date,
     data: String,

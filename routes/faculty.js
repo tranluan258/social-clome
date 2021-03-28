@@ -23,13 +23,12 @@ router.get('/:id', validatorLogin, async (req, res) => {
     let number = req.params.number || 1
     let id = req.params.id
     let faculty = await facultyModel.findOne({id: id})
-    let arrFaculty = await facultyModel.find()
     notificationModel
-    .find()
+    .find({"faculty.idFaculty" : id})
     .skip((limit * number) - limit)
     .exec((err, notification) => {
         notificationModel.countDocuments((err,count) => {
-            res.render('faculty', {arrFaculty, faculty, notification, currentPage: number, countPage: Math.ceil(count/limit) })
+            res.render('faculty', {faculty, notification, currentPage: number, countPage: Math.ceil(count/limit) })
         })
     })
 })

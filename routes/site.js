@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const userModel = require('../models/user')
 const fs = require('fs')
+const commentsModel = require('../models/comments')
 const accountModel = require('../models/accounts')
 const postModel = require('../models/posts')
 /* GET home page. */
@@ -24,8 +25,11 @@ router.get('/', async function (req, res, next) {
       let email = req.session.email
       user = await accountModel.findOne({ email: email })
     }
+    
+    req.session.user = user
     const post = await postModel.find().sort({time: -1}).limit(10)
-    res.render('index', { user,post })
+    const comments = await commentsModel.find().sort({time: -1})
+    res.render('index', { user,post,comments })
   }
 })
 

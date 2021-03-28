@@ -6,7 +6,13 @@ const accountSchema = new mongoose.Schema({
     email: String,
     password: String,
     img: String,
-    type: String
+    type: String,
+    arrFaculty: [
+        {
+            idFaculty: String,
+            name: String,
+        }
+    ]
 })
 
 const account = mongoose.model('Account',accountSchema)

@@ -6,14 +6,19 @@ const postModel = require('../models/posts')
 const commentsModel = require('../models/comments')
 const uuid = require('short-uuid')
 
-router.post('/add', (req, res) => {
+router.post('/add', async (req, res) => {
     const { idPost, email, data } = req.body
     if (!idPost || !email || !data) {
       res.json({ code: 1, message: "Du lieu khong hop le" })
     }
+    const user = await accountModel.findOne({ email: email }) || await userModel.findOne({ email: email })
     new commentsModel({
       id: uuid.generate(),
-      email: email,
+      user: {
+        id: user.id,
+        email: user.email,
+        name: user.name,
+      },
       idPost: idPost,
       time: new Date().getTime(),
       data: data,
