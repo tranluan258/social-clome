@@ -10,16 +10,11 @@
     <p><%= user.name %></p>
     <p><%= user.email %></p>
     <p><%= user.id %></p>
-    <% if (user.img) { %>
-        <a href="/account/profile/<%= user.id %>"><img src="<%= user.img %>" alt=""></a>
-    <% } else {%>
-        <a href="/account/profile/<%= user.id %>"><img src="./images/user.png" alt=""></a>
-    <% } %>
-
+    <p>Các bài Post</p>
     <% post.forEach(p => { %>
         <p><%= p.data %></p>
         <% if (p.urlFile.length > 0) { %>
-            <img src="<%=p.email %>/<%= p.nameFile %>" alt="">
+            <img src="/<%=p.email %>/<%= p.nameFile %>" alt="">
         <% } %>
         <% if (p.idVideos.length > 0) { %>
             <iframe width="560" height="315" src="https://www.youtube.com/embed/<%= p.idVideos %>" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`)

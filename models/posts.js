@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 
-const postSchema = mongoose.Schema({
+const postSchema = new mongoose.Schema({
     id: String,
     email: String,
     data: String,

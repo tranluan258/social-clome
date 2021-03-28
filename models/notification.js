@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 
-const notificationSchema = mongoose.Schema({
+const notificationSchema = new mongoose.Schema({
     id: String,
     idFaculty: String,
     email: String,

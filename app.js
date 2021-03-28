@@ -15,6 +15,8 @@ const siteRouter = require('./routes/site');
 const commentRouter = require('./routes/comments')
 const accountRouter = require('./routes/account');
 const postRouter = require('./routes/post')
+const facultyRouter = require('./routes/faculty')
+const notificationsRouter = require('./routes/notification')
 
 const app = express();
 
@@ -31,6 +33,7 @@ app.use(flash())
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'users')));
 app.use(session({ secret: 'password_secret', path: '/', httpOnly: true, secure: false, maxAge: null }))
 
 app.use((req, res, next) => {
@@ -38,7 +41,9 @@ app.use((req, res, next) => {
   next()
 })
 
-app.use('/post',postRouter)
+app.use('/faculty',facultyRouter)
+app.use('/notification',notificationsRouter)
+app.use('/post',postRouter);
 app.use('/account', accountRouter);
 app.use('/comments', commentRouter);
 require('./routes/authRoutes')(app);

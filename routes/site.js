@@ -24,9 +24,8 @@ router.get('/', async function (req, res, next) {
       let email = req.session.email
       user = await accountModel.findOne({ email: email })
     }
-    const post = await postModel.find({ email: user.email })
+    const post = await postModel.find().sort({time: -1}).limit(10)
     res.render('index', { user,post })
-
   }
 })
 

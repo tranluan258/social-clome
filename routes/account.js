@@ -3,7 +3,9 @@ const uuid = require('short-uuid');
 const bcrypt = require('bcrypt')
 const accountModel = require('../models/accounts')
 const userModel = require('../models/user')
-const emailValidator = require('email-validator')
+const emailValidator = require('email-validator');
+const postModel = require('../models/posts');
+const validatorLogin = require('../middleware/validatorLogin')
 const router = express.Router();
 
 /* GET users listing. */
@@ -38,7 +40,6 @@ router.post('/login', async (req, res, next) => {
           res.cookie("email", account.email, { maxAge: 36000000, httpOnly: true })
         }
         req.session.email = acc.email
-        req.app.use(express.static(`${req.vars.root}/users/${account.email}`))
         res.redirect("/")
       } else {
         error = "Sai email hoặc mật khẩu"
@@ -53,13 +54,14 @@ router.post('/login', async (req, res, next) => {
   }
 })
 
-router.get('/profile/:id', async (req, res) => {
+router.get('/profile/:id', validatorLogin, async (req, res) => {
   let id = req.params.id
-  let user = await accountModel.findOne({ id: id }) || await userModel.findOne({ googleId: id })
-  res.json({ user: user })
+  let user = await accountModel.findOne({ id: id }) || await userModel.findOne({ id: id })
+  let post =  await postModel.find({email: user.email})
+  res.render('profile', { user,post })
 })
 
-router.post('/profile/:id', async (req, res) => {
+router.post('/profile/:id', validatorLogin ,async (req, res) => {
 
 })
 
