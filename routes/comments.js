@@ -1,6 +1,5 @@
 const express = require('express')
 const router = express.Router()
-const userModel = require('../models/user')
 const accountModel = require('../models/accounts')
 const postModel = require('../models/posts')
 const commentsModel = require('../models/comments')
@@ -11,7 +10,7 @@ router.post('/add', async (req, res) => {
     if (!idPost || !email || !data) {
       res.json({ code: 1, message: "Du lieu khong hop le" })
     }
-    const user = await accountModel.findOne({ email: email }) || await userModel.findOne({ email: email })
+    const user = await accountModel.findOne({ email: email })
     new commentsModel({
       id: uuid.generate(),
       user: {

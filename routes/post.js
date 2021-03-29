@@ -2,7 +2,6 @@ const express = require('express')
 const router = express.Router()
 const multer = require('multer')
 const upload = multer({ dest: __dirname + '/uploads/' })
-const userModel = require('../models/user')
 const accountModel = require('../models/accounts')
 const postModel = require('../models/posts')
 const commentsModel = require('../models/comments')
@@ -17,7 +16,7 @@ router.post('/add', upload.single('attachment'), async (req, res) => {
     res.json({ code: 1, message: 'Du lieu khong hop le' })
   }
 
-  const user = await accountModel.findOne({ email: email }) || userModel.findOne({ email: email })
+  const user = await accountModel.findOne({ email: email })
 
   if (user) {
     if (file) {

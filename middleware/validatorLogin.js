@@ -1,7 +1,8 @@
 module.exports = (req,res,next) => {
-    if(req.session.passport || req.session.email){
+    if(req.session.passport){
         next();
     }else {
         res.redirect('/account/login')
+    
     }
 }
