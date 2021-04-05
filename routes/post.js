@@ -8,6 +8,7 @@ const commentsModel = require("../models/comments");
 const fs = require("fs");
 const uuid = require("short-uuid");
 const validator = require("youtube-validator");
+const { collection } = require("../models/accounts");
 
 router.post("/add", upload.single("attachment"), async (req, res) => {
   const { email, YoutubeId, data } = req.body;
@@ -123,7 +124,12 @@ router.post("/update", (req, res) => {});
 
 router.post("/load", async (req, res) => {
   const id = req.session.passport.user
-  const { start, limit } = req.body;
+  var { start, limit } = req.body;
+  postModel.count().then(numDocs => {
+    if(limit*start - numDocs < limit){
+      limit = limit*start - numDocs
+    }
+  });
   const post = await postModel
     .find()
     .sort({ time: -1 })

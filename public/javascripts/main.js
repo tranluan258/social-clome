@@ -5,7 +5,6 @@ $(document).ready(() => {
   });
   addPost();
   scrollLoadData();
-  addComments();
 });
 
 function scrollLoadData() {
@@ -33,27 +32,22 @@ function scrollLoadData() {
               let comments = json.comments
               let user = json.user
               p.forEach((post) => {
-                if (id == post.user.id) {
+               if (id === post.user.id) {
                   if (post.urlFile.length > 0) {
                     $(".index_body_post").append(` 
                         <div class="card index_poster">
                             <div class="card index_on_the_cmt">
                                 <div class="index_post_title_option">
-                                    
                                     <h2 class="index_post_avtname"><img class="index_avt_post" src="${post.user.img}">${post.user.name}</h2>
-                                    
                                     <div class="dropdown edit_and_delete_inpost">
                                         <button class="btn index_button_in_the_post" type="button" id="dropdownMenuButtonPost" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                                         . . .
                                         </button>
                                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButtonPost">
-                                        <a class="dropdown-item" href="#"><i class="fas fa-trash"></i> Delete</a>
-                                        <a class="dropdown-item" href="#"><i class="fas fa-edit"></i> Edit</a>
-                                            
-                                            
+                                        <button class="dropdown-item" id="${post.id}" onclick="deletePost(this)"><i class="fas fa-trash"></i> Delete</button>
+                                        <button class="dropdown-item"><i class="fas fa-edit"></i> Edit</button>
                                         </div>
                                     </div>
-                                    
                                     </div>
                                 <aside>${post.time}</aside>
                                 <aside>${post.data}</aside>
@@ -61,32 +55,30 @@ function scrollLoadData() {
                             </div>
                             <button type="button" class="btn btn-light index_button_cmt" id="" name="" value="" data-toggle="collapse" href="#collapseCmt${post.id}" role="button" aria-expanded="false" aria-controls="collapseCmt${post.id}"><i class="far fa-comment-dots"></i>  Comment</button>
                             <div class="collapse" id="collapseCmt${post.id}">
-                              <div class=" index_cmt" id="${post.id}>">
+                              <div class="index_cmt" id="${post.id}>">
                                 <img class="index_avt_cmt" src="${user.img}">
                                 <input type="text" class="form-control index_cmt_texbox" id="index_data_cmt${post.id}" value="" placeholder="Your comment..." name="">
-                                <button id="btn_index_cmt" data-id="${post.id}" data-email="${user.email}">Send</button>
+                                <button id="${post.id }" onclick="addComments(this)">Send</button>
                             </div>
                             </div>
                             `);
                             comments.forEach(cmt => {
-                              if(cmt.idPost == post .id){
-                                $(`
-                                    <div id="${cmt.id}">
-                                    <a class="profile_da_cmt" href="/account/profile"><img class="index_avt_cmt" src="${cmt.user.img}"> ${cmt.user.name} :</a>
-                                    <div class="index_da_cmt">
-                                        <p class=" card noidungcmt">${cmt.data}</p>
-                                            <div class="dropdown edit_and_delete_incmt">
-                                                <button class="btn index_button_in_the_cmt" type="button" id="dropdownMenuButtonCmt" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                                ...
-                                                </button>
-                                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButtonCmt">
-                                                        <button class="dropdown-item"><i class="fas fa-trash"></i> Delete</button>
-                                                        <button class="dropdown-item"><i class="fas fa-edit"></i> Edit</button>
-                                                    </div>
-                                            </div>
-                                    </div>
-                                    </div>
-                                    `).insertBefore(`.index_cmt#${cmt.idPost}`);
+                              if(cmt.idPost === post .id){
+                                $((`#collapseCmt${cmt.idPost}`)).append(`
+                                <div id="${cmt.id}">
+                                <a class="profile_da_cmt" href="/account/profile"><img class="index_avt_cmt" src="${cmt.user.img}"> ${cmt.user.name} :</a>
+                                <div class="index_da_cmt">
+                                    <p class=" card noidungcmt">${cmt.data}</p>
+                                        <div class="dropdown edit_and_delete_incmt">
+                                            <button class="btn index_button_in_the_cmt" type="button" id="dropdownMenuButtonCmt" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                            ...
+                                            </button>
+                                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButtonCmt">
+                                                <button class="dropdown-item" id="${cmt.id} " onclick="deleteComments(this)"><i class="fas fa-trash"></i> Delete</button>
+                                                </div>
+                                        </div>
+                                </div>
+                                </div>`);
                               }
                           })
                   } else if (post.idVideos.length > 0) {
@@ -94,7 +86,6 @@ function scrollLoadData() {
                           <div class="card index_poster">
                               <div class="card index_on_the_cmt">
                                   <div class="index_post_title_option">
-                                      
                                       <h2 class="index_post_avtname"><img class="index_avt_post" src="${post.user.img}">${post.user.name}</h2>
                                       
                                       <div class="dropdown edit_and_delete_inpost">
@@ -102,13 +93,10 @@ function scrollLoadData() {
                                           . . .
                                           </button>
                                           <div class="dropdown-menu" aria-labelledby="dropdownMenuButtonPost">
-                                          <a class="dropdown-item" href="#"><i class="fas fa-trash"></i> Delete</a>
-                                          <a class="dropdown-item" href="#"><i class="fas fa-edit"></i> Edit</a>
-                                              
-                                              
+                                          <button class="dropdown-item" id="${post.id}" onclick="deletePost(this)"><i class="fas fa-trash"></i> Delete</button>
+                                        <button class="dropdown-item"><i class="fas fa-edit"></i> Edit</button>
                                           </div>
                                       </div>
-                                      
                                       </div>
                                   <aside>${post.time}</aside>
                                   <aside>${post.data}</aside>
@@ -116,32 +104,30 @@ function scrollLoadData() {
                               </div>
                               <button type="button" class="btn btn-light index_button_cmt" id="" name="" value="" data-toggle="collapse" href="#collapseCmt${post.id}" role="button" aria-expanded="false" aria-controls="collapseCmt${post.id}"><i class="far fa-comment-dots"></i>  Comment</button>
                               <div class="collapse" id="collapseCmt${post.id}">
-                                <div class=" index_cmt" id="${post.id}>">
+                                <div class="index_cmt" id="${post.id}>">
                                   <img class="index_avt_cmt" src="${user.img}">
                                   <input type="text" class="form-control index_cmt_texbox" id="index_data_cmt${post.id}" value="" placeholder="Your comment..." name="">
-                                  <button id="btn_index_cmt" data-id="${post.id}" data-email="${user.email}">Send</button>
+                                  <button id="${post.id }" onclick="addComments(this)">Send</button>
                               </div>
                               </div>
                               `);
                               comments.forEach(cmt => {
-                                if(cmt.idPost == post .id){
-                                  $(`
-                                      <div id="${cmt.id}">
-                                      <a class="profile_da_cmt" href="/account/profile"><img class="index_avt_cmt" src="${cmt.user.img}"> ${cmt.user.name} :</a>
-                                      <div class="index_da_cmt">
-                                          <p class=" card noidungcmt">${cmt.data}</p>
-                                              <div class="dropdown edit_and_delete_incmt">
-                                                  <button class="btn index_button_in_the_cmt" type="button" id="dropdownMenuButtonCmt" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                                  ...
-                                                  </button>
-                                                      <div class="dropdown-menu" aria-labelledby="dropdownMenuButtonCmt">
-                                                          <button class="dropdown-item"><i class="fas fa-trash"></i> Delete</button>
-                                                          <button class="dropdown-item"><i class="fas fa-edit"></i> Edit</button>
-                                                      </div>
-                                              </div>
-                                      </div>
-                                      </div>
-                                      `).insertBefore(`.index_cmt#${cmt.idPost}`);
+                                if(cmt.idPost === post .id){
+                                  $((`#collapseCmt${cmt.idPost}`)).append(`
+                                  <div id="${cmt.id}">
+                                  <a class="profile_da_cmt" href="/account/profile"><img class="index_avt_cmt" src="${cmt.user.img}"> ${cmt.user.name} :</a>
+                                  <div class="index_da_cmt">
+                                      <p class=" card noidungcmt">${cmt.data}</p>
+                                          <div class="dropdown edit_and_delete_incmt">
+                                              <button class="btn index_button_in_the_cmt" type="button" id="dropdownMenuButtonCmt" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                              ...
+                                              </button>
+                                                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButtonCmt">
+                                                  <button class="dropdown-item" id="${cmt.id} " onclick="deleteComments(this)"><i class="fas fa-trash"></i> Delete</button>
+                                                  </div>
+                                          </div>
+                                  </div>
+                                  </div>`);
                                 }
                             })
                   } else {
@@ -149,54 +135,48 @@ function scrollLoadData() {
                       <div class="card index_poster">
                           <div class="card index_on_the_cmt">
                               <div class="index_post_title_option">
-                                  
-                                  <h2 class="index_post_avtname"><img class="index_avt_post" src="${post.user.img}">${post.user.name}</h2>
-                                  
+                                  <h2 class="index_post_avtname"><img class="index_avt_post" src="${post.user.img}">${post.user.name}</h2>                
                                   <div class="dropdown edit_and_delete_inpost">
                                       <button class="btn index_button_in_the_post" type="button" id="dropdownMenuButtonPost" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                                       . . .
                                       </button>
                                       <div class="dropdown-menu" aria-labelledby="dropdownMenuButtonPost">
-                                      <a class="dropdown-item" href="#"><i class="fas fa-trash"></i> Delete</a>
-                                      <a class="dropdown-item" href="#"><i class="fas fa-edit"></i> Edit</a>
-                                          
-                                          
+                                      <button class="dropdown-item" id="${post.id}" onclick="deletePost(this)"><i class="fas fa-trash"></i> Delete</button>
+                                      <button class="dropdown-item"><i class="fas fa-edit"></i> Edit</button>
                                       </div>
                                   </div>
-                                  
                                   </div>
                               <aside>${post.time}</aside>
                               <aside>${post.data}</aside>
                               <button type="button" class="btn btn-light index_button_cmt" id="" name="" value="" data-toggle="collapse" href="#collapseCmt${post.id}" role="button" aria-expanded="false" aria-controls="collapseCmt${post.id}"><i class="far fa-comment-dots"></i>  Comment</button>
                               <div class="collapse" id="collapseCmt${post.id}">
-                                <div class=" index_cmt" id="${post.id}>">
+                                <div class="index_cmt" id="${post.id}>">
                                   <img class="index_avt_cmt" src="${user.img}">
                                   <input type="text" class="form-control index_cmt_texbox" id="index_data_cmt${post.id}" value="" placeholder="Your comment..." name="">
-                                  <button id="btn_index_cmt" data-id="${post.id}" data-email="${user.email}">Send</button>
+                                  <button id="${post.id }" onclick="addComments(this)">Send</button>
                               </div>
                               </div>
                               `);
                               comments.forEach(cmt => {
-                                if(cmt.idPost == post .id){
-                                  $(`
-                                      <div id="${cmt.id}">
-                                      <a class="profile_da_cmt" href="/account/profile"><img class="index_avt_cmt" src="${cmt.user.img}"> ${cmt.user.name} :</a>
-                                      <div class="index_da_cmt">
-                                          <p class=" card noidungcmt">${cmt.data}</p>
-                                              <div class="dropdown edit_and_delete_incmt">
-                                                  <button class="btn index_button_in_the_cmt" type="button" id="dropdownMenuButtonCmt" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                                  ...
-                                                  </button>
-                                                      <div class="dropdown-menu" aria-labelledby="dropdownMenuButtonCmt">
-                                                          <button class="dropdown-item"><i class="fas fa-trash"></i> Delete</button>
-                                                          <button class="dropdown-item"><i class="fas fa-edit"></i> Edit</button>
-                                                      </div>
-                                              </div>
-                                      </div>
-                                      </div>
-                                      `).insertBefore(`.index_cmt#${cmt.idPost}`);
+                                if(cmt.idPost === post .id){
+                                  $((`#collapseCmt${cmt.idPost}`)).append(`
+                                  <div id="${cmt.id}">
+                                  <a class="profile_da_cmt" href="/account/profile"><img class="index_avt_cmt" src="${cmt.user.img}"> ${cmt.user.name} :</a>
+                                  <div class="index_da_cmt">
+                                      <p class=" card noidungcmt">${cmt.data}</p>
+                                          <div class="dropdown edit_and_delete_incmt">
+                                              <button class="btn index_button_in_the_cmt" type="button" id="dropdownMenuButtonCmt" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                              ...
+                                              </button>
+                                                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButtonCmt">
+                                                  <button class="dropdown-item" id="${cmt.id} " onclick="deleteComments(this)"><i class="fas fa-trash"></i> Delete</button>
+                                                      <button class="dropdown-item"><i class="fas fa-edit"></i> Edit</button>
+                                                  </div>
+                                          </div>
+                                  </div>
+                                  </div>`);
                                 }
-                            })
+                              })
                   }
                 } else {
                   if (post.urlFile.length > 0) {
@@ -213,31 +193,30 @@ function scrollLoadData() {
                         </div>
                         <button type="button" class="btn btn-light index_button_cmt" id="" name="" value="" data-toggle="collapse" href="#collapseCmt${post.id}" role="button" aria-expanded="false" aria-controls="collapseCmt${post.id}"><i class="far fa-comment-dots"></i>  Comment</button>
                   <div class="collapse" id="collapseCmt${post.id}">
-                    <div class=" index_cmt" id="${post.id}>">
+                    <div class="index_cmt" id="${post.id}>">
                       <img class="index_avt_cmt" src="${user.img}">
                       <input type="text" class="form-control index_cmt_texbox" id="index_data_cmt${post.id}" value="" placeholder="Your comment..." name="">
-                      <button id="btn_index_cmt" data-id="${post.id}" data-email="${user.email}">Send</button>
+                      <button id="${post.id }" onclick="addComments(this)">Send</button>
                   </div>
                   </div>`);
                   comments.forEach(cmt => {
-                    if(cmt.idPost == post .id){
-                      $(`
-                          <div id="${cmt.id}">
-                          <a class="profile_da_cmt" href="/account/profile"><img class="index_avt_cmt" src="${cmt.user.img}"> ${cmt.user.name} :</a>
-                          <div class="index_da_cmt">
-                              <p class=" card noidungcmt">${cmt.data}</p>
-                                  <div class="dropdown edit_and_delete_incmt">
-                                      <button class="btn index_button_in_the_cmt" type="button" id="dropdownMenuButtonCmt" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                      ...
-                                      </button>
-                                          <div class="dropdown-menu" aria-labelledby="dropdownMenuButtonCmt">
-                                              <button class="dropdown-item"><i class="fas fa-trash"></i> Delete</button>
-                                              <button class="dropdown-item"><i class="fas fa-edit"></i> Edit</button>
-                                          </div>
-                                  </div>
-                          </div>
-                          </div>
-                          `).insertBefore(`.index_cmt#${cmt.idPost}`);
+                    if(cmt.idPost === post .id){
+                      $((`#collapseCmt${cmt.idPost}`)).append(`
+                      <div id="${cmt.id}">
+                      <a class="profile_da_cmt" href="/account/profile"><img class="index_avt_cmt" src="${cmt.user.img}"> ${cmt.user.name} :</a>
+                      <div class="index_da_cmt">
+                          <p class=" card noidungcmt">${cmt.data}</p>
+                              <div class="dropdown edit_and_delete_incmt">
+                                  <button class="btn index_button_in_the_cmt" type="button" id="dropdownMenuButtonCmt" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                  ...
+                                  </button>
+                                      <div class="dropdown-menu" aria-labelledby="dropdownMenuButtonCmt">
+                                      <button class="dropdown-item" id="${cmt.id} " onclick="deleteComments(this)"><i class="fas fa-trash"></i> Delete</button>
+                                         
+                                      </div>
+                              </div>
+                      </div>
+                      </div>`);
                     }
                 })
                   } else if (post.idVideos.length > 0) {
@@ -254,31 +233,29 @@ function scrollLoadData() {
                           </div>
                           <button type="button" class="btn btn-light index_button_cmt" id="" name="" value="" data-toggle="collapse" href="#collapseCmt${post.id}" role="button" aria-expanded="false" aria-controls="collapseCmt${post.id}"><i class="far fa-comment-dots"></i>  Comment</button>
                           <div class="collapse" id="collapseCmt${post.id}">
-                            <div class=" index_cmt" id="${post.id}>">
+                            <div class="index_cmt" id="${post.id}>">
                               <img class="index_avt_cmt" src="${user.img}">
                               <input type="text" class="form-control index_cmt_texbox" id="index_data_cmt${post.id}" value="" placeholder="Your comment..." name="">
-                              <button id="btn_index_cmt" data-id="${post.id}" data-email="${user.email}">Send</button>
+                              <button id="${post.id }" onclick="addComments(this)">Send</button>
                           </div>
                           </div>`);
                           comments.forEach(cmt => {
-                            if(cmt.idPost == post .id){
-                              $(`
-                                  <div id="${cmt.id}">
-                                  <a class="profile_da_cmt" href="/account/profile"><img class="index_avt_cmt" src="${cmt.user.img}"> ${cmt.user.name} :</a>
-                                  <div class="index_da_cmt">
-                                      <p class=" card noidungcmt">${cmt.data}</p>
-                                          <div class="dropdown edit_and_delete_incmt">
-                                              <button class="btn index_button_in_the_cmt" type="button" id="dropdownMenuButtonCmt" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                              ...
-                                              </button>
-                                                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButtonCmt">
-                                                      <button class="dropdown-item"><i class="fas fa-trash"></i> Delete</button>
-                                                      <button class="dropdown-item"><i class="fas fa-edit"></i> Edit</button>
-                                                  </div>
-                                          </div>
-                                  </div>
-                                  </div>
-                                  `).insertBefore(`.index_cmt#${cmt.idPost}`);
+                            if(cmt.idPost === post .id){
+                              $((`#collapseCmt${cmt.idPost}`)).append(`
+                              <div id="${cmt.id}">
+                              <a class="profile_da_cmt" href="/account/profile"><img class="index_avt_cmt" src="${cmt.user.img}"> ${cmt.user.name} :</a>
+                              <div class="index_da_cmt">
+                                  <p class=" card noidungcmt">${cmt.data}</p>
+                                      <div class="dropdown edit_and_delete_incmt">
+                                          <button class="btn index_button_in_the_cmt" type="button" id="dropdownMenuButtonCmt" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                          ...
+                                          </button>
+                                              <div class="dropdown-menu" aria-labelledby="dropdownMenuButtonCmt">
+                                              <button class="dropdown-item" id="${cmt.id} " onclick="deleteComments(this)"><i class="fas fa-trash"></i> Delete</button>
+                                              </div>
+                                      </div>
+                              </div>
+                              </div>`);
                             }
                         })
                   } else {
@@ -296,12 +273,12 @@ function scrollLoadData() {
                             <div class=" index_cmt" id="${post.id}>">
                               <img class="index_avt_cmt" src="${user.img}">
                               <input type="text" class="form-control index_cmt_texbox" id="index_data_cmt${post.id}" value="" placeholder="Your comment..." name="">
-                              <button id="btn_index_cmt" data-id="${post.id}" data-email="${user.email}">Send</button>
+                              <button id="${post.id }" onclick="addComments(this)">Send</button>
                           </div>
                           </div>`);
                           comments.forEach(cmt => {
-                            if(cmt.idPost == post .id){
-                              $(`
+                            if(cmt.idPost === post .id){
+                              $((`#collapseCmt${cmt.idPost}`)).append(`
                                   <div id="${cmt.id}">
                                   <a class="profile_da_cmt" href="/account/profile"><img class="index_avt_cmt" src="${cmt.user.img}"> ${cmt.user.name} :</a>
                                   <div class="index_da_cmt">
@@ -311,13 +288,12 @@ function scrollLoadData() {
                                               ...
                                               </button>
                                                   <div class="dropdown-menu" aria-labelledby="dropdownMenuButtonCmt">
-                                                      <button class="dropdown-item"><i class="fas fa-trash"></i> Delete</button>
-                                                      <button class="dropdown-item"><i class="fas fa-edit"></i> Edit</button>
+                                                      <button class="dropdown-item" id="${cmt.id} " onclick="deleteComments(this)"><i class="fas fa-trash"></i> Delete</button>
+                                                     
                                                   </div>
                                           </div>
                                   </div>
-                                  </div>
-                                  `).insertBefore(`.index_cmt#${cmt.idPost}`);
+                                  </div>`);
                             }
                         })
                   }
@@ -379,22 +355,17 @@ function addPost() {
             $(".index_body_post").prepend(`
               <div class="card index_poster">
                   <div class="card index_on_the_cmt">
-                      <div class="index_post_title_option">
-                          
+                      <div class="index_post_title_option"> 
                           <h2 class="index_post_avtname"><img class="index_avt_post" src="${post.user.img}">${post.user.name}</h2>
-                          
                           <div class="dropdown edit_and_delete_inpost">
                               <button class="btn index_button_in_the_post" type="button" id="dropdownMenuButtonPost" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                               . . .
                               </button>
                               <div class="dropdown-menu" aria-labelledby="dropdownMenuButtonPost">
-                              <a class="dropdown-item" href="#"><i class="fas fa-trash"></i> Delete</a>
-                              <a class="dropdown-item" href="#"><i class="fas fa-edit"></i> Edit</a>
-                                  
-                                  
+                              <button class="dropdown-item" id="${p.id}" onclick="deletePost(this)"><i class="fas fa-trash"></i> Delete</button>
+                              <button class="dropdown-item"><i class="fas fa-edit"></i> Edit</button>
                               </div>
                           </div>
-                          
                           </div>
                       <aside>${post.time}</aside>
                       <aside>${post.data}</aside>
@@ -402,10 +373,10 @@ function addPost() {
                   </div>
                   <button type="button" class="btn btn-light index_button_cmt" id="" name="" value="" data-toggle="collapse" href="#collapseCmt${post.id}" role="button" aria-expanded="false" aria-controls="collapseCmt${post.id}"><i class="far fa-comment-dots"></i>  Comment</button>
                   <div class="collapse" id="collapseCmt${post.id}">
-                    <div class=" index_cmt" id="${post.id}>">
+                    <div class="index_cmt" id="${post.id}>">
                       <img class="index_avt_cmt" src="${post.user.img}">
                       <input type="text" class="form-control index_cmt_texbox" id="index_data_cmt${post.id}" value="" placeholder="Your comment..." name="">
-                      <button id="btn_index_cmt" data-id="${post.id}" data-email="${post.user.email}">Send</button>
+                      <button id="${post.id }" onclick="addComments(this)">Send</button>
                   </div>
                   </div>
                   `);
@@ -424,8 +395,8 @@ function addPost() {
                                 . . .
                                 </button>
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButtonPost">
-                                <a class="dropdown-item" href="#"><i class="fas fa-trash"></i> Delete</a>
-                                <a class="dropdown-item" href="#"><i class="fas fa-edit"></i> Edit</a>
+                                <button class="dropdown-item" id="${post.id}" onclick="deletePost(this)"><i class="fas fa-trash"></i> Delete</button>
+                                <button class="dropdown-item"><i class="fas fa-edit"></i> Edit</button>
                                     
                                     
                                 </div>
@@ -441,7 +412,7 @@ function addPost() {
                       <div class=" index_cmt" id="${post.id}>">
                         <img class="index_avt_cmt" src="${post.user.img}">
                         <input type="text" class="form-control index_cmt_texbox" id="index_data_cmt${post.id}" value="" placeholder="Your comment..." name="">
-                        <button id="btn_index_cmt" data-id="${post.id}" data-email="${post.user.email}">Send</button>
+                        <button id="${post.id }" onclick="addComments(this)">Send</button>
                     </div>
                     </div>`);
             $("#index_modal_new_post").modal("hide");
@@ -459,8 +430,8 @@ function addPost() {
                             . . .
                             </button>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButtonPost">
-                            <a class="dropdown-item" href="#"><i class="fas fa-trash"></i> Delete</a>
-                            <a class="dropdown-item" href="#"><i class="fas fa-edit"></i> Edit</a>
+                            <button class="dropdown-item" id="${post.id}" onclick="deletePost(this)"><i class="fas fa-trash"></i> Delete</button>
+                              <button class="dropdown-item"><i class="fas fa-edit"></i> Edit</button>
                                 
                                 
                             </div>
@@ -474,7 +445,7 @@ function addPost() {
                       <div class=" index_cmt" id="${post.id}>">
                         <img class="index_avt_cmt" src="${post.user.img}">
                         <input type="text" class="form-control index_cmt_texbox" id="index_data_cmt${post.id}" value="" placeholder="Your comment..." name="">
-                        <button id="btn_index_cmt" data-id="${post.id}" data-email="${post.user.email}">Send</button>
+                        <button id="${post.id }" onclick="addComments(this)">Send</button>
                     </div>
                     </div>`);
             $("#index_modal_new_post").modal("hide");
@@ -493,23 +464,28 @@ function addPost() {
   });
 }
 
-function deletePost() {}
+function deletePost(e) {
+  let id = e.id
+  fetch('/post/delete/'+id,{
+    method: "DELETE"
+  }).then(res => res.json())
+  .then(json => {
+    if(json.code === 0 ){
+      $(`div#${id}`).remove()
+    }
+  })
+  .catch(err => console.log(err))
+}
 
-function addComments() {
-  let add = document.querySelectorAll("#btn_index_cmt");
-  add.forEach((a) => {
-    a.addEventListener("click", (e) => {
-      let btn = e.target;
-      let id = btn.dataset.id;
-      let email = btn.dataset.email;
+function addComments(e) {
+      let id = e.id;
       let data = $(`#index_data_cmt${id}`).val();
-      if (data && id && email) {
+      if (data && id) {
         fetch("/comments/add", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             idPost: id,
-            email: email,
             data: data,
           }),
         })
@@ -517,7 +493,7 @@ function addComments() {
           .then((json) => {
             if (json.code === 0) {
               let cmt = json.cmt;
-              $(`
+              $((`#collapseCmt${cmt.idPost}`)).append(`
               <div id="${cmt.id}">
               <a class="profile_da_cmt" href="/account/profile"><img class="index_avt_cmt" src="${cmt.user.img}"> ${cmt.user.name} :</a>
               <div class="index_da_cmt">
@@ -527,20 +503,30 @@ function addComments() {
                           ...
                           </button>
                               <div class="dropdown-menu" aria-labelledby="dropdownMenuButtonCmt">
-                                  <button class="dropdown-item"><i class="fas fa-trash"></i> Delete</button>
-                                  <button class="dropdown-item"><i class="fas fa-edit"></i> Edit</button>
+                              <button class="dropdown-item" id="${cmt.id} " onclick="deleteComments(this)"><i class="fas fa-trash"></i> Delete</button>
                               </div>
                       </div>
               </div>
               </div>
-              `).insertBefore(`.index_cmt#${cmt.idPost}`);
+              `)
               $(`#index_data_cmt${id}`).val("");
             }
           })
           .catch((err) => console.log(err));
       }
-    });
-  });
+}
+
+function deleteComments(e){
+  let id = e.id
+  fetch('/comments/delete/'+id,{
+    method: "DELETE"
+  }).then(res => res.json())
+  .then(json => {
+    if(json.code === 0 ){
+      $(`div#${id}`).remove()
+    }
+  })
+  .catch(err => console.log(err))
 }
 
 function clearDataModal() {

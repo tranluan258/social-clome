@@ -7,11 +7,12 @@ const validatorLogin = require('../middleware/validatorLogin')
 const uuid = require('short-uuid')
 
 router.post('/add', validatorLogin, async (req, res) => {
-    const { idPost, email, data } = req.body
-    if (!idPost || !email || !data) {
+    const { idPost, data } = req.body
+    if (!idPost || !data) {
       res.json({ code: 1, message: "Du lieu khong hop le" })
     }
-    const user = await accountModel.findOne({ email: email })
+    const id = req.session.passport.user
+    const user = await accountModel.findById(id)
     if(user){
       new commentsModel({
         id: uuid.generate(),

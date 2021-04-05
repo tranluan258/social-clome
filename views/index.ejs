@@ -11,7 +11,6 @@
     <title>Index</title>
     <link rel="stylesheet" href="/stylesheets/style.css" />
     <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
-    <script src="/javascripts/main.js"></script>
 </head>
 <body class="index_body">
     <div class="container-fluid">
@@ -138,19 +137,15 @@
                         <div class="card index_poster" id="<%= p.id %>">
                             <div class="card index_on_the_cmt">
                                 <div class="index_post_title_option">
-                                    
                                     <h2 class="index_post_avtname"><img class="index_avt_post" src="<%= p.user.img %>"> <%= p.user.name %></h2>
-                                    
                                     <% if(p.user.id  === user.id) { %>
                                         <div class="dropdown edit_and_delete_inpost">
                                             <button class="btn index_button_in_the_post" type="button" id="dropdownMenuButtonPost" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                                             . . .
                                             </button>
                                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButtonPost">
-                                            <button class="dropdown-item" data-id="<%= p.id %>"><i class="fas fa-trash"></i> Delete</button>
+                                            <button class="dropdown-item" id="<%= p.id %>" onclick="deletePost(this)"><i class="fas fa-trash"></i> Delete</button>
                                             <button class="dropdown-item" data-id="<%= p.id %>"><i class="fas fa-edit"></i> Edit</button>
-                                                
-                                                
                                             </div>
                                         </div>
                                     <%} %>
@@ -166,10 +161,15 @@
                             </div>
                             <button type="button" class="btn btn-light index_button_cmt" id="" name="" value="" data-toggle="collapse" href="#collapseCmt<%= p.id %>" role="button" aria-expanded="false" aria-controls="collapseCmt<%= p.id %>"><i class="far fa-comment-dots"></i>  Comment</button>
                             <div class="collapse" id="collapseCmt<%= p.id %>">
+                                <div class="index_cmt" id="<%= p.id %>">
+                                    <img class="index_avt_cmt" src="<%= user.img %>">
+                                    <input type="text" class="form-control index_cmt_texbox" id="index_data_cmt<%= p.id %>" value="" placeholder="Your comment..." name="">
+                                    <button id="<%= p.id %>" onclick="addComments(this)">Send</button>
+                                </div>
                                 <!--Binh luan bi an-->
                                <% comments.forEach(c => { %>
-                                   <div id="<%= c.id %>">
                                     <% if(c.idPost == p.id) { %>
+                                    <div id="<%= c.id %>">
                                         <a class="profile_da_cmt" href="/account/profile"><img class="index_avt_cmt" src="<%= c.user.img %>"> <%= c.user.name %> :</a>
                                         <div class="index_da_cmt">
                                             <p class=" card noidungcmt"><%= c.data %></p>
@@ -179,20 +179,14 @@
                                                     ...
                                                     </button>
                                                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButtonCmt">
-                                                            <button class="dropdown-item"><i class="fas fa-trash"></i> Delete</button>
-                                                            <button class="dropdown-item"><i class="fas fa-edit"></i> Edit</button>
+                                                            <button class="dropdown-item" id="<%= c.id %>" onclick="deleteComments(this)"><i class="fas fa-trash"></i> Delete</button>
                                                         </div>
                                                 </div>
                                             <%}%>
                                         </div>
+                                    </div>
                                    <% } %>
-                                   </div>
                                <%}) %>
-                               <div class=" index_cmt" id="<%= p.id %>">
-                                    <img class="index_avt_cmt" src="<%= user.img %>">
-                                    <input type="text" class="form-control index_cmt_texbox" id="index_data_cmt<%= p.id %>" value="" placeholder="Your comment..." name="">
-                                    <button id="btn_index_cmt" data-id="<%= p.id %>" data-email="<%= user.email %>">Send</button>
-                                </div>
                             </div>
                         </div>
                    <%})%>
@@ -326,10 +320,10 @@
             
                 <div class="modal-footer">
                     <button id="btn-create-post" data-email= "<%= user.email %>" type="button" class="btn btn-primary index_button_post_new_post">Create post</button>
-                    
                 </div>
             </div>
         </div>
     </div>
+    <script src="/javascripts/main.js"></script> 
 </body>
 </html>
