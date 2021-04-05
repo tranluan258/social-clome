@@ -6,6 +6,7 @@ const postSchema = new mongoose.Schema({
         id: String,
         email: String,
         name: String,
+        img: String,
     },
     data: String,
     time: Date,

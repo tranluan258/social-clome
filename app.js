@@ -2,7 +2,6 @@ require('dotenv').config()
 const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
-const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const logger = require('morgan');
@@ -46,7 +45,6 @@ app.use('/notification',notificationsRouter)
 app.use('/post',postRouter);
 app.use('/account', accountRouter);
 app.use('/comments', commentRouter);
-require('./routes/authRoutes')(app);
 app.use('/', siteRouter);
 
 // catch 404 and forward to error handler
@@ -64,7 +62,5 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
-
-
 
 module.exports = app;

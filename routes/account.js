@@ -6,9 +6,12 @@ const postModel = require('../models/posts');
 const validatorLogin = require('../middleware/validatorLogin');
 const router = express.Router();
 const passport = require('passport')
-/* GET users listing. */
-router.get('/login', (req, res, next) => {
+
+router.get('/login', (req, res) => {
   var error = req.flash('error')
+  if(error[0] === 'Missing credentials'){
+    error[0] = 'Vui lòng nhập đầy đủ thông tin'
+  }
   if (req.session.passport) {
     res.redirect('../')
   } else {
@@ -17,10 +20,10 @@ router.get('/login', (req, res, next) => {
 })
 
 router.post('/login', passport.authenticate('local', {
-    successRedirect: '/',
-    failureRedirect: 'login',
-    failureFlash: true
-  })
+  successRedirect: '/',
+  failureRedirect: 'login',
+  failureFlash: true
+})
 )
 
 router.get('/profile/:id', validatorLogin, async (req, res) => {
@@ -33,8 +36,8 @@ router.get('/profile/:id', validatorLogin, async (req, res) => {
 router.post('/update', validatorLogin, async (req, res) => {
 })
 
-router.get('/logout', (req, res, next) => {
-  req.session.destroy(function (err) {
+router.get('/logout', (req, res) => {
+  req.session.destroy((err) => {
     res.redirect('login')
   })
 })
@@ -71,7 +74,7 @@ router.post('/add', async (req, res) => {
       name: name,
       email: email,
       password: hashPassword,
-      img: "",
+      img: "user.png",
       type: 1,
       arrFaculty: arrFaculty
     }).save()

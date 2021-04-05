@@ -53,4 +53,4 @@ passport.use(new LocalStrategy({
         return done(null, user);
       });
     }
-  ));
+));

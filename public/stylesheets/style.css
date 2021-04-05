@@ -1,10 +1,286 @@
 *{
-    margin: 0;
-    padding: 0;
     box-sizing: border-box;
 }
+.login_body {
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+    background: linear-gradient(to left, #1cdada,#db1e86, #ec2626 )
+}
+.card_login_box{
+    width: 100%;
+    padding: 10%;
+    top: 50%;
+    left: 50%;
+    background: #252323;
+    text-align: center;
+    transition: 0.25s;
+    margin-top: 20%;
+    border-radius: 12%;
+    -webkit-box-shadow: 0px 1px 22px 5px rgba(0, 0, 0, 0.75);
+    -moz-box-shadow: 0px 1px 22px 5px rgba(0, 0, 0, 0.75);
+    box-shadow: 0px 1px 22px 5px rgba(0, 0, 0, 0.75);
+}
+.a{
+    float: left;
+    
+}
+.login_title_login{
+    font-size: 300%;
+    color: antiquewhite;
+    font-variant: normal; 
+    color: white;
+    font-weight: 20%; 
+    line-height: 110%;
+    margin-bottom: 5%;
+} 
+.google_icon{
+    width:20%;
+    height:15%
+}
+.login_description{ 
+    font-family: "Francois One"; 
+    font-size: 14px; 
+    font-style: normal; 
+    font-variant: normal; 
+    font-weight: 700; 
+    line-height: 110%; 
+    color: grey;
+}
+.login_account_textbox{
+    border: 0;
+    background: none;
+    display: block;
+    margin: 20px auto;
+    text-align: center;
+    border: 2px solid #3498db;
+    padding: 10px 10px;
+    width: 75%;
+    outline: none;
+    color: white;
+    border-radius: 24px;
+    transition: 0.25s
+}
+.login_password_textbox{
+    border: 0;
+    background: none;
+    display: block;
+    margin: 20px auto;
+    text-align: center;
+    border: 2px solid #3498db;
+    padding: 10px 10px;
+    width: 75%;
+    outline: none;
+    color: white;
+    border-radius: 24px;
+    transition: 0.25s
+}
+.login_account_textbox:focus,
+.login_password_textbox:focus {
+    width: 85%;
+    border-color: pink
+}   
+.login_checkbox{
+    color: white;
+    font-size: 15px
+}
+.login_button_login{
+    border: 0;
+    background: none;
+    display: block;
+    width: 75%;
+    margin: 20px auto;
+    text-align: center;
+    border: 2px solid #2ecc71;
+    padding: 14px 40px;
+    outline: none;
+    color: white;
+    border-radius: 24px;
+    transition: 0.25s;
+    cursor: pointer
+}
 
-.body-login {
+
+.aa{
+    margin-top: 10%;
+}
+
+
+.index_logo_homepage{
+    font-size: 35px;
+}
+.nav-index{
     display: flex;
-    flex-direction: column;
+}
+.okok{
+    background-color:#3498db;
+}
+
+.index_khoa{
+    position:fixed;
+}
+.tungkhoa{
+    padding: 2%;
+}
+
+.index_add_user_alert{
+    display: none;
+}
+.index_button_link_image_new_post{
+    display: none;
+}
+.index_button_link_video_new_post{
+    display: none;
+}
+.indexpage{
+    width: 100%;
+}
+
+.index_content{
+    margin-left: 25%;
+}
+.index_body_content{
+    
+}
+
+.collapse-index{
+    justify-content: flex-end;
+}
+
+.index_post_title_option{
+    display: flex;
+    width: 100%;
+}
+.index_post_avtname{
+    width: 99%;
+}
+.index_option_post{
+    justify-content: flex-end;
+    cursor: pointer;
+    outline: none;
+}
+
+.index_avt_profile_in_the_tab{
+    width: 20px;
+    border-radius: 20px;
+    height: 20px;
+}
+
+.index_video_post{
+    width: 588px;
+    height: 315px;
+}
+
+.index_img_post{
+    width: 588px;
+    height: 315px;
+}
+
+.ba_cai_phim{
+    width: 100%;
+}
+
+.index_alert_post_fail{
+    display: none;
+}
+.index_button_video_new_post{
+    width: 50%;
+}
+.index_button_image_new_post{
+    width: 49%;
+}
+
+
+.index_post{
+    padding: 1em;
+    overflow: hidden;
+}
+.index_your_post{
+    border-radius: 25px;
+    padding: 1em;
+}
+.index_new_post_button_video{
+    width: 30%;
+}
+
+
+
+
+.index_poster{
+    padding: 1%;
+    margin-top: 2%;
+}
+.index_modal_type{
+    width: 100%;
+    border-radius: 25px;
+    height: 200px;
+}
+.index_body_modal_new_post{
+    padding: 2%;
+}
+.index_button_post_new_post{
+    width: 100%;
+}
+.index_button_in_the_post{
+    border-radius: 50px;    
+    background: none;
+    display: block;
+}
+.index_on_the_cmt{
+    padding: 1em;
+}
+.index_avt_post{
+    width: 45px;
+    border-radius: 25px;
+    height: 45px;
+}
+.index_cmt{
+    display: flex;
+    width: 100%;
+    margin-top: 2%;
+}
+.index_da_cmt{
+    margin-left: 5%;
+    display: flex;
+}
+.noidungcmt{
+    width: 100%;
+    padding: 1%;
+}
+.index_avt_cmt{
+    width: 30px;
+    height: 30px;
+    border-radius: 25px;
+}
+.index_cmt_texbox{
+    width: 100%;
+    border-radius:30px;
+}
+
+
+.index_button_in_the_cmt{
+    width: 100%;
+    outline: none;
+    background: none;
+    display: block;
+    border-radius: 50px;   
+}
+.index_thongbaoquantrong{
+    right: 0;
+    position: fixed;
+}
+.header_thongbao_quantrong{
+    width: 100%;
+    
+}
+.index_thongbaoquantrong_title{
+    font-size: 20px;
+    text-decoration: none;
+    color: black;
+}
+
+
+.dacmt{
+    flex: float;
+    display: flex;
 }

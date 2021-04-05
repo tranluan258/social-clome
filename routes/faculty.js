@@ -7,7 +7,7 @@ const router = express.Router()
 
 router.get('/', validatorLogin, async (req, res) => {
     let limit = 10
-    let number = req.params.number || 1
+    let number = req.query.page || 1
     let faculty =  await facultyModel.find()
     notificationModel
     .find()
@@ -20,7 +20,8 @@ router.get('/', validatorLogin, async (req, res) => {
 })
 
 router.get('/:id', validatorLogin, async (req, res) => {
-    let number = req.params.number || 1
+    let limit = 10
+    let number = req.query.page || 1
     let id = req.params.id
     let faculty = await facultyModel.findOne({id: id})
     notificationModel

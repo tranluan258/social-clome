@@ -6,6 +6,7 @@ const commentsSchema = new mongoose.Schema({
         id: String,
         email: String,
         name: String,
+        img: String,
     },
     idPost: String,
     time: Date,
