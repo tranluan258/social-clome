@@ -100,6 +100,9 @@
     cursor: pointer
 }
 
+.index_body{
+    background-color: #a7a7a7;
+}
 
 .aa{
     margin-top: 10%;
@@ -118,9 +121,15 @@
 
 .index_khoa{
     position:fixed;
+    left: 0;
 }
 .tungkhoa{
     padding: 2%;
+}
+
+.khoakhoa{
+    height: 100%;
+    width: 100%;
 }
 
 .index_add_user_alert{
@@ -134,13 +143,6 @@
 }
 .indexpage{
     width: 100%;
-}
-
-.index_content{
-    margin-left: 25%;
-}
-.index_body_content{
-    
 }
 
 .collapse-index{
@@ -167,12 +169,12 @@
 }
 
 .index_video_post{
-    width: 588px;
-    height: 315px;
+    width: 100%;
+    height: 312px;
 }
 
 .index_img_post{
-    width: 588px;
+    width: 100%;
     height: 315px;
 }
 
@@ -265,10 +267,48 @@
     display: block;
     border-radius: 50px;   
 }
+
+.header_thongbao_quantrong{
+    width: 100%;
+}
+
 .index_thongbaoquantrong{
     right: 0;
     position: fixed;
 }
+
+.index_thongbaoquantrong_title{
+    font-size: 25px;
+    color: black;
+    width: 100%;
+}
+
+.thongbao_info{
+    padding: 1%;
+    color: rgb(38, 0, 255);
+}
+
+.thongbao_info:hover{
+    padding: 1%;
+    text-decoration: none;
+    color: black;
+}
+
+.title_thongbao{
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.noidungthongbao{
+    font-size: 12px;
+    overflow: hidden;
+    height: 20px;
+}
+
+.ngaythongbao{
+    font-style: italic;
+}
+
 .header_thongbao_quantrong{
     width: 100%;
     
@@ -279,8 +319,65 @@
     color: black;
 }
 
+@media screen and (max-width: 992px ){
+    .index_thongbaoquantrong,.index_khoa{
+        display: none;
+        right: 0;
+    }
+}
 
 .dacmt{
-    flex: float;
     display: flex;
+}
+
+
+.bb{
+    background-color: #afafaf;
+}
+.choichoi{
+    font-weight: bold;
+    text-align: center;
+    font-size: 20px;
+}
+.profile_info{
+    margin-top: 13%;
+    height:100%;
+    background-color: #ffffff;
+    
+}
+.caianh{
+    text-align: center;
+}
+.profile_avatar{
+    width: 250px;
+    height: 250px;
+    border-radius: 500px;
+    border: 5px solid;
+    
+}
+.profile_name{
+    font-size: xx-large;
+    text-align: center;
+    font-weight: bold;
+}
+.profile_label_name,.profile_label_email,.profile_label_faculty{
+    
+    width: 10%;
+}
+.namename,.emailemail,.facultyfaculty{
+    display: flex;
+}
+.profile_info_name,.profile_info_email,.profile_info_faculty{
+    font-style: italic;
+    font-size: 20px;
+    font-family: 'Times New Roman', Times, serif;
+}
+.caigido{
+    padding: 1%;
+    margin-bottom: 2%;
+}
+
+.profile_timeline{
+    margin-top: 10%;
+    
 }

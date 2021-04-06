@@ -5,7 +5,9 @@ const accountModel = require('../models/accounts');
 const postModel = require('../models/posts');
 const validatorLogin = require('../middleware/validatorLogin');
 const router = express.Router();
-const passport = require('passport')
+const passport = require('passport');
+const commentsModel = require('../models/comments');
+const facultyModel =  require('../models/faculty')
 
 router.get('/login', (req, res) => {
   var error = req.flash('error')
@@ -28,9 +30,13 @@ router.post('/login', passport.authenticate('local', {
 
 router.get('/profile/:id', validatorLogin, async (req, res) => {
   let id = req.params.id
+  let idCurrent = req.session.passport.user
+  let userCurrent =  await accountModel.findById(idCurrent)
   let user = await accountModel.findOne({ id: id })
   let post = await postModel.find({ "user.email": user.email })
-  res.render('profile', { user, post })
+  let comments = await commentsModel.find()
+  let faculty =  await facultyModel.find()
+  res.render('profile', { user,userCurrent, post ,comments,faculty})
 })
 
 router.post('/update', validatorLogin, async (req, res) => {
@@ -42,11 +48,17 @@ router.get('/logout', (req, res) => {
   })
 })
 
-router.post('/updatePassword', async (req, res) => {
-  const { email, oldPassword, newPassword } = req.body
-  const user = await accountModel.findOne({ email: email })
+router.post('/updatePassword', validatorLogin, async (req, res) => {
+  const { oldPassword, newPassword } = req.body
+  const id =  req.session.passport.user
+  if(!oldPassword || !newPassword){
+    return res.json({ code: 1, message: "Du lieu khong hop le" })
+  }
+  const user = await accountModel.findById(id)
   let match = bcrypt.compareSync(oldPassword, user.password)
-  if (match) {
+  if (!match) {
+    res.json({ code: 2, message: "Sai mat khau" })
+  } else {
     let hashPass = bcrypt.hashSync(newPassword, 10)
     accountModel.findOneAndUpdate({
       email: user.email,
@@ -58,8 +70,6 @@ router.post('/updatePassword', async (req, res) => {
         res.json({ code: 0, message: "Thanh cong" })
       })
       .catch(err => res.json({ code: 1, message: "That bai" }))
-  } else {
-    res.json({ code: 2, message: "Sai mat khau" })
   }
 })
 
@@ -68,20 +78,25 @@ router.post('/add', async (req, res) => {
   if (!email || !name || !password || !arrFaculty) {
     res.json({ code: 1, message: "Du lieu khong hop le" })
   } else {
-    let hashPassword = bcrypt.hashSync(password, 10)
-    new accountModel({
-      id: uuid.generate(),
-      name: name,
-      email: email,
-      password: hashPassword,
-      img: "user.png",
-      type: 1,
-      arrFaculty: arrFaculty
-    }).save()
-      .then(() => {
-        res.json({ code: 0, message: "Thanh cong" })
-      })
-      .catch(err => { res.json({ code: 200, message: "That bai" }) })
+    let user  =  await accountModel.findOne({email: email})
+    if(user){
+      res.json({ code: 2, message: "Tồn tại" }) 
+    }else {
+      let hashPassword = bcrypt.hashSync(password, 10)
+      new accountModel({
+        id: uuid.generate(),
+        name: name,
+        email: email,
+        password: hashPassword,
+        img: "/images/user.png",
+        type: 1,
+        arrFaculty: arrFaculty
+      }).save()
+        .then(() => {
+          res.json({ code: 0, message: "Thanh cong" })
+        })
+        .catch(err => { res.json({ code: 2, message: "That bai" }) })
+    }
   }
 
 })

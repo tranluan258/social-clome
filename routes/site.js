@@ -8,6 +8,7 @@ const postModel = require('../models/posts')
 const facultyModel = require('../models/faculty')
 const notificationModel = require('../models/notification')
 const validatorLogin = require('../middleware/validatorLogin')
+const moment =  require('moment')
 
 router.get('/', validatorLogin , async function (req, res) {
     let user = null
@@ -24,7 +25,7 @@ router.get('/', validatorLogin , async function (req, res) {
     const faculty = await facultyModel.find()
     const notification = await notificationModel.find({time: -1}).limit(5)
     const comments = await commentsModel.find()
-    res.render('index', { user,post,comments,faculty,notification })
+    res.render('index', { user,post,comments,faculty,notification,moment })
 })
 
 router.get('/auth/google', passport.authenticate('google', {

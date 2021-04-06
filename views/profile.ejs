@@ -8,22 +8,432 @@
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-    <script src="/javascripts/script.js"></script>
-    <title>Document</title>
+    <title>Profile</title>
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
+    <script src="/javascripts/main.js"></script>
 </head>
-<body>
-    <p><%= user.name %></p>
-    <p><%= user.email %></p>
-    <p><%= user.id %></p>
-    <p>Các bài Post</p>
-    <% post.forEach(p => { %>
-        <p><%= p.data %></p>
-        <% if (p.urlFile.length > 0) { %>
-            <img src="/<%=p.user.email %>/<%= p.nameFile %>" alt="">
-        <% } %>
-        <% if (p.idVideos.length > 0) { %>
-            <iframe width="560" height="315" src="https://www.youtube.com/embed/<%= p.idVideos %>" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`)
-        <% } %>    
-    <% }) %>
+<body class="bb">
+    <div class="container bb">
+        <div class="justify-content-center">
+            <div class="row">
+                <nav class="navbar navbar-expand-lg navbar-light bg-light nav-index fixed-top">
+                    <a class="navbar-brand" href="/" class="fas fa-home index_logo_homepage"></i> SOCIAL CLONE</a>
+                    
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+
+                    
+                    
+                    
+                    
+                    <div class="collapse navbar-collapse collapse-index" id="navbarSupportedContent">
+                        
+                        <% if(userCurrent.type == 2){ %>
+                            <ul class="navbar-nav mr-12">
+                                <div class="index_notifications_button_in_tabbar">
+                                    <li class="nav-item">
+                                        <a href ="/notification/mangenment" class="nav-link mr-sm-2"><i class="fas fa-bell"></i>Notifications</a>
+                                    </li>
+                                </div>
+                            </ul>
+                            <ul class="navbar-nav mr-12">
+                                <div class="index_notifications_button_in_tabbar">
+                                    <li class="nav-item">
+                                        <a class="nav-link mr-sm-2" id="index_create_add_user"><i class="fas fa-user-plus"></i> Add user</a>
+                                    </li>
+                                </div>
+                            </ul>
+                        <%} %>
+                        <% if(userCurrent.type == 1){ %>
+                            <ul class="navbar-nav mr-12">
+                                <div class="index_notifications_button_in_tabbar">
+                                    <li class="nav-item">
+                                        <a  class="nav-link mr-sm-2"><i class="fas fa-bell"></i>Notifications</a>
+                                    </li>
+                                </div>
+                            </ul>
+                            <ul class="navbar-nav mr-12">
+                                <div class="index_change_password_button_in_tabbar">
+                                    <li class="nav-item">
+                                        <a class="nav-link mr-sm-2" id="index_change_password"><i class="fas fa-bell"></i>Change Password</a>
+                                    </li>
+                                </div>
+                            </ul>
+                        <%} %>
+                        <ul class="navbar-nav mr-12">
+                            <div class ="index_profile">
+                                    <a class="nav-link mr-sm-2"><img class="index_avt_profile_in_the_tab" src="<%= userCurrent.img %>"><%= userCurrent.name %></a>
+                                </li>
+                            </div>
+                            <li class="nav-item index_logout">
+                                <a class="nav-link mr-sm-2" href="/account/logout">Logout</a>
+                            </li>
+                        </ul>
+                        
+                    </div>
+
+                </nav>
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                <div class="profile_info col-xs-12 col-md-12 col-sm-12 col-lg-4 col-xl-4">
+                    
+                    <div class="caianh">
+                        <img class="profile_avatar" src="<%= user.img %>">
+                    </div>
+                    <div class="profile_name"><label><%= user.name %></label></div><br> 
+                    
+                    
+                    <div class="info_profile card">
+                        <div class="caigido">
+                            <div class="namename">
+                                <label class="profile_label_name"><i class="fa fa-user" aria-hidden="true"></i></label>
+                                <form>
+                                    <div class="profile_info_name">
+                                        <%= user.name %>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="emailemail">
+                                <label class="profile_label_email"><i class="fa fa-envelope" aria-hidden="true"></i></label>
+                                <form>
+                                    <div class="profile_info_email">
+                                       <%= user.email %>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <% if(user.id == userCurrent.id) { %>
+                            <% if (userCurrent.type == 0) { %>
+                                <button type="button" id="index_create_edit_profile" class="btn btn-success button_edit_profile"><i class="fas fa-edit"></i> Edit profile</button>
+                            <%}%>
+                        <%}%>
+                    </div>
+                    <br>
+                    
+                    
+                </div>
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                    <div class="profile_timeline col-xs-12 col-md-12 col-sm-12 col-lg-8 col-xl-8">
+                        <% if(user.id === userCurrent.id) { %>
+                        <div class="card index_new_post">
+                            <form>
+                                <div class="index_post">
+                                    <input type="textarea" href="#" class="form-control index_your_post" id="index_create_new_post" name="" placeholder="Hey <%= user.name %>, what do you think ..."><br>
+                                </div>
+                            </form>
+                        </div>
+                      <%} %>
+                    <div class="index_body_post">
+    
+    
+                        <!--1 bai viet-->
+                        <% post.forEach(p => { %>
+                            <div class="card index_poster" id="<%= p.id %>">
+                                <div class="card index_on_the_cmt">
+                                    <div class="index_post_title_option">
+                                        <a href="/account/profile/<%= p.user.id %>" class="index_post_avtname"><img class="index_avt_post" src="<%= p.user.img %>"> <%= p.user.name %></a>
+                                        <% if(p.user.id  === userCurrent.id) { %>
+                                            <div class="dropdown edit_and_delete_inpost">
+                                                <button class="btn index_button_in_the_post" type="button" id="dropdownMenuButtonPost" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                . . .
+                                                </button>
+                                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButtonPost">
+                                                <button class="dropdown-item" id="<%= p.id %>" onclick="deletePost(this)"><i class="fas fa-trash"></i> Delete</button>
+                                                <button class="dropdown-item" data-id="<%= p.id %>"><i class="fas fa-edit"></i> Edit</button>
+                                                </div>
+                                            </div>
+                                        <%} %>
+                                        </div>
+                                    <aside><%= p.time %></aside>
+                                    <aside><%= p.data %></aside>
+                                    <% if(p.urlFile.length > 0) { %>
+                                        <img class="index_img_post" src="/<%= p.user.email%>/<%= p.nameFile %>" alt="">
+                                    <%} %>
+                                    <% if (p.idVideos.length > 0) { %>
+                                        <iframe class="index_video_post" src="https://www.youtube.com/embed/<%= p.idVideos %>" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                                    <% } %> 
+                                </div>
+                                <button type="button" class="btn btn-light index_button_cmt" id="" name="" value="" data-toggle="collapse" href="#collapseCmt<%= p.id %>" role="button" aria-expanded="false" aria-controls="collapseCmt<%= p.id %>"><i class="far fa-comment-dots"></i>  Comment</button>
+                                <div class="collapse" id="collapseCmt<%= p.id %>">
+                                    <div class="index_cmt" id="<%= p.id %>">
+                                        <img class="index_avt_cmt" src="<%= userCurrent.img %>">
+                                        <input type="text" class="form-control index_cmt_texbox" id="index_data_cmt<%= p.id %>" value="" placeholder="Your comment..." name="">
+                                        <button id="<%= p.id %>" class="btn-light" onclick="addComments(this)">Send</button>
+                                    </div>
+                                    <!--Binh luan bi an-->
+                                   <% comments.forEach(c => { %>
+                                        <% if(c.idPost == p.id) { %>
+                                        <div id="<%= c.id %>">
+                                            <a class="profile_da_cmt" href="/account/profile"><img class="index_avt_cmt" src="<%= c.user.img %>"> <%= c.user.name %> :</a>
+                                            <div class="index_da_cmt">
+                                                <p class=" card noidungcmt"><%= c.data %></p>
+                                                <% if(c.user.id == userCurrent.id) { %>
+                                                    <div class="dropdown edit_and_delete_incmt">
+                                                        <button class="btn index_button_in_the_cmt" type="button" id="dropdownMenuButtonCmt" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                        ...
+                                                        </button>
+                                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButtonCmt">
+                                                                <button class="dropdown-item" id="<%= c.id %>" onclick="deleteComments(this)"><i class="fas fa-trash"></i> Delete</button>
+                                                            </div>
+                                                    </div>
+                                                <%}%>
+                                            </div>
+                                        </div>
+                                       <% } %>
+                                   <%}) %>
+                                </div>
+                            </div>
+                       <%})%>
+                    </div>
+                </div>
+
+                    </div>
+                </div>
+
+
+
+
+
+
+
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- MODAL------------------------------------------------------------------------------------------------------------------------------------------------------------------------ -->
+
+
+
+
+
+    <!-- modal add user-->
+    <form>
+        <div class="modal" id="index_modal_edit_profile">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h4 class="modal-title">Edit profile</h4>
+                    <button type="button" class="btn  index_button_cancle_add_user" data-dismiss="modal">x</button>
+                    </div>
+                
+                    <div class="modal-body index_body_modal_add_user">
+                        <form>
+                            <div class="namename">
+                                <label class="profile_label_name"><i class="fa fa-user" aria-hidden="true"></i></label>
+                                <form>
+                                    <div class="profile_info_name">
+                                        Tran Luan
+                                    </div>
+                                </form>
+                            </div>
+                            <br>
+                            <label>New name</label>
+                            <input type="text" class="form-control index_add_user_email" id="" name="" placeholder="Enter your new name . . .">
+                            <br>
+                            <div class="emailemail">
+                                <label class="profile_label_email"><i class="fa fa-envelope" aria-hidden="true"></i></label>
+                                <form>
+                                    <div class="profile_info_email">
+                                        518000397@student.tdtu.edu.vn
+                                    </div>
+                                </form>
+                            </div>
+                            
+                            <br>
+                            <label>Avatar</label>
+                            <input type="file" class="form-control index_add_user_email" id="" name="" placeholder="Enter your new name . . .">
+                            <br>
+                            <br>
+                            <div class="alert alert-danger index_edit_profile_alert" role="alert">
+                                Your avatar is too large, please choose a 250x250 pixel picture !
+                            </div>
+                        </form>
+                    </div>
+                
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary index_button_post_new_post"><i class="fas fa-edit"></i> Edit profile</button>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    
+    <div class="modal" id="index_modal_new_post">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h4 class="modal-title">Create post</h4>
+                <button type="button" class="btn  index_button_cancle_new_post" data-dismiss="modal">x</button>
+                </div>
+            
+                <div class="modal-body index_body_modal_new_post">
+                    <form>
+                        <textarea type="" class="form-control index_modal_type" id="data-post" name="" placeholder="Hey <%= user.name %>, what do you think ..."></textarea><br>
+                        <div class="ba_cai_phim">
+                            <button type="button" id="btn-post-ytb" class="btn btn-danger index_button_video_new_post"><i class="fab fa-youtube"></i>  Youtube</button>
+                            
+                            <button type="button" id="btn-post-img" class="btn btn-success index_button_image_new_post"><i class="fas fa-images"></i>  Image</button>
+                            
+                        </div>
+                        <input type="text" class="form-control index_button_link_video_new_post" id="input-post-ytb">
+                        <input type="file"  id="input-post-img" class="form-control index_button_link_image_new_post">
+                        <div class="alert alert-danger index_alert_post_fail"></div>
+                    </form>
+                </div>
+            
+                <div class="modal-footer">
+                    <button id="btn-create-post" data-email= "<%= userCurrent.email %>" type="button" class="btn btn-primary index_button_post_new_post">Create post</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <div class="modal" id="index_modal_add_user">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h4 class="modal-title">Add user</h4>
+                <button type="button" class="btn  index_button_cancle_add_user" data-dismiss="modal">x</button>
+                </div>
+            
+                <div class="modal-body index_body_modal_add_user">
+                        <label>Email:</label>
+                        <input type="text" class="form-control index_add_user_email" id="email_user" name="" placeholder="Enter email">
+                        <label>Password:</label>
+                        <input type="password" class="form-control index_add_user_email" id="password_user" name="" placeholder="Enter password">
+                        <label>Full name:</label>
+                        <input type="text" class="form-control index_add_user_email" id="name_user" name="" placeholder="Enter name">
+                        <label>Faculty: </label>
+                        <br>
+                        <% faculty.forEach(f => {%>
+                            <input type="checkbox" name="faculty" id ="<%=f.id %>" value="<%= f.name %>" placeholder="Check"> <%= f.name %>
+                        <%})%>
+                        <div class="alert alert-danger index_add_user_alert" role="alert">
+                            Incorrect email or password !
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button"  id="btn_add_user" class="btn btn-primary index_button_post_new_post">Add user</button>    
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="index_modal_change_password">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h4 class="modal-title">Change Password</h4>
+                <button type="button" class="btn  index_button_cancle_change_password" data-dismiss="modal">x</button>
+                </div>
+            
+                <div class="modal-body index_body_modal_change_password">
+                        <label>Old Password:</label>
+                        <input type="password" class="form-control index_add_user_email" id="old_password" name="" placeholder="Enter password">
+                        <label>New Password:</label>
+                        <input type="password" class="form-control index_add_user_email" id="new_password" name="" placeholder="Enter name">
+                </div>
+                <div class="alert alert-danger index_add_user_alert" role="alert">
+                    Incorrect email or password !
+                </div>
+                <div class="modal-footer">
+                    <button type="button"  id="btn_change_password" class="btn btn-primary index_button_post_new_post">Change</button>    
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 </body>
 </html>

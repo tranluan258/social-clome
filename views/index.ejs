@@ -10,39 +10,39 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <title>Index</title>
     <link rel="stylesheet" href="/stylesheets/style.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js" integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ==" crossorigin="anonymous"></script>
+    <script src="/javascripts/main.js"></script> 
     <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
 </head>
 <body class="index_body">
     <div class="container-fluid">
-        <div class="row aa">
+        <div class="row aa justify-content-center">
             <nav class="navbar navbar-expand-lg navbar-light bg-light nav-index fixed-top">
                 <a class="navbar-brand" href="/"><i class="fas fa-home index_logo_homepage"></i> SOCIAL CLONE</a>
 
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#phimkhoa" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <a class="navbar-toggler" href="/faculty">
                     <span class="navbar-toggler fa fa-briefcase"></span>
-                  </button>
-                  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#phimthongbao" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                  </a>
+                  <button class="navbar-toggler" id='bttn' type="button" data-toggle="collapse" data-target="#phimthongbao" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler fa fa-globe action-nav-horizontal"></span>
                   </button>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon action-nav-horizontal"></span>
                 </button>
                 
-
-                
                 <div class="collapse navbar-collapse collapse-index" id="navbarSupportedContent">
                     <% if(user.type == 2){ %>
                         <ul class="navbar-nav mr-12">
                             <div class="index_notifications_button_in_tabbar">
                                 <li class="nav-item">
-                                    <a href ="#" class="nav-link mr-sm-2"><i class="fas fa-bell"></i>Create notifications</a>
+                                    <a href ="/notification/mangenment" class="nav-link mr-sm-2"><i class="fas fa-bell"></i>Notifications</a>
                                 </li>
                             </div>
                         </ul>
                         <ul class="navbar-nav mr-12">
                             <div class="index_notifications_button_in_tabbar">
                                 <li class="nav-item">
-                                    <a class="nav-link mr-sm-2" href ="#" id="index_create_add_user"><i class="fas fa-user-plus"></i> Add user</a>
+                                    <a class="nav-link mr-sm-2" id="index_create_add_user"><i class="fas fa-user-plus"></i> Add user</a>
                                 </li>
                             </div>
                         </ul>
@@ -51,7 +51,14 @@
                         <ul class="navbar-nav mr-12">
                             <div class="index_notifications_button_in_tabbar">
                                 <li class="nav-item">
-                                    <a href ="#" class="nav-link mr-sm-2"><i class="fas fa-bell"></i>Create notifications</a>
+                                    <a  class="nav-link mr-sm-2"><i class="fas fa-bell"></i>Notifications</a>
+                                </li>
+                            </div>
+                        </ul>
+                        <ul class="navbar-nav mr-12">
+                            <div class="index_change_password_button_in_tabbar">
+                                <li class="nav-item">
+                                    <a class="nav-link mr-sm-2" id="index_change_password"><i class="fas fa-bell"></i>Change Password</a>
                                 </li>
                             </div>
                         </ul>
@@ -80,26 +87,23 @@
 
 
 
-
-
-            <div class="card index_khoa col-lg-3 nav-link collapse navbar-collapse" id="phimkhoa">
-                <header class="Khoa">
-                    Khoa
-                </header>
+            <div class="card index_khoa col-lg-3 col-xl-3 nav-link collapse nav navbar-collapse collapse-index">
+                <header class="Khoa index_thongbaoquantrong_title"><b>Khoa</b></header>
+                <br>
                 <body>
-                    <ul class="navbar-nav flex-column">
+                    <ul class="navbar-nav khoakhoa flex-column">
                         <li class="nav-item">
                             <a class="card tungkhoa active" href="/faculty">
                                 All  
                             </a>
                         </li>
-                       <% faculty.forEach(f  => { %>
-                        <li class="nav-item">
-                            <a class="card tungkhoa" href="/faculty/<%= f.id %>">
-                               <%= f.name %>
-                            </a>
-                        </li>
-                      <% })%>
+                        <% faculty.forEach(f => { %>
+                            <li class="nav-item">
+                                <a class="card tungkhoa" href="/faculty/<%= f.id %>">
+                                    <%= f.name %>
+                                </a>
+                            </li>
+                        <%})%>
                     </ul>
                 </body>
             </div>
@@ -125,7 +129,7 @@
                 <div class="card index_new_post">
                     <form>
                         <div class="index_post">
-                            <input type="textarea" href="#" class="form-control index_your_post" id="index_create_new_post" name="" placeholder="Hey <%= user.name %>, what do you think ..."><br>
+                            <input type="textarea" class="form-control index_your_post" id="index_create_new_post" name="" placeholder="Hey <%= user.name %>, what do you think ..."><br>
                         </div>
                     </form>
                 </div>
@@ -137,7 +141,7 @@
                         <div class="card index_poster" id="<%= p.id %>">
                             <div class="card index_on_the_cmt">
                                 <div class="index_post_title_option">
-                                    <h2 class="index_post_avtname"><img class="index_avt_post" src="<%= p.user.img %>"> <%= p.user.name %></h2>
+                                    <a href="/account/profile/<%= p.user.id %>" class="index_post_avtname"><img class="index_avt_post" src="<%= p.user.img %>"> <%= p.user.name %></a>
                                     <% if(p.user.id  === user.id) { %>
                                         <div class="dropdown edit_and_delete_inpost">
                                             <button class="btn index_button_in_the_post" type="button" id="dropdownMenuButtonPost" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
@@ -150,7 +154,7 @@
                                         </div>
                                     <%} %>
                                     </div>
-                                <aside><%= p.time %></aside>
+                                <aside><%= moment(p.time).fromNow() %></aside>
                                 <aside><%= p.data %></aside>
                                 <% if(p.urlFile.length > 0) { %>
                                     <img class="index_img_post" src="/<%= p.user.email%>/<%= p.nameFile %>" alt="">
@@ -164,7 +168,7 @@
                                 <div class="index_cmt" id="<%= p.id %>">
                                     <img class="index_avt_cmt" src="<%= user.img %>">
                                     <input type="text" class="form-control index_cmt_texbox" id="index_data_cmt<%= p.id %>" value="" placeholder="Your comment..." name="">
-                                    <button id="<%= p.id %>" onclick="addComments(this)">Send</button>
+                                    <button id="<%= p.id %>" class="btn-light" onclick="addComments(this)">Send</button>
                                 </div>
                                 <!--Binh luan bi an-->
                                <% comments.forEach(c => { %>
@@ -212,36 +216,50 @@
             
 
 
-            <div class="card index_thongbaoquantrong col-lg-3 nav-link collapse navbar-collapse" id="phimthongbao">
+            <div class="card index_thongbaoquantrong col-xs-x col-sm-x col-md-x col-lg-3 nav-link collapse navbar-collapse" id="phimthongbaoall">
                 <header class="header_thongbao_quantrong">
                     <a class="index_thongbaoquantrong_title non-textdecoration" href="#"><p class="index_thongbaoquantrong_title"><b>Notifications</b></p></a>
                 </header>
-                    <ul class="navbar-nav flex-column lg-0">
-                        <li class="nav-item">
-                            <a class="card thongbaoquangtrong" href="#">
-                                Thông báo 1    
+                <body>
+                    <ul class="navbar-nav flex-column lg-0 thongbaoquangtrong">
+                        <li class="nav-item oi">
+                            <a class="card thongbao_info" href="#">
+                                <div class="title_thongbao">GIA HẠN ĐĂNG KÝ BẢO HIỂM</div>
+                                <div class="ngaythongbao">2 days ago</div>
+                                <div class="noidungthongbao">Chuyên mục Công nghệ của Quantrimang.com sẽ bao gồm thủ thuật, hướng dẫn sử dụng phần mềm, phần cứng, sửa lỗi mạng, sửa lỗi máy tính trên nhiều hệ điều hành như Windows, macOS, Linux, Android, iOS,....</div>   
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="card thongbaoquangtrong" href="#">
-                                Thông báo 1 
+                            <a class="card thongbao_info" href="#">
+                                <div class="title_thongbao">GIA HẠN ĐĂNG KÝ BẢO HIỂM</div>
+                                <div class="ngaythongbao">2 days ago</div>
+                                <div class="noidungthongbao">Chuyên mục Công nghệ của Quantrimang.com sẽ bao gồm thủ thuật, hướng dẫn sử dụng phần mềm, phần cứng, sửa lỗi mạng, sửa lỗi máy tính trên nhiều hệ điều hành như Windows, macOS, Linux, Android, iOS,....</div>   
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="card thongbaoquangtrong" href="#">
-                                Thông báo 1 
+                            <a class="card thongbao_info" href="#">
+                                <div class="title_thongbao">GIA HẠN ĐĂNG KÝ BẢO HIỂM</div>
+                                <div class="ngaythongbao">2 days ago</div>
+                                <div class="noidungthongbao">Chuyên mục Công nghệ của Quantrimang.com sẽ bao gồm thủ thuật, hướng dẫn sử dụng phần mềm, phần cứng, sửa lỗi mạng, sửa lỗi máy tính trên nhiều hệ điều hành như Windows, macOS, Linux, Android, iOS,....</div>   
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="card thongbaoquangtrong" href="#">
-                                Thông báo 1 
+                            <a class="card thongbao_info" href="#">
+                                <div class="title_thongbao">GIA HẠN ĐĂNG KÝ BẢO HIỂM</div>
+                                <div class="ngaythongbao">2 days ago</div>
+                                <div class="noidungthongbao">Chuyên mục Công nghệ của Quantrimang.com sẽ bao gồm thủ thuật, hướng dẫn sử dụng phần mềm, phần cứng, sửa lỗi mạng, sửa lỗi máy tính trên nhiều hệ điều hành như Windows, macOS, Linux, Android, iOS,....</div>   
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="card thongbaoquangtrong" href="#">
-                                Thông báo 1 </a>
+                            <a class="card thongbao_info" href="#">
+                                <div class="title_thongbao">GIA HẠN ĐĂNG KÝ BẢO HIỂM</div>
+                                <div class="ngaythongbao">2 days ago</div>
+                                <div class="noidungthongbao">Chuyên mục Công nghệ của Quantrimang.com sẽ bao gồm thủ thuật, hướng dẫn sử dụng phần mềm, phần cứng, sửa lỗi mạng, sửa lỗi máy tính trên nhiều hệ điều hành như Windows, macOS, Linux, Android, iOS,....</div>   
+                            </a>
                         </li>
                     </ul>
+                    
+                </body>
             </div>
 
 
@@ -258,7 +276,6 @@
 
 
     <!-- modal add user-->
-    <form>
         <div class="modal" id="index_modal_add_user">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -268,30 +285,51 @@
                     </div>
                 
                     <div class="modal-body index_body_modal_add_user">
-                        <form>
                             <label>Email:</label>
-                            <input type="text" class="form-control index_add_user_email" id="" name="" placeholder="Enter email">
+                            <input type="text" class="form-control index_add_user_email" id="email_user" name="" placeholder="Enter email">
                             <label>Password:</label>
-                            <input type="password" class="form-control index_add_user_email" id="" name="" placeholder="Enter password">
+                            <input type="password" class="form-control index_add_user_email" id="password_user" name="" placeholder="Enter password">
                             <label>Full name:</label>
-                            <input type="text" class="form-control index_add_user_email" id="" name="" placeholder="Enter name">
+                            <input type="text" class="form-control index_add_user_email" id="name_user" name="" placeholder="Enter name">
                             <label>Faculty: </label>
                             <br>
-                            <input type="checkbox" name="" id ="" placeholder="Check"> CNTT
+                            <% faculty.forEach(f => {%>
+                                <input type="checkbox" name="faculty" id ="<%=f.id %>" value="<%= f.name %>" placeholder="Check"> <%= f.name %>
+                            <%})%>
                             <div class="alert alert-danger index_add_user_alert" role="alert">
                                 Incorrect email or password !
                             </div>
-                        </form>
-                    </div>
-                
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-primary index_button_post_new_post">Add user</button>
-                        
+                            <div class="modal-footer">
+                                <button type="button"  id="btn_add_user" class="btn btn-primary index_button_post_new_post">Add user</button>    
+                            </div>
                     </div>
                 </div>
             </div>
         </div>
-    </form>
+
+        <div class="modal" id="index_modal_change_password">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h4 class="modal-title">Change Password</h4>
+                    <button type="button" class="btn  index_button_cancle_change_password" data-dismiss="modal">x</button>
+                    </div>
+                
+                    <div class="modal-body index_body_modal_change_password">
+                            <label>Old Password:</label>
+                            <input type="password" class="form-control index_add_user_email" id="old_password" name="" placeholder="Enter password">
+                            <label>New Password:</label>
+                            <input type="password" class="form-control index_add_user_email" id="new_password" name="" placeholder="Enter name">
+                    </div>
+                    <div class="alert alert-danger index_add_user_alert" role="alert">
+                        Incorrect email or password !
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button"  id="btn_change_password" class="btn btn-primary index_button_post_new_post">Change</button>    
+                    </div>
+                </div>
+            </div>
+        </div>
 
 
 
@@ -305,7 +343,7 @@
             
                 <div class="modal-body index_body_modal_new_post">
                     <form>
-                        <textarea type="" class="form-control index_modal_type" id="data-post" name="" placeholder="Hey Tran Luan, what do you think ..."></textarea><br>
+                        <textarea type="" class="form-control index_modal_type" id="data-post" name="" placeholder="Hey <%= user.name %>, what do you think ..."></textarea><br>
                         <div class="ba_cai_phim">
                             <button type="button" id="btn-post-ytb" class="btn btn-danger index_button_video_new_post"><i class="fab fa-youtube"></i>  Youtube</button>
                             
@@ -324,6 +362,5 @@
             </div>
         </div>
     </div>
-    <script src="/javascripts/main.js"></script> 
 </body>
 </html>

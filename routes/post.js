@@ -8,10 +8,9 @@ const commentsModel = require("../models/comments");
 const fs = require("fs");
 const uuid = require("short-uuid");
 const validator = require("youtube-validator");
-const { collection } = require("../models/accounts");
 
 router.post("/add", upload.single("attachment"), async (req, res) => {
-  const { email, YoutubeId, data } = req.body;
+  const {email,YoutubeId, data } = req.body;
   const file = req.file;
   if (!email) {
     return res.json({ code: 1, message: "Du lieu khong hop le" });
@@ -50,7 +49,7 @@ router.post("/add", upload.single("attachment"), async (req, res) => {
       })
         .save()
         .then((post) =>
-          res.json({ code: 0, message: "Them thanh cong", post: post })
+          res.json({ code: 0, message: "Them thanh cong", post: post})
         )
         .catch(() => res.json({ code: 3, message: "Them that bai" }));
     } else if (YoutubeId != null) {
@@ -67,13 +66,13 @@ router.post("/add", upload.single("attachment"), async (req, res) => {
               img: user.img
             },
             data: data || "",
-            time: new Date().getTime(),
+            time:new Date().getTime(),
             urlFile: "",
             idVideos: YoutubeId,
           })
             .save()
             .then((post) =>
-              res.json({ code: 0, message: "Them thanh cong", post: post })
+              res.json({ code: 0, message: "Them thanh cong", post: post})
             )
             .catch(() => res.json({ code: 3, message: "Them that bai" }));
         }
@@ -88,13 +87,13 @@ router.post("/add", upload.single("attachment"), async (req, res) => {
           img: user.img
         },
         data: data,
-        time: new Date().getTime(),
+        time:new Date().getTime(),
         urlFile: "",
         idVideos: "",
       })
         .save()
         .then((post) =>
-          res.json({ code: 0, message: "Them thanh cong", post: post })
+          res.json({ code: 0, message: "Them thanh cong", post: post})
         )
         .catch(() => res.json({ code: 3, message: "Them that bai" }));
     }
