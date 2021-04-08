@@ -23,7 +23,7 @@ router.get('/', validatorLogin , async function (req, res) {
     }
     const post = await postModel.find().sort({time: -1}).limit(10)
     const faculty = await facultyModel.find()
-    const notification = await notificationModel.find({time: -1}).limit(5)
+    const notification = await notificationModel.find().sort({time: -1}).limit(5)
     const comments = await commentsModel.find()
     res.render('index', { user,post,comments,faculty,notification,moment })
 })

@@ -142,6 +142,7 @@
                             <div class="card index_on_the_cmt">
                                 <div class="index_post_title_option">
                                     <a href="/account/profile/<%= p.user.id %>" class="index_post_avtname"><img class="index_avt_post" src="<%= p.user.img %>"> <%= p.user.name %></a>
+                                    <aside><%= moment(p.time).fromNow() %></aside>
                                     <% if(p.user.id  === user.id) { %>
                                         <div class="dropdown edit_and_delete_inpost">
                                             <button class="btn index_button_in_the_post" type="button" id="dropdownMenuButtonPost" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
@@ -154,7 +155,6 @@
                                         </div>
                                     <%} %>
                                     </div>
-                                <aside><%= moment(p.time).fromNow() %></aside>
                                 <aside><%= p.data %></aside>
                                 <% if(p.urlFile.length > 0) { %>
                                     <img class="index_img_post" src="/<%= p.user.email%>/<%= p.nameFile %>" alt="">
@@ -168,13 +168,13 @@
                                 <div class="index_cmt" id="<%= p.id %>">
                                     <img class="index_avt_cmt" src="<%= user.img %>">
                                     <input type="text" class="form-control index_cmt_texbox" id="index_data_cmt<%= p.id %>" value="" placeholder="Your comment..." name="">
-                                    <button id="<%= p.id %>" class="btn-light" onclick="addComments(this)">Send</button>
+                                    <button id="<%= p.id %>" class="btn btn-primary" onclick="addComments(this)">Send</button>
                                 </div>
                                 <!--Binh luan bi an-->
                                <% comments.forEach(c => { %>
                                     <% if(c.idPost == p.id) { %>
                                     <div id="<%= c.id %>">
-                                        <a class="profile_da_cmt" href="/account/profile"><img class="index_avt_cmt" src="<%= c.user.img %>"> <%= c.user.name %> :</a>
+                                        <a class="profile_da_cmt" href="/account/profile/<%= c.user.id %>"><img class="index_avt_cmt" src="<%= c.user.img %>"> <%= c.user.name %> :</a>
                                         <div class="index_da_cmt">
                                             <p class=" card noidungcmt"><%= c.data %></p>
                                             <% if(c.user.id == user.id) { %>
@@ -198,75 +198,28 @@
             </div>
                     
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            
-
-
             <div class="card index_thongbaoquantrong col-xs-x col-sm-x col-md-x col-lg-3 nav-link collapse navbar-collapse" id="phimthongbaoall">
                 <header class="header_thongbao_quantrong">
-                    <a class="index_thongbaoquantrong_title non-textdecoration" href="#"><p class="index_thongbaoquantrong_title"><b>Notifications</b></p></a>
+                    <a class="index_thongbaoquantrong_title non-textdecoration" href="/facutly"><p class="index_thongbaoquantrong_title"><b>Notifications</b></p></a>
                 </header>
                 <body>
                     <ul class="navbar-nav flex-column lg-0 thongbaoquangtrong">
-                        <li class="nav-item oi">
-                            <a class="card thongbao_info" href="#">
-                                <div class="title_thongbao">GIA HẠN ĐĂNG KÝ BẢO HIỂM</div>
-                                <div class="ngaythongbao">2 days ago</div>
-                                <div class="noidungthongbao">Chuyên mục Công nghệ của Quantrimang.com sẽ bao gồm thủ thuật, hướng dẫn sử dụng phần mềm, phần cứng, sửa lỗi mạng, sửa lỗi máy tính trên nhiều hệ điều hành như Windows, macOS, Linux, Android, iOS,....</div>   
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="card thongbao_info" href="#">
-                                <div class="title_thongbao">GIA HẠN ĐĂNG KÝ BẢO HIỂM</div>
-                                <div class="ngaythongbao">2 days ago</div>
-                                <div class="noidungthongbao">Chuyên mục Công nghệ của Quantrimang.com sẽ bao gồm thủ thuật, hướng dẫn sử dụng phần mềm, phần cứng, sửa lỗi mạng, sửa lỗi máy tính trên nhiều hệ điều hành như Windows, macOS, Linux, Android, iOS,....</div>   
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="card thongbao_info" href="#">
-                                <div class="title_thongbao">GIA HẠN ĐĂNG KÝ BẢO HIỂM</div>
-                                <div class="ngaythongbao">2 days ago</div>
-                                <div class="noidungthongbao">Chuyên mục Công nghệ của Quantrimang.com sẽ bao gồm thủ thuật, hướng dẫn sử dụng phần mềm, phần cứng, sửa lỗi mạng, sửa lỗi máy tính trên nhiều hệ điều hành như Windows, macOS, Linux, Android, iOS,....</div>   
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="card thongbao_info" href="#">
-                                <div class="title_thongbao">GIA HẠN ĐĂNG KÝ BẢO HIỂM</div>
-                                <div class="ngaythongbao">2 days ago</div>
-                                <div class="noidungthongbao">Chuyên mục Công nghệ của Quantrimang.com sẽ bao gồm thủ thuật, hướng dẫn sử dụng phần mềm, phần cứng, sửa lỗi mạng, sửa lỗi máy tính trên nhiều hệ điều hành như Windows, macOS, Linux, Android, iOS,....</div>   
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="card thongbao_info" href="#">
-                                <div class="title_thongbao">GIA HẠN ĐĂNG KÝ BẢO HIỂM</div>
-                                <div class="ngaythongbao">2 days ago</div>
-                                <div class="noidungthongbao">Chuyên mục Công nghệ của Quantrimang.com sẽ bao gồm thủ thuật, hướng dẫn sử dụng phần mềm, phần cứng, sửa lỗi mạng, sửa lỗi máy tính trên nhiều hệ điều hành như Windows, macOS, Linux, Android, iOS,....</div>   
-                            </a>
-                        </li>
-                    </ul>
-                    
+                       <% notification.forEach(n => { %>
+                            <li class="nav-item oi">
+                               <div class="card thongbao_info">
+                                    <span><%= n.faculty.name %> || Ngày: <%= n.datePost %></span>
+                                    <a href="/notification/<%= n.id %>">
+                                        <div class="title_thongbao"><%= n.title %></div>
+                                        <div class="ngaythongbao"><%= moment(n.time).fromNow() %></div>
+                                        <div class="noidungthongbao"><%= n.data %></div>   
+                                    </a>
+                               </div>
+                            </li>
+                       <%}) %>
+                    </ul>   
                 </body>
             </div>
 
-
-
-
-                
-            
         </div>
     </div>
     <!-- MODAL------------------------------------------------------------------------------------------------------------------------------------------------------------------------ -->
@@ -351,7 +304,7 @@
                             
                         </div>
                         <input type="text" class="form-control index_button_link_video_new_post" id="input-post-ytb">
-                        <input type="file"  id="input-post-img" class="form-control index_button_link_image_new_post">
+                        <input type="file" accept="image/*" id="input-post-img" class="form-control index_button_link_image_new_post">
                         <div class="alert alert-danger index_alert_post_fail"></div>
                     </form>
                 </div>

@@ -6,7 +6,7 @@ if(!connectionString){
     console.log('No connection string')
     process.exit(1)
 }
-mongoose.connect(connectionString, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(connectionString, { useNewUrlParser: true, useUnifiedTopology: true,useFindAndModify: false })
 const db = mongoose.connection
 
 db.on('error', error => {

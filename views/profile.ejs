@@ -10,6 +10,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <title>Profile</title>
     <link rel="stylesheet" href="/stylesheets/style.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js" integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ==" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
     <script src="/javascripts/main.js"></script>
 </head>
@@ -64,7 +65,7 @@
                         <%} %>
                         <ul class="navbar-nav mr-12">
                             <div class ="index_profile">
-                                    <a class="nav-link mr-sm-2"><img class="index_avt_profile_in_the_tab" src="<%= userCurrent.img %>"><%= userCurrent.name %></a>
+                                    <a class="nav-link mr-sm-2"><img class="index_avt_profile_in_the_tab" src="<%= userCurrent.img %>"> <span id="profile_name_span"> <%= userCurrent.name %></span></a>
                                 </li>
                             </div>
                             <li class="nav-item index_logout">
@@ -114,31 +115,27 @@
                     <div class="caianh">
                         <img class="profile_avatar" src="<%= user.img %>">
                     </div>
-                    <div class="profile_name"><label><%= user.name %></label></div><br> 
+                    <div class="profile_name"><label id="profile_label_name"><%= user.name %></label></div><br> 
                     
                     
                     <div class="info_profile card">
                         <div class="caigido">
                             <div class="namename">
                                 <label class="profile_label_name"><i class="fa fa-user" aria-hidden="true"></i></label>
-                                <form>
                                     <div class="profile_info_name">
                                         <%= user.name %>
                                     </div>
-                                </form>
                             </div>
                             <div class="emailemail">
                                 <label class="profile_label_email"><i class="fa fa-envelope" aria-hidden="true"></i></label>
-                                <form>
                                     <div class="profile_info_email">
                                        <%= user.email %>
                                     </div>
-                                </form>
                             </div>
                         </div>
                         <% if(user.id == userCurrent.id) { %>
                             <% if (userCurrent.type == 0) { %>
-                                <button type="button" id="index_create_edit_profile" class="btn btn-success button_edit_profile"><i class="fas fa-edit"></i> Edit profile</button>
+                                <button type="button" id="index_create_edit_profile" data-id="<%= userCurrent.id %>" class="btn btn-success button_edit_profile"><i class="fas fa-edit"></i> Edit profile</button>
                             <%}%>
                         <%}%>
                     </div>
@@ -199,7 +196,8 @@
                             <div class="card index_poster" id="<%= p.id %>">
                                 <div class="card index_on_the_cmt">
                                     <div class="index_post_title_option">
-                                        <a href="/account/profile/<%= p.user.id %>" class="index_post_avtname"><img class="index_avt_post" src="<%= p.user.img %>"> <%= p.user.name %></a>
+                                        <a href="/account/profile/<%= p.user.id %>" class="index_post_avtname"><img id="profile_avt_post" class="index_avt_post" src="<%= p.user.img %>"><span id="profile_name_span_post"><%= p.user.name %></span> </a>
+                                        <aside><%= moment(p.time).fromNow() %></aside>
                                         <% if(p.user.id  === userCurrent.id) { %>
                                             <div class="dropdown edit_and_delete_inpost">
                                                 <button class="btn index_button_in_the_post" type="button" id="dropdownMenuButtonPost" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
@@ -212,7 +210,6 @@
                                             </div>
                                         <%} %>
                                         </div>
-                                    <aside><%= p.time %></aside>
                                     <aside><%= p.data %></aside>
                                     <% if(p.urlFile.length > 0) { %>
                                         <img class="index_img_post" src="/<%= p.user.email%>/<%= p.nameFile %>" alt="">
@@ -224,15 +221,15 @@
                                 <button type="button" class="btn btn-light index_button_cmt" id="" name="" value="" data-toggle="collapse" href="#collapseCmt<%= p.id %>" role="button" aria-expanded="false" aria-controls="collapseCmt<%= p.id %>"><i class="far fa-comment-dots"></i>  Comment</button>
                                 <div class="collapse" id="collapseCmt<%= p.id %>">
                                     <div class="index_cmt" id="<%= p.id %>">
-                                        <img class="index_avt_cmt" src="<%= userCurrent.img %>">
+                                        <img id="profile_avt_post_2" class="index_avt_cmt" src="<%= userCurrent.img %>">
                                         <input type="text" class="form-control index_cmt_texbox" id="index_data_cmt<%= p.id %>" value="" placeholder="Your comment..." name="">
-                                        <button id="<%= p.id %>" class="btn-light" onclick="addComments(this)">Send</button>
+                                        <button id="<%= p.id %>" class="btn btn-primary" onclick="addComments(this)">Send</button>
                                     </div>
                                     <!--Binh luan bi an-->
                                    <% comments.forEach(c => { %>
                                         <% if(c.idPost == p.id) { %>
                                         <div id="<%= c.id %>">
-                                            <a class="profile_da_cmt" href="/account/profile"><img class="index_avt_cmt" src="<%= c.user.img %>"> <%= c.user.name %> :</a>
+                                            <a class="profile_da_cmt" href="/account/profile"><img id="profile_avt_cmt" class="index_avt_cmt" src="<%= c.user.img %>"> <span id="profile_name_span_cmt"><%= c.user.name %> :</span></a>
                                             <div class="index_da_cmt">
                                                 <p class=" card noidungcmt"><%= c.data %></p>
                                                 <% if(c.user.id == userCurrent.id) { %>
@@ -277,7 +274,6 @@
 
 
     <!-- modal add user-->
-    <form>
         <div class="modal" id="index_modal_edit_profile">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -287,47 +283,37 @@
                     </div>
                 
                     <div class="modal-body index_body_modal_add_user">
-                        <form>
-                            <div class="namename">
-                                <label class="profile_label_name"><i class="fa fa-user" aria-hidden="true"></i></label>
-                                <form>
-                                    <div class="profile_info_name">
-                                        Tran Luan
-                                    </div>
-                                </form>
-                            </div>
-                            <br>
-                            <label>New name</label>
-                            <input type="text" class="form-control index_add_user_email" id="" name="" placeholder="Enter your new name . . .">
+                       
+                            <label>Name</label>
+                            <input type="text" class="form-control profile_update_name" id="" name="" placeholder="Enter your new name . . .">
                             <br>
                             <div class="emailemail">
                                 <label class="profile_label_email"><i class="fa fa-envelope" aria-hidden="true"></i></label>
                                 <form>
-                                    <div class="profile_info_email">
-                                        518000397@student.tdtu.edu.vn
+                                    <div class="profile_info_email_modal">
+                                        
                                     </div>
                                 </form>
                             </div>
                             
                             <br>
                             <label>Avatar</label>
-                            <input type="file" class="form-control index_add_user_email" id="" name="" placeholder="Enter your new name . . .">
+                            <input type="file" class="form-control index_add_user_email" id="profile_img_upload" name="" placeholder="Enter your new name . . .">
                             <br>
                             <br>
-                            <div class="alert alert-danger index_edit_profile_alert" role="alert">
-                                Your avatar is too large, please choose a 250x250 pixel picture !
+                            <div class="alert alert-danger profile_edit_profile_alert_danger" role="alert">
+                                
                             </div>
-                        </form>
+
                     </div>
                 
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary index_button_post_new_post"><i class="fas fa-edit"></i> Edit profile</button>
+                        <button id="btn_update_profile" type="button" class="btn btn-primary index_button_post_new_post"><i class="fas fa-edit"></i> Edit profile</button>
                         
                     </div>
                 </div>
             </div>
         </div>
-    </form>
     
     <div class="modal" id="index_modal_new_post">
         <div class="modal-dialog">

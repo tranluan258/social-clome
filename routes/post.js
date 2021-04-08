@@ -8,8 +8,9 @@ const commentsModel = require("../models/comments");
 const fs = require("fs");
 const uuid = require("short-uuid");
 const validator = require("youtube-validator");
+const validatorLogin =  require("../middleware/validatorLogin")
 
-router.post("/add", upload.single("attachment"), async (req, res) => {
+router.post("/add", validatorLogin, upload.single("attachment"), async (req, res) => {
   const {email,YoutubeId, data } = req.body;
   const file = req.file;
   if (!email) {
@@ -100,7 +101,7 @@ router.post("/add", upload.single("attachment"), async (req, res) => {
   }
 });
 
-router.delete("/delete/:id", async (req, res) => {
+router.delete("/delete/:id", validatorLogin, async (req, res) => {
   const id = req.params.id;
   const post = await postModel.findOne({ id: id });
   if (post) {
@@ -121,7 +122,7 @@ router.delete("/delete/:id", async (req, res) => {
 
 router.post("/update", (req, res) => {});
 
-router.post("/load", async (req, res) => {
+router.post("/load",  async (req, res) => {
   const id = req.session.passport.user
   var { start, limit } = req.body;
   postModel.count().then(numDocs => {

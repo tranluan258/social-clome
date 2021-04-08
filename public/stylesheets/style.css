@@ -361,7 +361,6 @@
     font-weight: bold;
 }
 .profile_label_name,.profile_label_email,.profile_label_faculty{
-    
     width: 10%;
 }
 .namename,.emailemail,.facultyfaculty{
@@ -379,5 +378,12 @@
 
 .profile_timeline{
     margin-top: 10%;
-    
+}
+
+.profile_update_name{
+    text-align: center;
+}
+
+.profile_edit_profile_alert_danger{
+    display: none;
 }

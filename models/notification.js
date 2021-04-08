@@ -11,10 +11,10 @@ const notificationSchema = new mongoose.Schema({
         email: String,
         name: String
     },
+    datePost: String,
     time: Date,
     title: String,
-    data: String,
-    urlFile: String,
+    data: String
 })
 
 const notificationsModel = mongoose.model('notification', notificationSchema)

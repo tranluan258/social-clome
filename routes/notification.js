@@ -3,8 +3,8 @@ const uuid  = require('short-uuid')
 const router = express.Router()
 const notificationModel = require('../models/notification')
 const accountModel = require('../models/accounts')
+const facultyModel = require('../models/faculty')
 const validatorLogin = require('../middleware/validatorLogin')
-const validatorRole = require('../middleware/validatorRole')
 
 router.get('/:id', validatorLogin, async (req, res) => {
     const id = req.params.id
@@ -12,8 +12,8 @@ router.get('/:id', validatorLogin, async (req, res) => {
     res.render('notification', {notification})
 })
 
-router.post('/add',validatorRole ,async (req, res) => {
-    const {idFaculty,email,title,data} = req.body
+router.post('/add',async (req, res) => {
+    const {idFaculty,email,datePost,title,data} = req.body
     if(!idFaculty || !email || !title || !data) {
         res.json({code: 2,  message: "Du lieu khong hop le"})
     }
@@ -30,6 +30,7 @@ router.post('/add',validatorRole ,async (req, res) => {
             email: user.email,
             name: user.name,
         },
+        datePost: datePost,
         time: new Date().getTime(),
         title: title,
         data: data

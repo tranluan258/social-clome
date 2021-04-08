@@ -38,22 +38,4 @@ router.delete('/delete/:id', validatorLogin, (req, res) => {
     .catch((err) => res.json({ code: 1, message: "Xoa that bai"}))
 })
 
-router.post('/update', validatorLogin, (req, res) => {
-    const {id,data} = req.body
-    commentsModel.findOneAndUpdate(
-        {
-            id: id,
-        },
-        {
-            data: data,
-            time: new Date().getTime(),
-        },
-        {
-            new: true,
-        }
-    )
-    .then(() => res.json({ code: 0 , message: "Sua thanh cong"}))
-    .catch((err) => res.json({ code: 1, message: "Sua that bai" }))
-})
-
 module.exports = router
