@@ -1,6 +1,5 @@
-const keys = require('./configs/keys')
 const mongoose = require('mongoose')
-const connectionString = keys.mongo.connectionString
+const connectionString = process.env.MONGO_URI
 
 if(!connectionString){
     console.log('No connection string')

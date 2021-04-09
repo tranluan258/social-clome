@@ -1,8 +1,8 @@
 const passport = require('passport')
 const GoogleStrategy = require('passport-google-oauth20').Strategy
 const LocalStrategy = require('passport-local').Strategy
-const keys = require('../configs/keys')
 const accountModel = require('../models/accounts')
+const {CLIENT_ID,CLIENT_SECRET} = process.env
 const bcrypt = require('bcrypt')
 const emailValidator = require('email-validator')
 
@@ -17,8 +17,8 @@ passport.deserializeUser((id, done) => {
 });
 
 passport.use(new GoogleStrategy({
-    clientID: keys.clientID,
-    clientSecret: keys.clientSecret,
+    clientID: CLIENT_ID ,
+    clientSecret: CLIENT_SECRET,
     callbackURL: '/auth/google/callback'
 }, (accessToken, refreshToken, profile, done) => {
     accountModel.findOne({id: profile.id}).then(existingUser => {
