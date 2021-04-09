@@ -1,18 +1,20 @@
 const express = require("express");
 const uuid = require("short-uuid");
-const bcrypt = require("bcrypt");
-const fs = require("fs");
+const router = express.Router();
+
 const accountModel = require("../models/accounts");
 const postModel = require("../models/posts");
-const multer = require("multer");
-const upload = multer({ dest: __dirname + "/uploads/" });
-const validatorLogin = require("../middleware/validatorLogin");
-const validatorRole = require("../middleware/validatorRole");
-const router = express.Router();
-const passport = require("passport");
 const commentsModel = require("../models/comments");
 const facultyModel = require("../models/faculty");
+
+const bcrypt = require("bcrypt");
+const fs = require("fs");
+const passport = require("passport");
 const moment = require("moment")
+const upload = require("../uploads/upload")
+const validatorLogin = require("../middleware/validatorLogin");
+const validatorRole = require("../middleware/validatorRole");
+const validateEmail = require("email-validator")
 
 router.get("/login", (req, res) => {
   var error = req.flash("error");
@@ -40,24 +42,70 @@ router.get("/profile/:id", validatorLogin, async (req, res) => {
   let idCurrent = req.session.passport.user;
   let userCurrent = await accountModel.findById(idCurrent);
   let user = await accountModel.findOne({ id: id });
-  let post = await postModel.find({ "user.email": user.email });
+  let post = await postModel.find({ "user.email": user.email }).sort({ time: -1 }).limit(10);
   let comments = await commentsModel.find();
-  let faculty = await facultyModel.find();
-  res.render("profile", { user, userCurrent, post, comments, faculty,moment });
+  let faculty = await facultyModel.find().sort();
+  res.render("profile", { user, userCurrent, post, comments, faculty, moment });
 });
 
-router.post( "/update", validatorLogin, upload.single("image"), async (req, res) => {
-    const { name } = req.body;
-    const id = req.session.passport.user
-    const file = req.file;
-    const user = await accountModel.findById(id)
-    const { root } = req.vars;
-    const currentPath = `${root}/users/${user.email}`;
-    if (user) {
-      if (!file && !name) {
-        return res.json({ code: 1, message: "Không thay đổi gì cả" });
+router.post("/update", validatorLogin, upload.single("image"), async (req, res) => {
+  const { name } = req.body;
+  const id = req.session.passport.user
+  const file = req.file;
+  const user = await accountModel.findById(id)
+  const { root } = req.vars;
+  const currentPath = `${root}/users/${user.email}`;
+  if (user) {
+    if (!file && !name) {
+      return res.json({ code: 1, message: "Không thay đổi gì cả" });
+    }
+    if (file && name) {
+      if (!fs.existsSync(currentPath)) {
+        res.json({ code: 2, message: "Duong dan hong hop le" });
       }
-      if (file && name) {
+
+      let nameFile = file.originalname;
+      let newPath = currentPath + "/" + nameFile;
+      fs.renameSync(file.path, newPath);
+
+      accountModel
+        .findOneAndUpdate(
+          {
+            id: user.id,
+          },
+          {
+            name: name,
+            img: "/" + user.email + "/" + nameFile,
+          },
+          {
+            new: true,
+            runValidators: true,
+          }
+        )
+        .then(doc => {
+          postModel.updateMany(
+            {
+              "user.id": doc.id,
+            },
+            {
+              "user.name": doc.name,
+              "user.img": doc.img
+            }
+          ).then(() => {
+            commentsModel.updateMany(
+              {
+                "user.id": doc.id,
+              },
+              {
+                "user.name": doc.name,
+                "user.img": doc.img
+              }
+            ).then(() => res.json({ code: 0, message: "Thành công", acc: doc }))
+          })
+        })
+        .catch((err) => console.log(err));
+    } else {
+      if (file) {
         if (!fs.existsSync(currentPath)) {
           res.json({ code: 2, message: "Duong dan hong hop le" });
         }
@@ -72,7 +120,6 @@ router.post( "/update", validatorLogin, upload.single("image"), async (req, res)
               id: user.id,
             },
             {
-              name: name,
               img: "/" + user.email + "/" + nameFile,
             },
             {
@@ -80,111 +127,66 @@ router.post( "/update", validatorLogin, upload.single("image"), async (req, res)
               runValidators: true,
             }
           )
-          .then(doc=> {
+          .then(doc => {
             postModel.updateMany(
               {
                 "user.id": doc.id,
               },
               {
-                  "user.name": doc.name,
-                  "user.img": doc.img
+                "user.img": doc.img,
               }
-            ).then(() => {
-              commentsModel.updateMany(
+            )
+              .then(() => {
+                commentsModel.updateMany(
                   {
                     "user.id": doc.id,
                   },
                   {
-                      "user.name": doc.name,
-                      "user.img": doc.img
+                    "user.img": doc.img
                   }
-                ).then(() => res.json({ code: 0, message: "Thành công", acc: doc }) )
-            })
+                ).then(() => res.json({ code: 0, message: "Thành công", acc: doc }))
+              })
           })
           .catch((err) => console.log(err));
-      }else {
-        if (file) {
-          if (!fs.existsSync(currentPath)) {
-            res.json({ code: 2, message: "Duong dan hong hop le" });
-          }
-
-          let nameFile = file.originalname;
-          let newPath = currentPath + "/" + nameFile;
-          fs.renameSync(file.path, newPath);
-
-          accountModel
-            .findOneAndUpdate(
+      } else {
+        accountModel
+          .findOneAndUpdate(
+            {
+              id: user.id,
+            },
+            {
+              name: name,
+            },
+            {
+              new: true,
+              runValidators: true,
+            }
+          )
+          .then(doc => {
+            postModel.updateMany(
               {
-                id: user.id,
+                "user.id": doc.id,
               },
               {
-                img: "/" + user.email + "/" + nameFile,
-              },
-              {
-                new: true,
-                runValidators: true,
+                "user.name": doc.name,
               }
             )
-            .then(doc => {
-              postModel.updateMany(
-                {
-                  "user.id": doc.id,
-                },
-                {
-                  "user.img": doc.img,
-                }
-              )
               .then(() => {
                 commentsModel.updateMany(
-                    {
-                      "user.id": doc.id,
-                    },
-                    {
-                        "user.img": doc.img
-                    }
-                  ).then(() => res.json({ code: 0, message: "Thành công", acc: doc }) )
-              })
-            })
-            .catch((err) => console.log(err));
-        } else {
-          accountModel
-            .findOneAndUpdate(
-              {
-                id: user.id,
-              },
-              {
-                name: name,
-              },
-              {
-                new: true,
-                runValidators: true,
-              }
-            )
-            .then(doc => {
-              postModel.updateMany(
-                {
-                  "user.id": doc.id,
-                },
-                {
+                  {
+                    "user.id": doc.id,
+                  },
+                  {
                     "user.name": doc.name,
-                }
-              )
-              .then(() => {
-                commentsModel.updateMany(
-                    {
-                      "user.id": doc.id,
-                    },
-                    {
-                        "user.name": doc.name,
-                    }
-                  ).then(() => res.json({ code: 0, message: "Thành công", acc: doc }) )
+                  }
+                ).then(() => res.json({ code: 0, message: "Thành công", acc: doc }))
               })
-            })
-            .catch((err) => console.log(err));
-        }
+          })
+          .catch((err) => console.log(err));
       }
     }
   }
+}
 );
 
 router.get("/logout", (req, res) => {
@@ -230,23 +232,27 @@ router.post("/add", async (req, res) => {
     if (user) {
       res.json({ code: 2, message: "Tồn tại" });
     } else {
-      let hashPassword = bcrypt.hashSync(password, 10);
-      new accountModel({
-        id: uuid.generate(),
-        name: name,
-        email: email,
-        password: hashPassword,
-        img: "/images/user.png",
-        type: 1,
-        arrFaculty: arrFaculty,
-      })
-        .save()
-        .then(() => {
-          res.json({ code: 0, message: "Thanh cong" });
+      if (validateEmail.validate(email)) {
+        let hashPassword = bcrypt.hashSync(password, 10);
+        new accountModel({
+          id: uuid.generate(),
+          name: name,
+          email: email,
+          password: hashPassword,
+          img: "/images/user.png",
+          type: 1,
+          arrFaculty: arrFaculty,
         })
-        .catch((err) => {
-          res.json({ code: 2, message: "That bai" });
-        });
+          .save()
+          .then(() => {
+            res.json({ code: 0, message: "Thanh cong" });
+          })
+          .catch((err) => {
+            res.json({ code: 2, message: "That bai" });
+          });
+      } else {
+        res.json({ code: 3, message: "Email not format" })
+      }
     }
   }
 });

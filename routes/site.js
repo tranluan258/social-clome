@@ -1,12 +1,14 @@
 const express = require('express');
 const router = express.Router();
-const fs = require('fs')
-const passport = require('passport')
+
 const commentsModel = require('../models/comments')
 const accountModel = require('../models/accounts')
 const postModel = require('../models/posts')
 const facultyModel = require('../models/faculty')
 const notificationModel = require('../models/notification')
+
+const fs = require('fs')
+const passport = require('passport')
 const validatorLogin = require('../middleware/validatorLogin')
 const moment =  require('moment')
 

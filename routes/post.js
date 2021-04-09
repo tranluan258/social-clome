@@ -1,10 +1,11 @@
 const express = require("express");
 const router = express.Router();
-const multer = require("multer");
-const upload = multer({ dest: __dirname + "/uploads/" });
+
 const accountModel = require("../models/accounts");
 const postModel = require("../models/posts");
 const commentsModel = require("../models/comments");
+
+const upload = require("../uploads/upload")
 const fs = require("fs");
 const uuid = require("short-uuid");
 const validator = require("youtube-validator");
@@ -52,11 +53,11 @@ router.post("/add", validatorLogin, upload.single("attachment"), async (req, res
         .then((post) =>
           res.json({ code: 0, message: "Them thanh cong", post: post})
         )
-        .catch(() => res.json({ code: 3, message: "Them that bai" }));
+        .catch(() => res.json({ code: 2, message: "Them that bai" }));
     } else if (YoutubeId != null) {
       validator.validateVideoID(YoutubeId, (result, err) => {
         if (err) {
-          res.json({ code: 1, message: "Du lieu khong hop le" });
+          res.json({ code: 2, message: "Sai link" });
         } else {
           new postModel({
             id: uuid.generate(),
@@ -75,7 +76,7 @@ router.post("/add", validatorLogin, upload.single("attachment"), async (req, res
             .then((post) =>
               res.json({ code: 0, message: "Them thanh cong", post: post})
             )
-            .catch(() => res.json({ code: 3, message: "Them that bai" }));
+            .catch(() => res.json({ code: 2, message: "Them that bai" }));
         }
       });
     } else {
@@ -96,7 +97,7 @@ router.post("/add", validatorLogin, upload.single("attachment"), async (req, res
         .then((post) =>
           res.json({ code: 0, message: "Them thanh cong", post: post})
         )
-        .catch(() => res.json({ code: 3, message: "Them that bai" }));
+        .catch(() => res.json({ code: 2, message: "Them that bai" }));
     }
   }
 });

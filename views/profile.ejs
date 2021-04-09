@@ -19,15 +19,11 @@
         <div class="justify-content-center">
             <div class="row">
                 <nav class="navbar navbar-expand-lg navbar-light bg-light nav-index fixed-top">
-                    <a class="navbar-brand" href="/" class="fas fa-home index_logo_homepage"></i> SOCIAL CLONE</a>
+                    <a class="navbar-brand" href="/"><i class="fas fa-home index_logo_homepage"></i> SOCIAL CLONE</a>
                     
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
-
-                    
-                    
-                    
                     
                     <div class="collapse navbar-collapse collapse-index" id="navbarSupportedContent">
                         
@@ -35,7 +31,7 @@
                             <ul class="navbar-nav mr-12">
                                 <div class="index_notifications_button_in_tabbar">
                                     <li class="nav-item">
-                                        <a href ="/notification/mangenment" class="nav-link mr-sm-2"><i class="fas fa-bell"></i>Notifications</a>
+                                        <a href ="/notification/management" class="nav-link mr-sm-2"><i class="fas fa-bell"></i>Notifications</a>
                                     </li>
                                 </div>
                             </ul>
@@ -51,7 +47,7 @@
                             <ul class="navbar-nav mr-12">
                                 <div class="index_notifications_button_in_tabbar">
                                     <li class="nav-item">
-                                        <a  class="nav-link mr-sm-2"><i class="fas fa-bell"></i>Notifications</a>
+                                        <a  class="nav-link mr-sm-2"  href ="/notification/management"><i class="fas fa-bell"></i>Notifications</a>
                                     </li>
                                 </div>
                             </ul>
@@ -65,6 +61,7 @@
                         <%} %>
                         <ul class="navbar-nav mr-12">
                             <div class ="index_profile">
+                                    <p id="index_id_user" style="display: none"><%= userCurrent.id %></p>
                                     <a class="nav-link mr-sm-2"><img class="index_avt_profile_in_the_tab" src="<%= userCurrent.img %>"> <span id="profile_name_span"> <%= userCurrent.name %></span></a>
                                 </li>
                             </div>
@@ -196,7 +193,7 @@
                             <div class="card index_poster" id="<%= p.id %>">
                                 <div class="card index_on_the_cmt">
                                     <div class="index_post_title_option">
-                                        <a href="/account/profile/<%= p.user.id %>" class="index_post_avtname"><img id="profile_avt_post" class="index_avt_post" src="<%= p.user.img %>"><span id="profile_name_span_post"><%= p.user.name %></span> </a>
+                                        <a href="/account/profile/<%= p.user.id %>" class="index_post_avtname"><img id="profile_avt" class="index_avt_post" src="<%= p.user.img %>"><span id="profile_name_span"><%= p.user.name %></span> </a>
                                         <aside><%= moment(p.time).fromNow() %></aside>
                                         <% if(p.user.id  === userCurrent.id) { %>
                                             <div class="dropdown edit_and_delete_inpost">
@@ -221,7 +218,7 @@
                                 <button type="button" class="btn btn-light index_button_cmt" id="" name="" value="" data-toggle="collapse" href="#collapseCmt<%= p.id %>" role="button" aria-expanded="false" aria-controls="collapseCmt<%= p.id %>"><i class="far fa-comment-dots"></i>  Comment</button>
                                 <div class="collapse" id="collapseCmt<%= p.id %>">
                                     <div class="index_cmt" id="<%= p.id %>">
-                                        <img id="profile_avt_post_2" class="index_avt_cmt" src="<%= userCurrent.img %>">
+                                        <img id="profile_avt" class="index_avt_cmt" src="<%= userCurrent.img %>">
                                         <input type="text" class="form-control index_cmt_texbox" id="index_data_cmt<%= p.id %>" value="" placeholder="Your comment..." name="">
                                         <button id="<%= p.id %>" class="btn btn-primary" onclick="addComments(this)">Send</button>
                                     </div>
@@ -229,7 +226,7 @@
                                    <% comments.forEach(c => { %>
                                         <% if(c.idPost == p.id) { %>
                                         <div id="<%= c.id %>">
-                                            <a class="profile_da_cmt" href="/account/profile"><img id="profile_avt_cmt" class="index_avt_cmt" src="<%= c.user.img %>"> <span id="profile_name_span_cmt"><%= c.user.name %> :</span></a>
+                                            <a class="profile_da_cmt" href="/account/profile"><img id="profile_avt" class="index_avt_cmt" src="<%= c.user.img %>"> <span id="profile_name_span"><%= c.user.name %> :</span></a>
                                             <div class="index_da_cmt">
                                                 <p class=" card noidungcmt"><%= c.data %></p>
                                                 <% if(c.user.id == userCurrent.id) { %>

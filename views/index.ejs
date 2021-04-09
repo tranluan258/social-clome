@@ -35,7 +35,7 @@
                         <ul class="navbar-nav mr-12">
                             <div class="index_notifications_button_in_tabbar">
                                 <li class="nav-item">
-                                    <a href ="/notification/mangenment" class="nav-link mr-sm-2"><i class="fas fa-bell"></i>Notifications</a>
+                                    <a href ="/notification/management" class="nav-link mr-sm-2"><i class="fas fa-bell"></i>Notifications</a>
                                 </li>
                             </div>
                         </ul>
@@ -51,7 +51,7 @@
                         <ul class="navbar-nav mr-12">
                             <div class="index_notifications_button_in_tabbar">
                                 <li class="nav-item">
-                                    <a  class="nav-link mr-sm-2"><i class="fas fa-bell"></i>Notifications</a>
+                                    <a  class="nav-link mr-sm-2" href ="/notification/management"><i class="fas fa-bell"></i>Notifications</a>
                                 </li>
                             </div>
                         </ul>
@@ -208,7 +208,7 @@
                             <li class="nav-item oi">
                                <div class="card thongbao_info">
                                     <span><%= n.faculty.name %> || Ngày: <%= n.datePost %></span>
-                                    <a href="/notification/<%= n.id %>">
+                                    <a href="/notification/detail/<%= n.id %>">
                                         <div class="title_thongbao"><%= n.title %></div>
                                         <div class="ngaythongbao"><%= moment(n.time).fromNow() %></div>
                                         <div class="noidungthongbao"><%= n.data %></div>   

@@ -1,15 +1,37 @@
 const express = require('express')
-const uuid  = require('short-uuid')
 const router = express.Router()
+
 const notificationModel = require('../models/notification')
 const accountModel = require('../models/accounts')
 const facultyModel = require('../models/faculty')
+
+const uuid  = require('short-uuid')
 const validatorLogin = require('../middleware/validatorLogin')
 
-router.get('/:id', validatorLogin, async (req, res) => {
+router.get('/detail/:id', validatorLogin, async (req, res) => {
     const id = req.params.id
+    const idUser = req.session.passport.user
+    let user  = await accountModel.findById(idUser)
     let notification =  await notificationModel.findOne({id: id})
-    res.render('notification', {notification})
+    let faculty =  await facultyModel.find()
+    res.render('notification', {notification,user,faculty})
+})
+
+router.get('/management', validatorLogin, async (req, res) => {
+    const idUser = req.session.passport.user
+    let user  = await accountModel.findById(idUser)
+    let faculty =  await facultyModel.find()
+    let notification = await  notificationModel.find()
+    res.render('management',{user, faculty,notification, active: "all"})
+})
+
+router.get('/management/:id', validatorLogin, async (req, res) => {
+    const id = req.params.id
+    const idUser = req.session.passport.user
+    let user  = await accountModel.findById(idUser)
+    let notification = await notificationModel.find({"faculty.idFaculty": id})
+    let faculty =  await facultyModel.find()
+    res.render('management',{user, faculty, notification, active: id})
 })
 
 router.post('/add',async (req, res) => {

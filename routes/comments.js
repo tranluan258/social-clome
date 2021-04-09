@@ -1,8 +1,10 @@
 const express = require('express')
 const router = express.Router()
+
 const accountModel = require('../models/accounts')
 const postModel = require('../models/posts')
 const commentsModel = require('../models/comments')
+
 const validatorLogin = require('../middleware/validatorLogin')
 const uuid = require('short-uuid')
 

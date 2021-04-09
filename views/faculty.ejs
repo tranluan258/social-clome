@@ -4,9 +4,187 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>faculty</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <title>Notification Faculty</title>
+    <link rel="stylesheet" href="../stylesheets/style.css" />
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
+    <script src="../javascripts/main.js"></script>
+    <link rel="stylesheet prefetch" href="http://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/css/datepicker.css"><script src="http://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/js/bootstrap-datepicker.js"></script>
 </head>
-<body>
-    
+<body class="noti_body">
+    <div class="container-fluid">
+        <div class="=justify-content-center">
+            <div class="row notinoti">
+                <nav class="navbar navbar-expand-lg navbar-light bg-light nav-index fixed-top">
+                    <a class="navbar-brand" href="/"><i class="fas fa-home index_logo_homepage"></i> SOCIAL CLONE</a>
+                    
+                    
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+
+                    
+                    
+                    
+                    
+                    <div class="collapse navbar-collapse collapse-index" id="navbarSupportedContent">
+                        <% if(user.type == 2){ %>
+                            <ul class="navbar-nav mr-12">
+                                <div class="index_notifications_button_in_tabbar">
+                                    <li class="nav-item">
+                                        <a href ="/notification/management" class="nav-link mr-sm-2"><i class="fas fa-bell"></i>Notifications</a>
+                                    </li>
+                                </div>
+                            </ul>
+                            <ul class="navbar-nav mr-12">
+                                <div class="index_notifications_button_in_tabbar">
+                                    <li class="nav-item">
+                                        <a class="nav-link mr-sm-2" id="index_create_add_user"><i class="fas fa-user-plus"></i> Add user</a>
+                                    </li>
+                                </div>
+                            </ul>
+                        <%} %>
+                        <% if(user.type == 1){ %>
+                            <ul class="navbar-nav mr-12">
+                                <div class="index_notifications_button_in_tabbar">
+                                    <li class="nav-item">
+                                        <a  class="nav-link mr-sm-2"  href ="/notification/management"><i class="fas fa-bell"></i>Notifications</a>
+                                    </li>
+                                </div>
+                            </ul>
+                            <ul class="navbar-nav mr-12">
+                                <div class="index_change_password_button_in_tabbar">
+                                    <li class="nav-item">
+                                        <a class="nav-link mr-sm-2" id="index_change_password"><i class="fas fa-bell"></i>Change Password</a>
+                                    </li>
+                                </div>
+                            </ul>
+                        <%} %>
+                        <ul class="navbar-nav mr-12">
+                            <div class ="index_profile">
+                                    <p id="index_id_user" style="display: none"><%= user.id %></p>
+                                    <a class="nav-link mr-sm-2" href="/account/profile/<%= user.id %>"><img class="index_avt_profile_in_the_tab" src="<%= user.img %>"><%= user.name %></a>
+                                </li>
+                            </div>
+                            <li class="nav-item index_logout">
+                                <a class="nav-link mr-sm-2" href="/account/logout">Logout</a>
+                            </li>
+                        </ul>
+                    </div>
+
+                </nav>
+                
+                <div class="card list_noti col-xs-12 col-md-12 col-sm-12 col-lg-12 col-xl-12">
+                    <div class="chonkhoa">
+                        <br>
+                        <label class="titlechonkhoa"><i class="fa fa-briefcase" aria-hidden="true"></i> Faculty </label>
+                        <select onchange="location = this.value">
+                            <% if( active == "all") { %>
+                                <option selected  value="/faculty">All</option>
+                                <% faculty.forEach(f => { %>
+                                    <option value="/faculty/<%=f.id%>"><%= f.name %></option>
+                                <%})%>
+                            <%} else { %>
+                                <option value="/faculty">All</option>
+                                <% faculty.forEach(f => { %>
+                                    <% if(active == f.id) {%>
+                                        <option selected value="/faculty/<%=f.id%>"><%= f.name %></option>
+                                    <%}else {%>
+                                        <option value="/faculty/<%=f.id%>"><%= f.name %></option>
+                                    <%}%>
+                                <%})%>
+                            <%} %>
+                        </select>
+                    </div>
+                    <br>
+                    <div class="phantrang">
+                        <div class="listtrang ">
+                            <% if(countPage >= 2){ %>
+                                <% if(currentPage == 1) { %>
+                                    <a class="page_of_list" disabled="disabled" >«</a>
+                                <% }else { %>
+                                    <a class="page_of_list" href="?page=<%=(currentPage - 1) %>">«</a>
+                                <%} %>
+                            <%}%>
+                            <% for(var i = 1 ; i<= countPage; i++) { %>
+                                <% if(i == currentPage) { %>
+                                    <a class="page_of_list active" href="?page=<%= i %>"><%= i %></a>
+                               <% }else { %>
+                                    <a class="page_of_list" href="?page=<%= i %>"><%= i %></a>
+                                <%}%>
+                            <%}%>
+                            <% if(countPage >= 2){ %>
+                                <% if(currentPage == countPage) { %>
+                                    <a class="page_of_list" disabled="disabled" >»</a>
+                                <% }else { %>
+                                    <a class="page_of_list" href="?page=<%=(currentPage + 1) %>">»</a>
+                                <%} %>
+                            <%}%>
+                          </div>
+                    </div>
+                    <br>
+                    <ul class="navbar-nav flex-column lg-0 thongbaoquangtrong">
+                           <% notification.forEach( n => { %>
+                            <li class="nav-item oi">
+                            <a class="card thongbao_info" href="/notification/detail/<%= n.id %>">
+                                <div class="title_thongbao"><%= n.title %></div>
+                                <div class="khoathongbao"><%= n.faculty.name %></div>
+                                <div class="ngaythongbao"><%= n.datePost %></div>
+                                <div class="noidungthongbao"><%= n.data %></div>   
+                            </a>
+                        </li>
+                           <%})%>
+                    </ul>
+                </div>
+                
+
+            </div>
+        </div>
+    </div>
+    <!-- modal -->
+    <form>
+        <div class="modal" id="index_modal_create_noti">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h4 class="modal-title">Create notification</h4>
+                    <button type="button" class="btn  index_button_cancle_add_user" data-dismiss="modal">x</button>
+                    </div>
+                
+                    <div class="modal-body index_body_modal_add_user">
+                        <form>
+                            <label>Subject</label>
+                            <input type="text" class="form-control index_add_user_email" id="" name="" placeholder="">
+                            <label>Content</label>
+                            <textarea type="" class="form-control index_modal_type" id="" name="" placeholder="Your notification"></textarea><br>
+                            <label>Date</label>
+                            <div  class="input-group date" id="datepicker" data-date-format="dd-mm-yyyy"> 
+                                <input class="form-control" id="d" readonly="" type="text"> 
+                                    <span class="input-group-addon">
+                                        <i class="glyphicon glyphicon-calendar"></i>
+                                    </span> 
+                            </div>
+                            <label>Faculty</label>
+                            <br>
+                            <select>
+                                <option>Information Technology</option>
+                            </select>
+                            <div class="alert alert-danger index_add_user_alert" role="alert">
+                                Incorrect email or password !
+                            </div>
+                        </form>
+                    </div>
+                
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary index_button_post_new_post" id="clickclick">Create</button>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
 </body>
 </html>

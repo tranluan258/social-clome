@@ -1,20 +1,25 @@
 const express = require('express')
-const uuid = require('short-uuid')
+const router = express.Router()
+
 const facultyModel = require('../models/faculty')
 const notificationModel = require('../models/notification')
+const accountModel = require('../models/accounts')
+
 const validatorLogin = require('../middleware/validatorLogin')
-const router = express.Router()
+const uuid = require('short-uuid')
 
 router.get('/', validatorLogin, async (req, res) => {
     let limit = 10
     let number = req.query.page || 1
     let faculty =  await facultyModel.find()
+    let idUser  = req.session.passport.user
+    let user  = await accountModel.findById(idUser)
     notificationModel
     .find()
     .skip((limit * number) - limit)
     .exec((err, notification) => {
         notificationModel.countDocuments((err,count) => {
-            res.render('faculty', {faculty, notification, currentPage: number, countPage: Math.ceil(count/limit) })
+            res.render('faculty', {user,faculty, notification, currentPage: number, countPage: Math.ceil(count/limit), active: "all"})
         })
     })
 })
@@ -23,13 +28,15 @@ router.get('/:id', validatorLogin, async (req, res) => {
     let limit = 10
     let number = req.query.page || 1
     let id = req.params.id
-    let faculty = await facultyModel.findOne({id: id})
+    let faculty = await facultyModel.find()
+    let idUser  = req.session.passport.user
+    let user  = await accountModel.findById(idUser)
     notificationModel
     .find({"faculty.idFaculty" : id})
     .skip((limit * number) - limit)
     .exec((err, notification) => {
-        notificationModel.countDocuments((err,count) => {
-            res.render('faculty', {faculty, notification, currentPage: number, countPage: Math.ceil(count/limit) })
+        notificationModel.find({"faculty.idFaculty" : id}).countDocuments((err,count) => {
+            res.render('faculty', {user,faculty, notification, currentPage: number, countPage: Math.ceil(count/limit), active: id })
         })
     })
 })
