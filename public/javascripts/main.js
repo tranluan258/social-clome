@@ -1,4 +1,4 @@
-const socket  = io()
+const socket  = io("https://new-social-clone.herokuapp.com/")
 
 socket.on("server-send-notification", data => {
 })
