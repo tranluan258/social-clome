@@ -7,6 +7,7 @@
     "npm": "6.x"
   },
   "scripts": {
+    "build": "bower install && grunt build",
     "start": "node  ./bin/www"
   },
   "dependencies": {
