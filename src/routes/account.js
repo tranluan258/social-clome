@@ -13,7 +13,6 @@ const passport = require("passport");
 const moment = require("moment")
 const upload = require("../uploads/upload")
 const validatorLogin = require("../middleware/validatorLogin");
-const validatorRole = require("../middleware/validatorRole");
 const validateEmail = require("email-validator")
 
 router.get("/login", (req, res) => {

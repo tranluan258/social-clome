@@ -25,6 +25,7 @@
     "passport-google-oauth20": "^2.0.0",
     "passport-local": "^1.0.0",
     "short-uuid": "^4.1.0",
+    "socket.io": "^4.0.1",
     "uuid": "^8.3.2",
     "youtube-validator": "^1.1.2"
   },

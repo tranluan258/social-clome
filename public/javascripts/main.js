@@ -1,3 +1,8 @@
+const socket  = io()
+
+socket.on("server-send-notification", data => {
+})
+
 $(document).ready(() => {
   hideandshowNoti();
   addPost();
@@ -5,6 +10,7 @@ $(document).ready(() => {
   addUser();
   changePassword();
   updateAccount();
+  addNotification();
 });
 
 function scrollLoadData() {
@@ -14,11 +20,7 @@ function scrollLoadData() {
   let limit = 10;
   if (check.length >= 21 || check === "") {
     $(window).scroll(function () {
-      if (
-        Math.abs(
-          $(window).scrollTop() - ($(document).height() - $(window).height())
-        ) < 1
-      ) {
+      if (Math.abs($(window).scrollTop() - ($(document).height() - $(window).height())) < 1 ) {
         fetch("/post/load", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -289,6 +291,10 @@ function addPost() {
       if (ampersandPosition != -1) {
         video_id = video_id.substring(0, ampersandPosition)
       }
+      if(video_id === ""){
+        $(".index_alert_post_fail").css("display", "block");
+        $(".index_alert_post_fail").html("Link Youtube Invalid!");
+      }
     }
     if (inputFile.files.length > 0) {
       file = inputFile.files[0];
@@ -384,6 +390,54 @@ function deleteComments(e) {
     .catch((err) => console.log(err));
 }
 
+function addNotification() {
+  $("#button_create_notification").click(() => {
+    $("#title-notification").val("")
+    $("#data-notification").val("")
+    $("#index_modal_create_noti").modal()
+    $("#datepicker").datepicker({         
+      autoclose: true,         
+      todayHighlight: true 
+      }).datepicker('update', new Date())
+
+     $("#btn_create_notification").click(() => {
+        let datePost = $("#datepicker").find("input").val()
+        let title = $("#title-notification").val()
+        let data = $("#data-notification").val()
+        var idFaculty = $("#select-faculty-post").find("option:selected").attr("id")
+        $("#select-faculty-post").on('change', () => {
+            idFaculty = $("#select-faculty-post").find("option:selected").attr("id")
+        })
+        if(!datePost || !title || !data || !idFaculty ) {
+          console.log(datePost,title,data,idFaculty)
+          $(".index_add_user_alert").css("display", "block")
+          $(".index_add_user_alert").html("Please enter all information")
+        } else {
+          fetch("/notification/add", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({
+              idFaculty: idFaculty,
+              datePost: datePost,
+              title: title,
+              data: data
+            })
+          })
+          .then(res => res.json())
+          .then(json => {
+              if(json.code === 0) {
+                let notification = json.notification
+                renderNotification(notification)
+                $("#index_modal_create_noti").modal("hide")
+                socket.emit("client-send-notification",notification.id)
+              }
+          })
+          .catch(err => console.log(err))
+        }
+     })
+  })
+}
+
 function clearDataModal() {
     $("#data-post").val("");
     $("#input-post-ytb").css("display", "none");
@@ -435,7 +489,6 @@ function renderCommentDifferentUser(cmt){
     </div>
     `);
 }
-
 
 function renderPostChar(post){ 
   let time = moment(post.time).fromNow()
@@ -590,4 +643,17 @@ function renderPostImageDifferentUser(post){
           </div>
         </div>
     </div>`
+}
+
+function renderNotification(notification) {
+    $(".thongbaoquangtrong").prepend(
+      `<li class="nav-item oi">
+        <a class="card thongbao_info" href="/notification/detail/${notification.id}">
+            <div class="title_thongbao">${ notification.title }</div>
+            <div class="khoathongbao">${ notification.faculty.name }</div>
+            <div class="ngaythongbao">${ notification.datePost }</div>
+            <div class="noidungthongbao">${ notification.data }</div>   
+        </a>
+    </li>`
+    )
 }

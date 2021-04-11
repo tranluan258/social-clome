@@ -6,7 +6,7 @@
 
 var app = require('../app');
 var debug = require('debug')('ex1:server');
-var http = require('http');
+var http = require('http')
 
 /**
  * Get port from environment and store in Express.
@@ -20,6 +20,17 @@ app.set('port', port);
  */
 
 var server = http.createServer(app);
+
+const io = require("socket.io")(server)
+
+io.on("connection", socket => {
+    console.log("IO connection")
+    socket.on("client-send-notification", data => {
+      if(data) {
+        socket.broadcast.emit("server-send-notification",data)
+      }
+    })
+})
 
 /**
  * Listen on provided port, on all network interfaces.
@@ -88,3 +99,5 @@ function onListening() {
     : 'port ' + addr.port;
   debug('Listening on ' + bind);
 }
+
+module.exports = server

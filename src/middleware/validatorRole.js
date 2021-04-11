@@ -1,10 +1,12 @@
-module.exports = (req, res, next) => {
+const accountModel = require("../models/accounts")
+module.exports = async (req, res, next) => {
     if(req.session.passport){
-        let user = req.session.passport
+        let id = req.session.passport.user
+        let user  = await accountModel.findById(id)
         if(user.type == 1 || user.type == 2){
             next()
         }else{
-            next(createError(404))
+            res.send("You do not have permission to access this page")
         }
     }else{
         res.redirect('/account/login')
