@@ -16,9 +16,10 @@ $(document).ready(() => {
 function scrollLoadData() {
   let pathName = window.location.pathname.split("/");
   let check = pathName[pathName.length - 1];
+  let path = pathName[pathName.length - 2]
   var start = 1;
   let limit = 10;
-  if (check.length >= 21 || check === "") {
+  if (check.length >= 21 && path === 'profile' || check === "") {
     $(window).scroll(function () {
       if (Math.abs($(window).scrollTop() - ($(document).height() - $(window).height())) < 1 ) {
         fetch("/post/load", {

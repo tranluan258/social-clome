@@ -1,0 +1,127 @@
+<div class="modal" id="index_modal_edit_profile">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h4 class="modal-title">Edit profile</h4>
+            <button type="button" class="btn  index_button_cancle_add_user" data-dismiss="modal">x</button>
+            </div>
+        
+            <div class="modal-body index_body_modal_add_user">
+               
+                    <label>Name</label>
+                    <input type="text" class="form-control profile_update_name" id="" name="" placeholder="Enter your new name . . .">
+                    <br>
+                    <div class="emailemail">
+                        <label class="profile_label_email"><i class="fa fa-envelope" aria-hidden="true"></i></label>
+                        <form>
+                            <div class="profile_info_email_modal">
+                                
+                            </div>
+                        </form>
+                    </div>
+                    
+                    <br>
+                    <label>Avatar</label>
+                    <input type="file" class="form-control index_add_user_email" id="profile_img_upload" name="" placeholder="Enter your new name . . .">
+                    <br>
+                    <br>
+                    <div class="alert alert-danger profile_edit_profile_alert_danger" role="alert">
+                        
+                    </div>
+
+            </div>
+        
+            <div class="modal-footer">
+                <button id="btn_update_profile" type="button" class="btn btn-primary index_button_post_new_post"><i class="fas fa-edit"></i> Edit profile</button>
+                
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="index_modal_new_post">
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+        <h4 class="modal-title">Create post</h4>
+        <button type="button" class="btn  index_button_cancle_new_post" data-dismiss="modal">x</button>
+        </div>
+    
+        <div class="modal-body index_body_modal_new_post">
+            <form>
+                <textarea type="" class="form-control index_modal_type" id="data-post" name="" placeholder="Hey <%= user.name %>, what do you think ..."></textarea><br>
+                <div class="ba_cai_phim">
+                    <button type="button" id="btn-post-ytb" class="btn btn-danger index_button_video_new_post"><i class="fab fa-youtube"></i>  Youtube</button>
+                    
+                    <button type="button" id="btn-post-img" class="btn btn-success index_button_image_new_post"><i class="fas fa-images"></i>  Image</button>
+                    
+                </div>
+                <input type="text" class="form-control index_button_link_video_new_post" id="input-post-ytb">
+                <input type="file"  id="input-post-img" class="form-control index_button_link_image_new_post">
+                <div class="alert alert-danger index_alert_post_fail"></div>
+            </form>
+        </div>
+    
+        <div class="modal-footer">
+            <button id="btn-create-post" data-email= "<%= user.email %>" type="button" class="btn btn-primary index_button_post_new_post">Create post</button>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+
+<div class="modal" id="index_modal_add_user">
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+        <h4 class="modal-title">Add user</h4>
+        <button type="button" class="btn  index_button_cancle_add_user" data-dismiss="modal">x</button>
+        </div>
+    
+        <div class="modal-body index_body_modal_add_user">
+                <label>Email:</label>
+                <input type="text" class="form-control index_add_user_email" id="email_user" name="" placeholder="Enter email">
+                <label>Password:</label>
+                <input type="password" class="form-control index_add_user_email" id="password_user" name="" placeholder="Enter password">
+                <label>Full name:</label>
+                <input type="text" class="form-control index_add_user_email" id="name_user" name="" placeholder="Enter name">
+                <label>Faculty: </label>
+                <br>
+                <% faculty.forEach(f => {%>
+                    <input type="checkbox" name="faculty" id ="<%=f.id %>" value="<%= f.name %>" placeholder="Check"> <%= f.name %>
+                <%})%>
+                <div class="alert alert-danger index_add_user_alert" role="alert">
+                    Incorrect email or password !
+                </div>
+                <div class="modal-footer">
+                    <button type="button"  id="btn_add_user" class="btn btn-primary index_button_post_new_post">Add user</button>    
+                </div>
+        </div>
+    </div>
+</div>
+</div>
+
+<div class="modal" id="index_modal_change_password">
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+        <h4 class="modal-title">Change Password</h4>
+        <button type="button" class="btn  index_button_cancle_change_password" data-dismiss="modal">x</button>
+        </div>
+    
+        <div class="modal-body index_body_modal_change_password">
+                <label>Old Password:</label>
+                <input type="password" class="form-control index_add_user_email" id="old_password" name="" placeholder="Enter password">
+                <label>New Password:</label>
+                <input type="password" class="form-control index_add_user_email" id="new_password" name="" placeholder="Enter name">
+        </div>
+        <div class="alert alert-danger index_add_user_alert" role="alert">
+            Incorrect email or password !
+        </div>
+        <div class="modal-footer">
+            <button type="button"  id="btn_change_password" class="btn btn-primary index_button_post_new_post">Change</button>    
+        </div>
+    </div>
+</div>
+</div>
+

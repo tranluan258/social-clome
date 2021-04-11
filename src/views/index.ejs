@@ -1,19 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-    <title>Index</title>
-    <link rel="stylesheet" href="/stylesheets/style.css" />
-    <script src="/socket.io/socket.io.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js" integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ==" crossorigin="anonymous"></script>
-    <script src="/javascripts/main.js"></script> 
-    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
+    <title>Home</title>
+    <%- include('includes/library') %>
 </head>
 <body class="index_body">
     <div class="container-fluid">
@@ -201,7 +190,7 @@
 
             <div class="card index_thongbaoquantrong col-xs-x col-sm-x col-md-x col-lg-3 nav-link collapse navbar-collapse" id="phimthongbaoall">
                 <header class="header_thongbao_quantrong">
-                    <a class="index_thongbaoquantrong_title non-textdecoration" href="/facutly"><p class="index_thongbaoquantrong_title"><b>Notifications</b></p></a>
+                    <a class="index_thongbaoquantrong_title non-textdecoration" href="/faculty"><p class="index_thongbaoquantrong_title"><b>Notifications</b></p></a>
                 </header>
                 <body>
                     <ul class="navbar-nav flex-column lg-0 thongbaoquangtrong">
@@ -225,96 +214,7 @@
     </div>
     <!-- MODAL------------------------------------------------------------------------------------------------------------------------------------------------------------------------ -->
 
-
-
-
-
     <!-- modal add user-->
-        <div class="modal" id="index_modal_add_user">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                    <h4 class="modal-title">Add user</h4>
-                    <button type="button" class="btn  index_button_cancle_add_user" data-dismiss="modal">x</button>
-                    </div>
-                
-                    <div class="modal-body index_body_modal_add_user">
-                            <label>Email:</label>
-                            <input type="text" class="form-control index_add_user_email" id="email_user" name="" placeholder="Enter email">
-                            <label>Password:</label>
-                            <input type="password" class="form-control index_add_user_email" id="password_user" name="" placeholder="Enter password">
-                            <label>Full name:</label>
-                            <input type="text" class="form-control index_add_user_email" id="name_user" name="" placeholder="Enter name">
-                            <label>Faculty: </label>
-                            <br>
-                            <% faculty.forEach(f => {%>
-                                <input type="checkbox" name="faculty" id ="<%=f.id %>" value="<%= f.name %>" placeholder="Check"> <%= f.name %>
-                            <%})%>
-                            <div class="alert alert-danger index_add_user_alert" role="alert">
-                                Incorrect email or password !
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button"  id="btn_add_user" class="btn btn-primary index_button_post_new_post">Add user</button>    
-                            </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="modal" id="index_modal_change_password">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                    <h4 class="modal-title">Change Password</h4>
-                    <button type="button" class="btn  index_button_cancle_change_password" data-dismiss="modal">x</button>
-                    </div>
-                
-                    <div class="modal-body index_body_modal_change_password">
-                            <label>Old Password:</label>
-                            <input type="password" class="form-control index_add_user_email" id="old_password" name="" placeholder="Enter password">
-                            <label>New Password:</label>
-                            <input type="password" class="form-control index_add_user_email" id="new_password" name="" placeholder="Enter name">
-                    </div>
-                    <div class="alert alert-danger index_add_user_alert" role="alert">
-                        Incorrect email or password !
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button"  id="btn_change_password" class="btn btn-primary index_button_post_new_post">Change</button>    
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
-
-    <div class="modal" id="index_modal_new_post">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                <h4 class="modal-title">Create post</h4>
-                <button type="button" class="btn  index_button_cancle_new_post" data-dismiss="modal">x</button>
-                </div>
-            
-                <div class="modal-body index_body_modal_new_post">
-                    <form>
-                        <textarea type="" class="form-control index_modal_type" id="data-post" name="" placeholder="Hey <%= user.name %>, what do you think ..."></textarea><br>
-                        <div class="ba_cai_phim">
-                            <button type="button" id="btn-post-ytb" class="btn btn-danger index_button_video_new_post"><i class="fab fa-youtube"></i>  Youtube</button>
-                            
-                            <button type="button" id="btn-post-img" class="btn btn-success index_button_image_new_post"><i class="fas fa-images"></i>  Image</button>
-                            
-                        </div>
-                        <input type="text" class="form-control index_button_link_video_new_post" id="input-post-ytb">
-                        <input type="file" accept="image/*" id="input-post-img" class="form-control index_button_link_image_new_post">
-                        <div class="alert alert-danger index_alert_post_fail"></div>
-                    </form>
-                </div>
-            
-                <div class="modal-footer">
-                    <button id="btn-create-post" data-email= "<%= user.email %>" type="button" class="btn btn-primary index_button_post_new_post">Create post</button>
-                </div>
-            </div>
-        </div>
-    </div>
+    <%- include('includes/modal') %>
 </body>
 </html>
