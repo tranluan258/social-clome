@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-const connectionString = process.env.MONGO_URI || "mongodb://localhost:27017/SocialClone"
+const connectionString = process.env.MONGO_URI
 
 if(!connectionString){
     console.log('No connection string')
