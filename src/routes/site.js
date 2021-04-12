@@ -20,7 +20,7 @@ router.get('/', validatorLogin , async function (req, res) {
       let { root } = req.vars
       let dir = `${root}/src/users/${user.email}`
         if (!fs.existsSync(dir)) {
-          fs.mkdirSync(dir)
+          fs.mkdirSync(dir, {recursive: true})
         }
     }
     const post = await postModel.find().sort({time: -1}).limit(10)
