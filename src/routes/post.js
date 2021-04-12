@@ -26,7 +26,7 @@ router.post("/add", validatorLogin, upload.single("attachment"), async (req, res
   if (user) {
     if (file) {
       const { root } = req.vars;
-      const currentPath = `${root}/users/${email}`;
+      const currentPath = `${root}/src/users/${email}`;
 
       if (!fs.existsSync(currentPath)) {
         res.json({ code: 2, message: "Duong dan hong hop le" });

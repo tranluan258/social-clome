@@ -32,7 +32,7 @@ app.use(flash())
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(express.static(path.join(__dirname, 'users')));
+app.use(express.static(path.join(__dirname, 'src/users')));
 app.use(session({ secret: 'password_secret', path: '/', httpOnly: true, secure: false, maxAge: null }))
 
 app.use((req, res, next) => {

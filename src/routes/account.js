@@ -53,7 +53,7 @@ router.post("/update", validatorLogin, upload.single("image"), async (req, res) 
   const file = req.file;
   const user = await accountModel.findById(id)
   const { root } = req.vars;
-  const currentPath = `${root}/users/${user.email}`;
+  const currentPath = `${root}/src/users/${user.email}`;
   if (user) {
     if (!file && !name) {
       return res.json({ code: 1, message: "Không thay đổi gì cả" });
