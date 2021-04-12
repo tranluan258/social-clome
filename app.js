@@ -19,6 +19,8 @@ const notificationsRouter = require('./src/routes/notification')
 
 const app = express();
 
+process.env.PWD = process.cwd();
+
 // view engine setup
 app.set('views', path.join(__dirname, 'src/views'));
 app.set('view engine', 'ejs');
@@ -32,7 +34,7 @@ app.use(flash())
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(express.static(path.join(__dirname, 'src/users')));
+app.use(express.static(path.join(process.env.PWD, 'src/users')));
 app.use(session({ secret: 'password_secret', path: '/', httpOnly: true, secure: false, maxAge: null }))
 
 app.use((req, res, next) => {
