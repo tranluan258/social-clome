@@ -19,9 +19,9 @@ router.get('/', validatorLogin , async function (req, res) {
       user = await accountModel.findById(id)
       let { root } = req.vars
       let dir = `${root}/users/${user.email}`
-      if (!fs.existsSync(dir)) {
-        fs.mkdirSync(dir)
-      }
+      // if (!fs.existsSync(dir)) {
+      //   fs.mkdirSync(dir)
+      // }
     }
     const post = await postModel.find().sort({time: -1}).limit(10)
     const faculty = await facultyModel.find()
