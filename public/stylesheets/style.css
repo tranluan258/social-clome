@@ -105,7 +105,7 @@
 }
 
 .aa{
-    margin-top: 10%;
+    margin-top: 5%;
 }
 
 
@@ -322,6 +322,9 @@
         display: none;
         right: 0;
     }
+    .aa {
+        margin-top: 15%;
+    }
 }
 
 .dacmt{
@@ -463,3 +466,87 @@
     height: 100%;
 }
 
+
+#message {
+    position: fixed;
+    display:flex;
+    margin-top: 85px;
+    width:100%;
+    justify-content: center;
+}
+#inner-message {
+    margin: 0 auto;
+    text-align: center;
+}
+
+/* 12/4 */
+.thongbaonot{
+    text-align: center;
+    font-size: 20px;
+    font-weight: bold;
+}
+.newthongbao{
+    width: 100%;
+    display:flex;
+}
+.edit_and_delete_noti{
+    width: 2%;
+}
+.thongbao_info{
+    width: 97%;
+}
+
+
+@media screen and (max-width: 700px){
+    @media screen and (min-width: 600px){
+        .aa{
+            margin-top: 11.5%;
+        }
+        
+    }
+    
+}
+@media screen and (max-width: 900px){
+    @media screen and (min-width: 700px){
+        .aa{
+            margin-top: 10%;
+        }
+        
+    }
+    
+}
+@media screen and (max-width: 1050px){
+    @media screen and (min-width: 1000px){
+        .aa{
+            margin-top: 8%;
+        }
+        
+    }
+    
+}
+@media screen and (max-width: 1350px){
+    @media screen and (min-width: 1100px){
+        .aa{
+            margin-top: 6%;
+        }
+        
+    }
+    
+}
+@media screen and (max-width: 1100px){
+    @media screen and (min-width: 950px){
+        .aa{
+            margin-top: 7%;
+        }
+        
+    }
+    
+}
+@media screen and (max-width: 1000px){
+    @media screen and (min-width: 900px){
+        .aa{
+            margin-top: 8%;
+        }
+        
+    }
+}

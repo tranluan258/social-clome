@@ -68,4 +68,14 @@ router.post('/add',async (req, res) => {
     .catch(err => res.json({ code: 1, message: "Them that bai"}))
 })
 
+router.delete("/delete/:id", async (req, res) => {
+    let id =  req.params.id
+    notificationModel.findOneAndDelete(
+        {
+            id: id
+        }
+    ).then( () => res.json({ code: 0, message: "Thành công"}))
+    .catch(err => res.json({ code: 1, message: "Thất bại"}))
+})
+
 module.exports = router

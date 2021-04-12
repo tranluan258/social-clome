@@ -1,6 +1,19 @@
-const socket  = io("https://new-social-clone.herokuapp.com/")
+const socket  = io()
 
 socket.on("server-send-notification", data => {
+  $(".alert-new-notification").append(`
+    <div id="message" class="fixed-top" >
+      <div style="padding: 5px;">
+          <div id="inner-message" class="alert alert-success">
+              <span>Khoa ${data.faculty.name} vừa đăng thông báo mới<span/>
+              <a href="/notification/detail/${data.id}">Click vào đây để xem chi tiết</a>
+          </div>
+      </div>
+    </div>
+  `)
+  setTimeout(() => {
+    $("#message").remove()
+  },5000);
 })
 
 $(document).ready(() => {
@@ -430,13 +443,27 @@ function addNotification() {
                 let notification = json.notification
                 renderNotification(notification)
                 $("#index_modal_create_noti").modal("hide")
-                socket.emit("client-send-notification",notification.id)
+                socket.emit("client-send-notification",notification)
               }
           })
           .catch(err => console.log(err))
         }
      })
   })
+}
+
+function deleteNotification(e) {
+    let id = e.id
+    fetch("/notification/delete/" + id, {
+      method: "DELETE",
+    })
+      .then((res) => res.json())
+      .then((json) => {
+        if (json.code === 0) {
+          $(`li#${id}`).remove();
+        }
+      })
+      .catch((err) => console.log(err));
 }
 
 function clearDataModal() {
@@ -648,13 +675,24 @@ function renderPostImageDifferentUser(post){
 
 function renderNotification(notification) {
     $(".thongbaoquangtrong").prepend(
-      `<li class="nav-item oi">
-        <a class="card thongbao_info" href="/notification/detail/${notification.id}">
+      `<li class="nav-item oi" id="${notification.id}">
+        <div class ="newthongbao">
+          <a class="card thongbao_info" href="/notification/detail/${notification.id}">
             <div class="title_thongbao">${ notification.title }</div>
             <div class="khoathongbao">${ notification.faculty.name }</div>
             <div class="ngaythongbao">${ notification.datePost }</div>
             <div class="noidungthongbao">${ notification.data }</div>   
-        </a>
+          </a>
+          <div class="dropdown edit_and_delete_noti">
+            <button class="btn index_button_in_the_post" type="button" id="dropdownMenuButtonNoti" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+            ...
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButtonNoti">
+                <button class="dropdown-item" id="${notification.id}" onclick="deleteNotification(this)"><i class="fas fa-trash"></i> Delete</button>
+                <button class="dropdown-item" id="button_edit_notification"><i class="fas fa-edit"></i> Edit</button>
+            </div>
+          </div>
+        </div>
     </li>`
     )
 }

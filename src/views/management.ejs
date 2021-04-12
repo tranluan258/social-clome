@@ -110,13 +110,24 @@
                     
                     <ul class="navbar-nav flex-column lg-0 thongbaoquangtrong">
                         <% notification.forEach( n => { %>
-                            <li class="nav-item oi">
-                                <a class="card thongbao_info" href="/notification/detail/<%= n.id %>">
-                                    <div class="title_thongbao"><%= n.title %></div>
-                                    <div class="khoathongbao"><%= n.faculty.name %></div>
-                                    <div class="ngaythongbao"><%= n.datePost %></div>
-                                    <div class="noidungthongbao"><%= n.data %></div>   
-                                </a>
+                            <li class="nav-item oi" id="<%= n.id %>">
+                                <div class="newthongbao">
+                                    <a class="card thongbao_info" href="/notification/detail/<%= n.id %>">
+                                        <div class="title_thongbao"><%= n.title %></div>
+                                        <div class="khoathongbao"><%= n.faculty.name %></div>
+                                        <div class="ngaythongbao"><%= n.datePost %></div>
+                                        <div class="noidungthongbao"><%= n.data %></div>   
+                                    </a>
+                                    <div class="dropdown edit_and_delete_noti">
+                                        <button class="btn index_button_in_the_post" type="button" id="dropdownMenuButtonNoti" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                        ...
+                                        </button>
+                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButtonNoti">
+                                            <button class="dropdown-item" id="<%= n.id %>" onclick="deleteNotification(this)"><i class="fas fa-trash"></i> Delete</button>
+                                            <button class="dropdown-item" id="button_edit_notification"><i class="fas fa-edit"></i> Edit</button>
+                                        </div>
+                                    </div>
+                                </div>
                             </li>
                         <%})%>
                     </ul>
