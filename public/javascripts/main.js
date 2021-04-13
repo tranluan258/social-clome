@@ -1,4 +1,4 @@
-const socket  = io("http://new-social-clone.herokuapp.com/")
+const socket  = io()
 
 socket.on("server-send-notification", data => {
   $(".alert-new-notification").append(`
@@ -281,7 +281,7 @@ function updateAccount(){
 function addPost() {
   $("#index_create_new_post").click(function () {
     $("#index_modal_new_post").modal("show");
-    clearDataModal()
+    clearDataModalPost()
     $("#btn-post-ytb").click(() => {
       $("#input-post-ytb").css("display", "block");
     });
@@ -352,6 +352,113 @@ function addPost() {
   });
 }
 
+function editPost(e) {
+  $(`#clear-id-img`).attr('disabled', false)
+  $(`#clear-id-ytb`).attr('disabled', false)
+  const idPost = e.id
+  $("#index_modal_edit_post").modal("show");
+  clearDataModalEdit()
+  $("#btn-post-ytb-edit").click(() => {
+    $("#input-post-ytb-edit").css("display", "block");
+  });
+  $("#btn-post-img-edit").click(() => {
+    $("#input-post-img-edit").click();
+    $("#input-post-img-edit").css("display", "block");
+  });
+  $("#data-post-edit").focus()
+  $("#data-post-edit").val($(`#data${idPost}`).html())
+
+  if($(`#iframe${idPost}`).length || $(`#img${idPost}`).length) {
+    if($(`#iframe${idPost}`).length) {
+      $(`#clear-id-img`).attr('disabled', true)
+    }
+  
+    if($(`#img${idPost}`).length) {
+      $(`#clear-id-ytb`).attr('disabled', true)
+    }
+  } else {
+    $(`#clear-id-img`).attr('disabled', true)
+    $(`#clear-id-ytb`).attr('disabled', true)
+  }
+  
+
+  $("#btn-edit-post").click(() => {
+    let data = $("#data-post-edit").val()
+    let urlYoutube = $("#input-post-ytb-edit").val()
+    let inputFile = document.getElementById("input-post-img-edit")
+    let file = null
+    let clearYoutube = false
+    let clearImage = false
+    var video_id = ""
+    if (urlYoutube != "") {
+      video_id = urlYoutube.split("v=")[1]
+      var ampersandPosition = video_id.indexOf("&")
+      if (ampersandPosition != -1) {
+        video_id = video_id.substring(0, ampersandPosition)
+      }
+      if(video_id === ""){
+        $(".index_alert_post_fail").css("display", "block");
+        $(".index_alert_post_fail").html("Link Youtube Invalid!");
+      }
+    }
+    if (inputFile.files.length > 0) {
+      file = inputFile.files[0];
+    }
+
+    if($(`#clear-id-ytb:checked`).length > 0) {
+      clearYoutube = true
+    }
+
+    if($(`#clear-id-img:checked`).length > 0) {
+      clearImage = true
+    }
+
+    let xhr = new XMLHttpRequest()
+    let form = new FormData()
+    form.set("idPost", idPost)
+    form.set("clearYoutube", clearYoutube)
+    form.set("clearImage", clearImage)
+    form.set("data", data)
+    form.set("YoutubeId", video_id)
+    form.set("image", file)
+    xhr.open("POST", "/post/update", true)
+    xhr.addEventListener("load", (e) => {
+      if (xhr.readyState === 4 && xhr.status === 200) {
+        let json = JSON.parse(xhr.responseText);
+        if (json.code === 0) {
+          let post = json.post;
+          if (post.urlFile.length > 0) {
+            $(`#img${post.id}`).remove()
+            $(`#iframe${post.id}`).remove()
+            $(`#data${post.id}`).html(post.data)
+            renderImg(post)
+            $("#index_modal_edit_post").modal("hide");
+          } else if (post.idVideos.length > 0) {
+            $(`#img${post.id}`).remove()
+            $(`#iframe${post.id}`).remove()
+            renderIframe(post)
+            $("#index_modal_edit_post").modal("hide");
+          } else {
+            $(`#img${post.id}`).remove()
+            $(`#iframe${post.id}`).remove()
+            $(`#data${post.id}`).html(post.data)
+            $("#index_modal_edit_post").modal("hide");
+          }
+        } else if (json.code === 1) {
+          $(".index_alert_post_fail").css("display", "block");
+          $(".index_alert_post_fail").html("Don't change anything!");
+        } else if (json.code === 3) {
+          $(".index_alert_post_fail").css("display", "block");
+          $(".index_alert_post_fail").html("Link Youtube Invalid!");
+        }else {
+          $(".index_alert_post_fail").css("display", "block");
+          $(".index_alert_post_fail").html("Try again!");
+        }
+      }
+    });
+    xhr.send(form);
+  })
+}
 function deletePost(e) {
   let id = e.id;
   fetch("/post/delete/" + id, {
@@ -466,13 +573,22 @@ function deleteNotification(e) {
       .catch((err) => console.log(err));
 }
 
-function clearDataModal() {
+function clearDataModalPost() {
     $("#data-post").val("");
     $("#input-post-ytb").css("display", "none");
     $("#input-post-img").css("display", "none");
     $("#input-post-ytb").val("");
     $("#input-post-img").val("");
     $(".index_alert_post_fail").css("display", "none");
+}
+
+function clearDataModalEdit() {
+  $("#data-post-edit").val("");
+  $("#input-post-ytb-edit").css("display", "none");
+  $("#input-post-img-edit").css("display", "none");
+  $("#input-post-ytb-edit").val("");
+  $("#input-post-img-edit").val("");
+  $(".index_alert_post_fail").css("display", "none");
 }
 
 function hideandshowNoti(){
@@ -521,7 +637,7 @@ function renderCommentDifferentUser(cmt){
 function renderPostChar(post){ 
   let time = moment(post.time).fromNow()
   return `<div class="card index_poster" id="${post.id}">
-    <div class="card index_on_the_cmt">
+    <div class="card index_on_the_cmt" id="bodyPost${post.id}">
       <div class="index_post_title_option">  
       <a href="/account/profile/${post.user.id}" class="index_post_avtname"><img id="profile_avt" class="index_avt_post" src="${post.user.img}"><span id="profile_name_span">${post.user.name}</span></a>
       <aside>${time}</aside>
@@ -531,11 +647,11 @@ function renderPostChar(post){
         </button>
         <div class="dropdown-menu" aria-labelledby="dropdownMenuButtonPost">
           <button class="dropdown-item" id="${post.id}" onclick="deletePost(this)"><i class="fas fa-trash"></i> Delete</button>
-          <button class="dropdown-item"><i class="fas fa-edit"></i> Edit</button>
+          <button class="dropdown-item" id="${post.id}" onclick="editPost(this)"><i class="fas fa-edit"></i> Edit</button>
         </div>
       </div>
       </div>
-      <aside>${post.data}</aside>
+      <aside id="data${post.id}">${post.data}</aside>
       <button type="button" class="btn btn-light index_button_cmt" id="" name="" value="" data-toggle="collapse" href="#collapseCmt${post.id}" role="button" aria-expanded="false" aria-controls="collapseCmt${post.id}"><i class="far fa-comment-dots"></i>  Comment</button>
       <div class="collapse" id="collapseCmt${post.id}">
         <div class=" index_cmt" id="${post.id}>">
@@ -570,7 +686,7 @@ function renderPostCharDifferentUser(post){
 function renderPostVideo(post){
   let time = moment(post.time).fromNow()
   return `<div class="card index_poster" id="${post.id}">
-    <div class="card index_on_the_cmt">
+    <div class="card index_on_the_cmt" id="bodyPost${post.id}">
         <div class="index_post_title_option">  
         <a href="/account/profile/${post.user.id}" class="index_post_avtname"><img id="profile_avt" class="index_avt_post" src="${post.user.img}"><span id="profile_name_span">${post.user.name}</span></a>
           <aside>${time}</aside> 
@@ -580,12 +696,12 @@ function renderPostVideo(post){
               </button>
               <div class="dropdown-menu" aria-labelledby="dropdownMenuButtonPost">
                 <button class="dropdown-item" id="${post.id}" onclick="deletePost(this)"><i class="fas fa-trash"></i> Delete</button>
-                <button class="dropdown-item"><i class="fas fa-edit"></i> Edit</button>  
+                <button class="dropdown-item" id="${post.id}" onclick="editPost(this)"><i class="fas fa-edit"></i> Edit</button>  
               </div>
             </div>
           </div>
-          <aside>${post.data}</aside>
-          <iframe class="index_video_post"  src="https://www.youtube.com/embed/${post.idVideos}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+          <aside id="data${post.id}">${post.data}</aside>
+          <iframe class="index_video_post" id="iframe${post.id}"  src="https://www.youtube.com/embed/${post.idVideos}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
     </div>
     <button type="button" class="btn btn-light index_button_cmt" id="" name="" value="" data-toggle="collapse" href="#collapseCmt${post.id}" role="button" aria-expanded="false" aria-controls="collapseCmt${post.id}"><i class="far fa-comment-dots"></i>  Comment</button>
     <div class="collapse" id="collapseCmt${post.id}">
@@ -623,7 +739,7 @@ function renderPostVideoDifferentUser(post){
 function renderPostImage(post){
   let time = moment(post.time).fromNow()
    return `<div class="card index_poster" id="${post.id}">
-      <div class="card index_on_the_cmt">
+      <div class="card index_on_the_cmt" id="bodyPost${post.id}">
         <div class="index_post_title_option"> 
           <a href="/account/profile/${post.user.id}" class="index_post_avtname"><img id="profile_avt" class="index_avt_post" src="${post.user.img}"><span id="profile_name_span">${post.user.name}</span></a>
           <aside>${time}</aside>
@@ -633,12 +749,12 @@ function renderPostImage(post){
               </button>
               <div class="dropdown-menu" aria-labelledby="dropdownMenuButtonPost">
                 <button class="dropdown-item" id="${post.id}" onclick="deletePost(this)"><i class="fas fa-trash"></i> Delete</button>
-                <button class="dropdown-item"><i class="fas fa-edit"></i> Edit</button>
+                <button class="dropdown-item" id="${post.id}" onclick="editPost(this)"><i class="fas fa-edit"></i> Edit</button>
               </div>
           </div>
         </div>
-        <aside>${post.data}</aside>
-        <img class="index_img_post" src="/${post.user.email}/${post.nameFile}" alt="">
+        <aside id="data${post.id}">${post.data}</aside>
+        <img class="index_img_post" id="img${post.id}" src="/${post.user.email}/${post.nameFile}" alt="">
       </div>
         <button type="button" class="btn btn-light index_button_cmt" id="" name="" value="" data-toggle="collapse" href="#collapseCmt${post.id}" role="button" aria-expanded="false" aria-controls="collapseCmt${post.id}"><i class="far fa-comment-dots"></i>  Comment</button>
         <div class="collapse" id="collapseCmt${post.id}">
@@ -695,4 +811,16 @@ function renderNotification(notification) {
         </div>
     </li>`
     )
+}
+
+function renderIframe(post) {
+  $(`#bodyPost${post.id}`).append(`
+  <iframe class="index_video_post" id="iframe${post.id}" src="https://www.youtube.com/embed/${post.idVideos}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+  `)
+}
+
+function renderImg(post) {
+  $(`#bodyPost${post.id}`).append(`
+  <img class="index_img_post" id="img${post.id}" src="/${post.user.email}/${post.nameFile}" alt="">
+  `) 
 }

@@ -121,7 +121,121 @@ router.delete("/delete/:id", validatorLogin, async (req, res) => {
   }
 });
 
-router.post("/update", (req, res) => {});
+router.post("/update", validatorLogin, upload.single("image"), async (req, res) => {
+  const {idPost, YoutubeId, data,clearYoutube,clearImage} = req.body;
+  const file = req.file;
+  const id = req.session.passport.user
+  const user = await accountModel.findById(id)
+  const post = await postModel.findOne({ id: idPost})
+  if (!user || !post) {
+    return res.json({ code: 1, message: "Du lieu khong hop le" });
+  }
+  if(!data && !YoutubeId && ! file && clearYoutube === false && clearImage === false){
+    return res.json({ code: 1, message: "Du lieu khong hop le" });
+  }
+
+  if (user && post) {
+    if (file) {
+      const { root } = req.vars;
+      const currentPath = `${root}/src/users/${user.email}`;
+
+      if (!fs.existsSync(currentPath)) {
+        res.json({ code: 2, message: "Duong dan hong hop le" });
+      }
+
+      let name = file.originalname;
+      let newPath = currentPath + "/" + name;
+      let oldPath = post.urlFile
+      fs.renameSync(file.path, newPath);
+      postModel.findOneAndUpdate(
+        {
+          id: idPost
+        },
+        {
+          urlFile: newPath,
+          nameFile: name,
+          idVideos: "",
+          data: data || ""
+        },
+        {
+          new: true,
+          runValidators: true
+        }
+      )
+      .then( doc => {
+        if (fs.existsSync(oldPath)) {
+          fs.unlinkSync(oldPath);
+        }
+        res.json({code: 0, message:"Thanh cong", post: doc}) 
+      })
+      .catch( err => console.log(err))
+    } else if (YoutubeId != null) {
+      validator.validateVideoID(YoutubeId, (result, err) => {
+        if (err) {
+          res.json({ code: 2, message: "Sai link" });
+        } else {
+          postModel.findOneAndUpdate(
+            {
+              id: idPost
+            },
+            {
+              urlFile: "",
+              nameFile: "",
+              idVideos: YoutubeId,
+              data: data || ""
+            },
+            {
+              new: true,
+              runValidators: true
+            }
+          )
+          .then( doc => res.json({code: 0, message:"Thanh cong", post: doc}))
+          .catch( err => console.log(err))
+        }
+      });
+    } else {
+      if(clearImage || clearYoutube) {
+        postModel.findOneAndUpdate(
+          {
+            id: idPost
+          },
+          {
+            urlFile: "",
+            nameFile: "",
+            idVideos: "",
+            data: data
+          },
+          {
+            new: true,
+            runValidators: true
+          }
+        )
+        .then( doc =>{
+          if (fs.existsSync(post.urlFile)) {
+            fs.unlinkSync(post.urlFile);
+          }
+           res.json({code: 0, message:"Thanh cong", post: doc})
+        })
+        .catch( err => console.log(err))
+      } else {
+        postModel.findOneAndUpdate(
+          {
+            id: idPost
+          },
+          {
+            data: data
+          },
+          {
+            new: true,
+            runValidators: true
+          }
+        )
+        .then( doc => res.json({code: 0, message:"Thanh cong", post: doc}))
+        .catch( err => console.log(err))
+      }
+    }
+  }
+});
 
 router.post("/load",  async (req, res) => {
   const id = req.session.passport.user
