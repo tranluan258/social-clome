@@ -18,7 +18,7 @@ const validateEmail = require("email-validator")
 router.get("/login", (req, res) => {
   var error = req.flash("error");
   if (error[0] === "Missing credentials") {
-    error[0] = "Vui lòng nhập đầy đủ thông tin";
+    error[0] = "Please enter email and password!";
   }
   if (req.session.passport) {
     res.redirect("../");

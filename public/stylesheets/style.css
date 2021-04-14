@@ -1,6 +1,7 @@
 *{
     box-sizing: border-box;
 }
+
 .login_body {
     margin: 0;
     padding: 0;
@@ -120,11 +121,18 @@
 }
 
 .index_khoa{
+    background-color: #6493b3;
     position:fixed;
     left: 0;
 }
 .tungkhoa{
     padding: 2%;
+    margin: 2%;
+    color: #000000;
+}
+
+.tungkhoa:hover {
+    text-decoration: none;
 }
 
 .khoakhoa{
@@ -133,16 +141,29 @@
 }
 
 .index_add_user_alert{
+    margin: 4px;
+    text-align: center;
     display: none;
 }
 .index_button_link_image_new_post{
     display: none;
 }
 .index_button_link_video_new_post{
+    margin-top: 5px;
+    width: 70%;
     display: none;
 }
 .indexpage{
     width: 100%;
+}
+
+#time-post {
+    text-align: right;
+    width: 20% ;
+}
+
+.data-post {
+    margin: 2%;
 }
 
 .collapse-index{
@@ -154,7 +175,13 @@
     width: 100%;
 }
 .index_post_avtname{
+    color: #000000;
     width: 99%;
+    font-size: 20px;
+}
+.index_post_avtname:hover{
+    text-decoration: none;
+    color: #000000;
 }
 .index_option_post{
     justify-content: flex-end;
@@ -163,9 +190,9 @@
 }
 
 .index_avt_profile_in_the_tab{
-    width: 20px;
+    width: 30px;
     border-radius: 20px;
-    height: 20px;
+    height: 30px;
 }
 
 .index_video_post{
@@ -183,6 +210,8 @@
 }
 
 .index_alert_post_fail{
+    margin: 3px;
+    text-align: center;
     display: none;
 }
 .index_button_video_new_post{
@@ -220,11 +249,12 @@
 .index_button_post_new_post{
     width: 100%;
 }
+
 .index_button_in_the_post{
-    border-radius: 50px;    
     background: none;
     display: block;
 }
+
 .index_on_the_cmt{
     padding: 1em;
 }
@@ -243,7 +273,7 @@
     display: flex;
 }
 .noidungcmt{
-    width: 100%;
+    width: auto;
     padding: 1%;
 }
 .index_avt_cmt{
@@ -273,6 +303,7 @@
     right: 0;
     position: fixed;
     overflow: scroll;
+    background-color: #6493b3;
 }
 
 .index_thongbaoquantrong_title{
@@ -386,6 +417,7 @@
 }
 
 .profile_edit_profile_alert_danger{
+    text-align: center;
     display: none;
 }
 

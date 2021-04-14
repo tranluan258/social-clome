@@ -133,7 +133,8 @@ function scrollLoadData() {
 }
 
 function addUser() {
-  $("#index_create_add_user").click(function () {
+  $("#index_create_add_user").click( () => {
+    clearDataModalAddUser()
     $("#index_modal_add_user").modal();
     $("#btn_add_user").click(() => {
       let input = [...$("input[name='faculty']")];
@@ -307,7 +308,7 @@ function addPost() {
       }
       if(video_id === ""){
         $(".index_alert_post_fail").css("display", "block");
-        $(".index_alert_post_fail").html("Link Youtube Invalid!");
+        $(".index_alert_post_fail").html("Link Youtube is Invalid!");
       }
     }
     if (inputFile.files.length > 0) {
@@ -341,7 +342,7 @@ function addPost() {
           $(".index_alert_post_fail").html("Please enter the data!");
         } else if (json.code === 3) {
           $(".index_alert_post_fail").css("display", "block");
-          $(".index_alert_post_fail").html("Link Youtube Invalid!");
+          $(".index_alert_post_fail").html("Link Youtube is Invalid!");
         }else {
           $(".index_alert_post_fail").css("display", "block");
           $(".index_alert_post_fail").html("Try again!");
@@ -459,6 +460,7 @@ function editPost(e) {
     xhr.send(form);
   })
 }
+
 function deletePost(e) {
   let id = e.id;
   fetch("/post/delete/" + id, {
@@ -515,7 +517,7 @@ function addNotification() {
   $("#button_create_notification").click(() => {
     $("#title-notification").val("")
     $("#data-notification").val("")
-    $("#index_modal_create_noti").modal()
+    $("#index_modal_create_noti").modal("show")
     $("#datepicker").datepicker({         
       autoclose: true,         
       todayHighlight: true 
@@ -530,7 +532,6 @@ function addNotification() {
             idFaculty = $("#select-faculty-post").find("option:selected").attr("id")
         })
         if(!datePost || !title || !data || !idFaculty ) {
-          console.log(datePost,title,data,idFaculty)
           $(".index_add_user_alert").css("display", "block")
           $(".index_add_user_alert").html("Please enter all information")
         } else {
@@ -557,7 +558,7 @@ function addNotification() {
         }
      })
   })
-}
+} 
 
 function deleteNotification(e) {
     let id = e.id
@@ -571,6 +572,57 @@ function deleteNotification(e) {
         }
       })
       .catch((err) => console.log(err));
+}
+
+function editNotification(e) {
+    let idNotification = e.id
+    let idFaculty = $(e).attr("data-id")
+    $("#title-notification-edit").val($(`#title${idNotification}`).html()) 
+    $("#data-notification-edit").val($(`#data${idNotification}`).html())
+    $(`option#${idFaculty}`).attr("selected", true)
+    $("#index_modal_edit_noti").modal("show")
+    $("#datepicker-edit").datepicker({         
+      autoclose: true,         
+      todayHighlight: true 
+      }).datepicker('update', $(`#date${idNotification}`).html())
+
+     $("#btn_edit_notification").click(() => {
+        let datePost = $("#datepicker-edit").find("input").val()
+        let title = $("#title-notification-edit").val()
+        let data = $("#data-notification-edit").val()
+        var idFaculty = $("#select-faculty-edit").find("option:selected").attr("id")
+        $("#select-faculty-edit").on('change', () => {
+            idFaculty = $("#select-faculty-edit").find("option:selected").attr("id")
+        })
+        if(!idNotification || !datePost || !title || !data || !idFaculty ) {
+          $(".index_add_user_alert").css("display", "block")
+          $(".index_add_user_alert").html("Please enter all information")
+        } else {
+          fetch("/notification/update", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({
+              idNotification: idNotification,
+              idFaculty: idFaculty,
+              datePost: datePost,
+              title: title,
+              data: data
+            })
+          })
+          .then(res => res.json())
+          .then(json => {
+              if(json.code === 0) {
+                let notification = json.notification
+                $(`#title${idNotification}`).html(notification.title)
+                $(`#data${idNotification}`).html(notification.data)
+                $(`#date${idNotification}`).html(notification.datePost)
+                $(`#faculty${idNotification}`).html(notification.faculty.name)
+                $("#index_modal_edit_noti").modal("hide")
+              }
+          })
+          .catch(err => console.log(err))
+        }
+     })
 }
 
 function clearDataModalPost() {
@@ -589,6 +641,13 @@ function clearDataModalEdit() {
   $("#input-post-ytb-edit").val("");
   $("#input-post-img-edit").val("");
   $(".index_alert_post_fail").css("display", "none");
+}
+
+function clearDataModalAddUser() {
+  $("#email_user").val("")
+  $("#name_user").val("")
+  $("#password_user").val("")
+  $("input[name='faculty']").prop("checked",false)
 }
 
 function hideandshowNoti(){
@@ -640,7 +699,7 @@ function renderPostChar(post){
     <div class="card index_on_the_cmt" id="bodyPost${post.id}">
       <div class="index_post_title_option">  
       <a href="/account/profile/${post.user.id}" class="index_post_avtname"><img id="profile_avt" class="index_avt_post" src="${post.user.img}"><span id="profile_name_span">${post.user.name}</span></a>
-      <aside>${time}</aside>
+      <aside id="time-post">${time}</aside>
       <div class="dropdown edit_and_delete_inpost">
         <button class="btn index_button_in_the_post" type="button" id="dropdownMenuButtonPost" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
         . . .
@@ -651,7 +710,7 @@ function renderPostChar(post){
         </div>
       </div>
       </div>
-      <aside id="data${post.id}">${post.data}</aside>
+      <aside class="data-post" id="data${post.id}">${post.data}</aside>
       <button type="button" class="btn btn-light index_button_cmt" id="" name="" value="" data-toggle="collapse" href="#collapseCmt${post.id}" role="button" aria-expanded="false" aria-controls="collapseCmt${post.id}"><i class="far fa-comment-dots"></i>  Comment</button>
       <div class="collapse" id="collapseCmt${post.id}">
         <div class=" index_cmt" id="${post.id}>">
@@ -669,9 +728,9 @@ function renderPostCharDifferentUser(post){
     <div class="card index_on_the_cmt">
       <div class="index_post_title_option">  
       <a href="/account/profile/${post.user.id}" class="index_post_avtname"><img id="profile_avt" class="index_avt_post" src="${post.user.img}"><span id="profile_name_span">${post.user.name}</span></a>
-      <aside>${time}</aside>
+      <aside id="time-post">${time}</aside>
       </div>
-      <aside>${post.data}</aside>
+      <aside class="data-post">${post.data}</aside>
       <button type="button" class="btn btn-light index_button_cmt" id="" name="" value="" data-toggle="collapse" href="#collapseCmt${post.id}" role="button" aria-expanded="false" aria-controls="collapseCmt${post.id}"><i class="far fa-comment-dots"></i>  Comment</button>
       <div class="collapse" id="collapseCmt${post.id}">
         <div class=" index_cmt" id="${post.id}>">
@@ -689,7 +748,7 @@ function renderPostVideo(post){
     <div class="card index_on_the_cmt" id="bodyPost${post.id}">
         <div class="index_post_title_option">  
         <a href="/account/profile/${post.user.id}" class="index_post_avtname"><img id="profile_avt" class="index_avt_post" src="${post.user.img}"><span id="profile_name_span">${post.user.name}</span></a>
-          <aside>${time}</aside> 
+          <aside id="time-post">${time}</aside> 
           <div class="dropdown edit_and_delete_inpost">
               <button class="btn index_button_in_the_post" type="button" id="dropdownMenuButtonPost" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
               . . .
@@ -700,7 +759,7 @@ function renderPostVideo(post){
               </div>
             </div>
           </div>
-          <aside id="data${post.id}">${post.data}</aside>
+          <aside class="data-post" id="data${post.id}">${post.data}</aside>
           <iframe class="index_video_post" id="iframe${post.id}"  src="https://www.youtube.com/embed/${post.idVideos}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
     </div>
     <button type="button" class="btn btn-light index_button_cmt" id="" name="" value="" data-toggle="collapse" href="#collapseCmt${post.id}" role="button" aria-expanded="false" aria-controls="collapseCmt${post.id}"><i class="far fa-comment-dots"></i>  Comment</button>
@@ -720,9 +779,9 @@ function renderPostVideoDifferentUser(post){
     <div class="card index_on_the_cmt">
         <div class="index_post_title_option">  
         <a href="/account/profile/${post.user.id}" class="index_post_avtname"><img id="profile_avt" class="index_avt_post" src="${post.user.img}"><span id="profile_name_span">${post.user.name}</span></a>
-          <aside>${time}</aside> 
+          <aside id="time-post">${time}</aside> 
           </div>
-          <aside>${post.data}</aside>
+          <aside class="data-post">${post.data}</aside>
           <iframe class="index_video_post"  src="https://www.youtube.com/embed/${post.idVideos}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
     </div>
     <button type="button" class="btn btn-light index_button_cmt" id="" name="" value="" data-toggle="collapse" href="#collapseCmt${post.id}" role="button" aria-expanded="false" aria-controls="collapseCmt${post.id}"><i class="far fa-comment-dots"></i>  Comment</button>
@@ -742,7 +801,7 @@ function renderPostImage(post){
       <div class="card index_on_the_cmt" id="bodyPost${post.id}">
         <div class="index_post_title_option"> 
           <a href="/account/profile/${post.user.id}" class="index_post_avtname"><img id="profile_avt" class="index_avt_post" src="${post.user.img}"><span id="profile_name_span">${post.user.name}</span></a>
-          <aside>${time}</aside>
+          <aside id="time-post">${time}</aside>
           <div class="dropdown edit_and_delete_inpost">
               <button class="btn index_button_in_the_post" type="button" id="dropdownMenuButtonPost" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
               . . .
@@ -753,7 +812,7 @@ function renderPostImage(post){
               </div>
           </div>
         </div>
-        <aside id="data${post.id}">${post.data}</aside>
+        <aside class="data-post" id="data${post.id}">${post.data}</aside>
         <img class="index_img_post" id="img${post.id}" src="/${post.user.email}/${post.nameFile}" alt="">
       </div>
         <button type="button" class="btn btn-light index_button_cmt" id="" name="" value="" data-toggle="collapse" href="#collapseCmt${post.id}" role="button" aria-expanded="false" aria-controls="collapseCmt${post.id}"><i class="far fa-comment-dots"></i>  Comment</button>
@@ -773,9 +832,9 @@ function renderPostImageDifferentUser(post){
       <div class="card index_on_the_cmt">
         <div class="index_post_title_option"> 
           <a href="/account/profile/${post.user.id}" class="index_post_avtname"><img id="profile_avt" class="index_avt_post" src="${post.user.img}"><span id="profile_name_span">${post.user.name}</span></a>
-          <aside>${time}</aside>
+          <aside id="time-post">${time}</aside>
         </div>
-        <aside>${post.data}</aside>
+        <aside class="data-post">${post.data}</aside>
         <img class="index_img_post" src="/${post.user.email}/${post.nameFile}" alt="">
       </div>
         <button type="button" class="btn btn-light index_button_cmt" id="" name="" value="" data-toggle="collapse" href="#collapseCmt${post.id}" role="button" aria-expanded="false" aria-controls="collapseCmt${post.id}"><i class="far fa-comment-dots"></i>  Comment</button>

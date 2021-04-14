@@ -40,15 +40,15 @@ passport.use(new LocalStrategy({
     },
     function(username, password, done) {
        if(!emailValidator.validate(username)){
-        return done(null, false, { message: 'Email không đúng định dạng' });
+        return done(null, false, { message: 'Incorrect email format' });
        }
       accountModel.findOne({ email: username }, function(err, user) {
-        if (err) { return done(null, false, { message: 'Vui lòng nhập đầy đủ email và password' });; }
+        if (err) { return done(null, false, { message: 'Please enter email and password' });; }
         if (!user) {
-          return done(null, false, { message: 'Sai email hoặc password' });
+          return done(null, false, { message: 'Incorrect email or password' });
         }
         if (!bcrypt.compareSync(password, user.password)) {
-          return done(null, false, { message: 'Sai email hoặc password' });
+          return done(null, false, { message: 'Incorrect email or password' });
         }
         return done(null, user);
       });

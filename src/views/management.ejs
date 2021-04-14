@@ -116,10 +116,10 @@
                             <li class="nav-item oi" id="<%= n.id %>">
                                 <div class="newthongbao">
                                     <a class="card thongbao_info" href="/notification/detail/<%= n.id %>">
-                                        <div class="title_thongbao"><%= n.title %></div>
-                                        <div class="khoathongbao"><%= n.faculty.name %></div>
-                                        <div class="ngaythongbao"><%= n.datePost %></div>
-                                        <div class="noidungthongbao"><%= n.data %></div>   
+                                        <div class="title_thongbao" id="title<%= n.id %>"><%= n.title %></div>
+                                        <div class="khoathongbao" id="faculty<%=n.id %>"><%= n.faculty.name %></div>
+                                        <div class="ngaythongbao" id="date<%=n.id %>"><%= n.datePost %></div>
+                                        <div class="noidungthongbao" id="data<%= n.id %>"><%= n.data %></div>   
                                     </a>
                                     <div class="dropdown edit_and_delete_noti">
                                         <button class="btn index_button_in_the_post" type="button" id="dropdownMenuButtonNoti" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
@@ -127,7 +127,7 @@
                                         </button>
                                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButtonNoti">
                                             <button class="dropdown-item" id="<%= n.id %>" onclick="deleteNotification(this)"><i class="fas fa-trash"></i> Delete</button>
-                                            <button class="dropdown-item" id="button_edit_notification"><i class="fas fa-edit"></i> Edit</button>
+                                            <button class="dropdown-item" data-id="<%= n.faculty.idFaculty %>" id="<%= n.id %>" onclick="editNotification(this)"><i class="fas fa-edit"></i> Edit</button>
                                         </div>
                                     </div>
                                 </div>
@@ -147,7 +147,6 @@
     </div>
     <!-- modal -->
     <%- include('includes/modal') %>
-    <form>
         <div class="modal" id="index_modal_create_noti">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -157,9 +156,8 @@
                     </div>
                 
                     <div class="modal-body index_body_modal_add_user">
-                        <form>
                             <label>Subject</label>
-                            <input type="text" class="form-control index_add_user_email" id="title-notification" name="" placeholder="">
+                            <input type="text" class="form-control index_add_user_email" id="title-notification" name="" placeholder="Enter subject">
                             <label>Content</label>
                             <textarea type="" class="form-control index_modal_type" id="data-notification" name="" placeholder="Your notification"></textarea><br>
                             <label>Date</label>
@@ -189,7 +187,6 @@
                             <div class="alert alert-danger index_add_user_alert" role="alert">
                                 Incorrect email or password !
                             </div>
-                        </form>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-primary index_button_post_new_post" id="btn_create_notification">Create</button>       
@@ -197,6 +194,53 @@
                 </div>
             </div>
         </div>
-    </form>
+
+        <div class="modal" id="index_modal_edit_noti">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h4 class="modal-title">Edit notification</h4>
+                    <button type="button" class="btn  index_button_cancle_add_user" data-dismiss="modal">x</button>
+                    </div>
+                
+                    <div class="modal-body index_body_modal_add_user">
+                            <label>Subject</label>
+                            <input type="text" class="form-control index_add_user_email" id="title-notification-edit" name="" placeholder="">
+                            <label>Content</label>
+                            <textarea type="" class="form-control index_modal_type" id="data-notification-edit" name="" placeholder="Your notification"></textarea><br>
+                            <label>Date</label>
+                            <div  class="input-group date" id="datepicker-edit" data-date-format="dd-mm-yyyy"> 
+                                <input class="form-control" readonly="" type="text"> 
+                                    <span class="input-group-addon">
+                                        <i class="glyphicon glyphicon-calendar"></i>
+                                    </span> 
+                            </div>
+                            <label>Faculty</label>
+                            <br>
+                            <select id="select-faculty-edit">
+                            <%if(active == "all") { %>
+                                <%if(user.type == 2){%>
+                                    <%faculty.forEach(f => { %>
+                                        <option id="<%= f.id %>"><%= f.name %></option>
+                                    <%})%>
+                                <%} else { %>
+                                    <%user.arrFaculty.forEach(f => { %>
+                                        <option id="<%= f.idFaculty %>"><%= name %></option>
+                                    <%})%>
+                                <%}%>
+                            <%} else { %>
+                                <option id="<%= facultyCurrent.id %>"><%= facultyCurrent.name %></option>
+                            <%}%>
+                            </select>
+                            <div class="alert alert-danger index_add_user_alert" role="alert">
+                                Incorrect email or password !
+                            </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary index_button_post_new_post" id="btn_edit_notification">Edit</button>       
+                    </div>
+                </div>
+            </div>
+        </div>
 </body>
 </html>

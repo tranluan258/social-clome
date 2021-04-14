@@ -7,7 +7,7 @@
     "npm": "6.x"
   },
   "scripts": {
-    "start": "nodemon  ./bin/www"
+    "start": "node  ./bin/www"
   },
   "dependencies": {
     "bcrypt": "^5.0.1",

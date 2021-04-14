@@ -68,6 +68,37 @@ router.post('/add',async (req, res) => {
     .catch(err => res.json({ code: 1, message: "Them that bai"}))
 })
 
+router.post('/update', validatorLogin, async (req, res) => {
+    const {idFaculty,idNotification,datePost,title,data} = req.body
+    const id = req.session.passport.user
+    if(!idFaculty || !title || !data || !idNotification) {
+        return res.json({code: 2,  message: "Du lieu khong hop le"})
+    }
+    const user = await accountModel.findById(id)
+    const faculty =  await facultyModel.findOne({id: idFaculty})
+    notificationModel.findOneAndUpdate(
+        {
+            id: idNotification
+        },
+        {
+            faculty: {
+                idFaculty: idFaculty,
+                name: faculty.name
+            },
+            datePost: datePost,
+            time: new Date().getTime(),
+            title: title,
+            data: data
+        }
+        ,
+        {
+            new : true,
+            runValidators: true
+        })
+        .then(doc => res.json({ code: 0, message: "Them thanh cong", notification: doc }))
+        .catch(err => res.json({ code: 1, message: "Them that bai"}))
+})
+
 router.delete("/delete/:id", async (req, res) => {
     let id =  req.params.id
     notificationModel.findOneAndDelete(

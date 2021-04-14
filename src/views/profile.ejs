@@ -116,10 +116,10 @@
                         <!--1 bai viet-->
                         <% post.forEach(p => { %>
                             <div class="card index_poster" id="<%= p.id %>">
-                                <div class="card index_on_the_cmt">
+                                <div class="card index_on_the_cmt" id="bodyPost<%= p.id %>">
                                     <div class="index_post_title_option">
                                         <a href="/account/profile/<%= p.user.id %>" class="index_post_avtname"><img id="profile_avt" class="index_avt_post" src="<%= p.user.img %>"><span id="profile_name_span"><%= p.user.name %></span> </a>
-                                        <aside><%= moment(p.time).fromNow() %></aside>
+                                        <aside id="time-post"><%= moment(p.time).fromNow() %></aside>
                                         <% if(p.user.id  === userCurrent.id) { %>
                                             <div class="dropdown edit_and_delete_inpost">
                                                 <button class="btn index_button_in_the_post" type="button" id="dropdownMenuButtonPost" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
@@ -127,17 +127,17 @@
                                                 </button>
                                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButtonPost">
                                                 <button class="dropdown-item" id="<%= p.id %>" onclick="deletePost(this)"><i class="fas fa-trash"></i> Delete</button>
-                                                <button class="dropdown-item" data-id="<%= p.id %>"><i class="fas fa-edit"></i> Edit</button>
+                                                <button class="dropdown-item" id="<%= p.id %>" onclick="editPost(this)"><i class="fas fa-edit"></i> Edit</button>
                                                 </div>
                                             </div>
                                         <%} %>
                                         </div>
-                                    <aside><%= p.data %></aside>
+                                    <aside class="data-post" id="data<%= p.id %>"><%= p.data %></aside>
                                     <% if(p.urlFile.length > 0) { %>
-                                        <img class="index_img_post" src="/<%= p.user.email%>/<%= p.nameFile %>" alt="">
+                                        <img class="index_img_post" id="img<%= p.id %>" src="/<%= p.user.email%>/<%= p.nameFile %>" alt="">
                                     <%} %>
                                     <% if (p.idVideos.length > 0) { %>
-                                        <iframe class="index_video_post" src="https://www.youtube.com/embed/<%= p.idVideos %>" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                                        <iframe class="index_video_post" id="iframe<%= p.id %>" src="https://www.youtube.com/embed/<%= p.idVideos %>" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
                                     <% } %> 
                                 </div>
                                 <button type="button" class="btn btn-light index_button_cmt" id="" name="" value="" data-toggle="collapse" href="#collapseCmt<%= p.id %>" role="button" aria-expanded="false" aria-controls="collapseCmt<%= p.id %>"><i class="far fa-comment-dots"></i>  Comment</button>

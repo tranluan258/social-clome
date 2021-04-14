@@ -81,7 +81,7 @@
 
 
             <div class="card index_khoa col-lg-3 col-xl-3 nav-link collapse nav navbar-collapse collapse-index">
-                <header class="Khoa index_thongbaoquantrong_title"><b>Khoa</b></header>
+                <header class="Khoa index_thongbaoquantrong_title"><b>Faculty</b></header>
                 <br>
                 <body>
                     <ul class="navbar-nav khoakhoa flex-column">
@@ -135,7 +135,7 @@
                             <div class="card index_on_the_cmt" id="bodyPost<%= p.id %>">
                                 <div class="index_post_title_option">
                                     <a href="/account/profile/<%= p.user.id %>" class="index_post_avtname"><img class="index_avt_post" src="<%= p.user.img %>"> <%= p.user.name %></a>
-                                    <aside><%= moment(p.time).fromNow() %></aside>
+                                    <aside id="time-post"><%= moment(p.time).fromNow() %></aside>
                                     <% if(p.user.id  === user.id) { %>
                                         <div class="dropdown edit_and_delete_inpost">
                                             <button class="btn index_button_in_the_post" type="button" id="dropdownMenuButtonPost" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
@@ -148,7 +148,7 @@
                                         </div>
                                     <%} %>
                                     </div>
-                                <aside id="data<%= p.id %>"><%= p.data %></aside>
+                                <aside class="data-post" id="data<%= p.id %>"><%= p.data %></aside>
                                 <% if(p.urlFile.length > 0) { %>
                                     <img class="index_img_post" id="img<%= p.id %>" src="/<%= p.user.email%>/<%= p.nameFile %>" alt="">
                                 <%} %>
