@@ -325,6 +325,7 @@ function addPost() {
     xhr.addEventListener("load", (e) => {
       if (xhr.readyState === 4 && xhr.status === 200) {
         let json = JSON.parse(xhr.responseText);
+        console.log(json.message);
         if (json.code === 0) {
           let post = json.post;
           if (post.urlFile.length > 0) {
