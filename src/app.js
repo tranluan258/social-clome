@@ -5,22 +5,22 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const logger = require('morgan');
-const db = require('./src/configs/db')
+const db = require('./configs/db')
 const passport = require('passport');
 const flash = require('express-flash')
-require('./src/services/passport');
+require('./services/passport');
 
-const siteRouter = require('./src/routes/site');
-const commentRouter = require('./src/routes/comments')
-const accountRouter = require('./src/routes/account');
-const postRouter = require('./src/routes/post')
-const facultyRouter = require('./src/routes/faculty')
-const notificationsRouter = require('./src/routes/notification')
+const siteRouter = require('./routes/site');
+const commentRouter = require('./routes/comments')
+const accountRouter = require('./routes/account');
+const postRouter = require('./routes/post')
+const facultyRouter = require('./routes/faculty')
+const notificationsRouter = require('./routes/notification')
 
 const app = express();
 
 // view engine setup
-app.set('views', path.join(__dirname, 'src/views'));
+app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 app.use(logger('dev'));
@@ -32,7 +32,7 @@ app.use(flash())
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(express.static(path.join(__dirname, 'src/users')));
+app.use(express.static(path.join(__dirname, 'users')));
 app.use(session({ secret: 'password_secret', path: '/', httpOnly: true, secure: false, maxAge: null }))
 
 app.use((req, res, next) => {

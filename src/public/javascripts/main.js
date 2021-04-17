@@ -5,8 +5,8 @@ socket.on("server-send-notification", data => {
     <div id="message" class="fixed-top" >
       <div style="padding: 5px;">
           <div id="inner-message" class="alert alert-success">
-              <span>Khoa ${data.faculty.name} vừa đăng thông báo mới<span/>
-              <a href="/notification/detail/${data.id}">Click vào đây để xem chi tiết</a>
+              <span>Faculty of  ${data.faculty.name} has just published a new announcement<span/>
+              <a href="/notification/detail/${data.id}">Click here!!</a>
           </div>
       </div>
     </div>
@@ -14,6 +14,14 @@ socket.on("server-send-notification", data => {
   setTimeout(() => {
     $("#message").remove()
   },5000);
+})
+
+socket.on("server-send-comment", data => {
+  renderCommentDifferentUser(data)
+})
+
+socket.on("server-send-delete-comment", data => {
+    $(`div#${data}`).remove()
 })
 
 $(document).ready(() => {
@@ -35,6 +43,7 @@ function scrollLoadData() {
   if (check.length >= 21 && path === 'profile' || check === "") {
     $(window).scroll(function () {
       if (Math.abs($(window).scrollTop() - ($(document).height() - $(window).height())) < 1 ) {
+        renderLoading()
         fetch("/post/load", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -45,6 +54,7 @@ function scrollLoadData() {
         })
           .then((response) => response.json())
           .then((json) => {
+            $("#message").remove();
             if (json.code === 0) {
               let id = $("#index_id_user").html();
               start = start + 1;
@@ -166,8 +176,8 @@ function addUser() {
         .then((res) => res.json())
         .then((json) => {
           if (json.code == 0) {
-            alert("Thêm thành công");
             $("#index_modal_add_user").modal("hide");
+            renderAlert()
           } else if (json.code === 1) {
             $(".index_add_user_alert").css("display", "block");
             $(".index_add_user_alert").html("Please enter full information!");
@@ -201,8 +211,8 @@ function changePassword() {
         .then((res) => res.json())
         .then((json) => {
           if (json.code === 0) {
-            alert("Change Password Success");
             $("#index_modal_change_password").modal("hide");
+            renderAlert()
           } else if (json.code === 2) {
             $(".index_add_user_alert").css("display", "block");
             $(".index_add_user_alert").html("Password Incorrect!");
@@ -302,60 +312,70 @@ function addPost() {
     var video_id = ""
     if (urlYoutube != "") {
       video_id = urlYoutube.split("v=")[1]
-      var ampersandPosition = video_id.indexOf("&")
-      if (ampersandPosition != -1) {
-        video_id = video_id.substring(0, ampersandPosition)
-      }
-      if(video_id === ""){
-        $(".index_alert_post_fail").css("display", "block");
-        $(".index_alert_post_fail").html("Link Youtube is Invalid!");
+      if(video_id === undefined){
+          
+      } else {
+        var ampersandPosition = video_id.indexOf("&")
+        if (ampersandPosition != -1) {
+          video_id = video_id.substring(0, ampersandPosition)
+        }
       }
     }
     if (inputFile.files.length > 0) {
       file = inputFile.files[0];
     }
 
-    let xhr = new XMLHttpRequest()
-    let form = new FormData()
-    form.set("email", email)
-    form.set("data", data)
-    form.set("YoutubeId", video_id)
-    form.set("attachment", file)
-    xhr.open("POST", "/post/add", true)
-    xhr.addEventListener("load", (e) => {
-      if (xhr.readyState === 4 && xhr.status === 200) {
-        let json = JSON.parse(xhr.responseText);
-        if (json.code === 0) {
-          let post = json.post;
-          if (post.urlFile.length > 0) {
-            $(".index_body_post").prepend(renderPostImage(post))
-            $("#index_modal_new_post").modal("hide");
-          } else if (post.idVideos.length > 0) {
-            $(".index_body_post").prepend(renderPostVideo(post))
-            $("#index_modal_new_post").modal("hide");
-          } else {
-            $(".index_body_post").prepend(renderPostChar(post))
-            $("#index_modal_new_post").modal("hide");
+    if(video_id === undefined) {
+      $(".index_alert_post_fail").css("display", "block");
+      $(".index_alert_post_fail").html("Link Youtube is Invalid!");
+    } else {
+      let xhr = new XMLHttpRequest()
+      let form = new FormData()
+      form.set("email", email)
+      form.set("data", data)
+      form.set("YoutubeId", video_id)
+      form.set("attachment", file)
+      xhr.open("POST", "/post/add", true)
+      xhr.addEventListener("load", (e) => {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+          let json = JSON.parse(xhr.responseText);
+          if (json.code === 0) {
+            let post = json.post;
+            if (post.urlFile.length > 0) {
+              $(".index_body_post").prepend(renderPostImage(post))
+              $("#index_modal_new_post").modal("hide");
+              renderAlert()
+            } else if (post.idVideos.length > 0) {
+              $(".index_body_post").prepend(renderPostVideo(post))
+              $("#index_modal_new_post").modal("hide");
+              renderAlert()
+            } else {
+              $(".index_body_post").prepend(renderPostChar(post))
+              $("#index_modal_new_post").modal("hide");
+              renderAlert()
+            }
+          } else if (json.code === 1) {
+            $(".index_alert_post_fail").css("display", "block");
+            $(".index_alert_post_fail").html("Please enter the data!");
+          } else if (json.code === 3) {
+            $(".index_alert_post_fail").css("display", "block");
+            $(".index_alert_post_fail").html("Link Youtube is Invalid!");
+          }else {
+            $(".index_alert_post_fail").css("display", "block");
+            $(".index_alert_post_fail").html("Try again!");
           }
-        } else if (json.code === 1) {
-          $(".index_alert_post_fail").css("display", "block");
-          $(".index_alert_post_fail").html("Please enter the data!");
-        } else if (json.code === 3) {
-          $(".index_alert_post_fail").css("display", "block");
-          $(".index_alert_post_fail").html("Link Youtube is Invalid!");
-        }else {
-          $(".index_alert_post_fail").css("display", "block");
-          $(".index_alert_post_fail").html("Try again!");
         }
-      }
     });
     xhr.send(form);
+  }
   });
 }
 
 function editPost(e) {
   $(`#clear-id-img`).attr('disabled', false)
   $(`#clear-id-ytb`).attr('disabled', false)
+  $(`#clear-id-ytb`).prop('checked', false)
+  $(`#clear-id-img`).prop('checked', false)
   const idPost = e.id
   $("#index_modal_edit_post").modal("show");
   clearDataModalEdit()
@@ -393,13 +413,13 @@ function editPost(e) {
     var video_id = ""
     if (urlYoutube != "") {
       video_id = urlYoutube.split("v=")[1]
-      var ampersandPosition = video_id.indexOf("&")
-      if (ampersandPosition != -1) {
-        video_id = video_id.substring(0, ampersandPosition)
-      }
-      if(video_id === ""){
-        $(".index_alert_post_fail").css("display", "block");
-        $(".index_alert_post_fail").html("Link Youtube Invalid!");
+      if(video_id === undefined){
+        
+      } else {
+        var ampersandPosition = video_id.indexOf("&")
+        if (ampersandPosition != -1) {
+          video_id = video_id.substring(0, ampersandPosition)
+        }
       }
     }
     if (inputFile.files.length > 0) {
@@ -414,50 +434,58 @@ function editPost(e) {
       clearImage = true
     }
 
-    let xhr = new XMLHttpRequest()
-    let form = new FormData()
-    form.set("idPost", idPost)
-    form.set("clearYoutube", clearYoutube)
-    form.set("clearImage", clearImage)
-    form.set("data", data)
-    form.set("YoutubeId", video_id)
-    form.set("image", file)
-    xhr.open("POST", "/post/update", true)
-    xhr.addEventListener("load", (e) => {
-      if (xhr.readyState === 4 && xhr.status === 200) {
-        let json = JSON.parse(xhr.responseText);
-        if (json.code === 0) {
-          let post = json.post;
-          if (post.urlFile.length > 0) {
-            $(`#img${post.id}`).remove()
-            $(`#iframe${post.id}`).remove()
-            $(`#data${post.id}`).html(post.data)
-            renderImg(post)
-            $("#index_modal_edit_post").modal("hide");
-          } else if (post.idVideos.length > 0) {
-            $(`#img${post.id}`).remove()
-            $(`#iframe${post.id}`).remove()
-            renderIframe(post)
-            $("#index_modal_edit_post").modal("hide");
-          } else {
-            $(`#img${post.id}`).remove()
-            $(`#iframe${post.id}`).remove()
-            $(`#data${post.id}`).html(post.data)
-            $("#index_modal_edit_post").modal("hide");
+    if(video_id === undefined) {
+      $(".index_alert_post_fail").css("display", "block");
+      $(".index_alert_post_fail").html("Link Youtube Invalid!");
+    } else {
+      let xhr = new XMLHttpRequest()
+      let form = new FormData()
+      form.set("idPost", idPost)
+      form.set("clearYoutube", clearYoutube)
+      form.set("clearImage", clearImage)
+      form.set("data", data)
+      form.set("YoutubeId", video_id)
+      form.set("image", file)
+      xhr.open("POST", "/post/update", true)
+      xhr.addEventListener("load", (e) => {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+          let json = JSON.parse(xhr.responseText);
+          if (json.code === 0) {
+            let post = json.post;
+            if (post.urlFile.length > 0) {
+              $(`#img${post.id}`).remove()
+              $(`#iframe${post.id}`).remove()
+              $(`#data${post.id}`).html(post.data)
+              renderImg(post)
+              $("#index_modal_edit_post").modal("hide");
+              renderAlert()
+            } else if (post.idVideos.length > 0) {
+              $(`#img${post.id}`).remove()
+              $(`#iframe${post.id}`).remove()
+              renderIframe(post)
+              $("#index_modal_edit_post").modal("hide");
+              renderAlert()
+            } else {
+              $(`#img${post.id}`).remove()
+              $(`#iframe${post.id}`).remove()
+              $(`#data${post.id}`).html(post.data)
+              $("#index_modal_edit_post").modal("hide");
+              renderAlert()
+            }
+          } else if (json.code === 1) {
+            $(".index_alert_post_fail").css("display", "block");
+            $(".index_alert_post_fail").html("Don't change anything!");
+          } else if (json.code === 3) {
+            $(".index_alert_post_fail").css("display", "block");
+            $(".index_alert_post_fail").html("Link Youtube Invalid!");
+          }else {
+            $(".index_alert_post_fail").css("display", "block");
+            $(".index_alert_post_fail").html("Try again!");
           }
-        } else if (json.code === 1) {
-          $(".index_alert_post_fail").css("display", "block");
-          $(".index_alert_post_fail").html("Don't change anything!");
-        } else if (json.code === 3) {
-          $(".index_alert_post_fail").css("display", "block");
-          $(".index_alert_post_fail").html("Link Youtube Invalid!");
-        }else {
-          $(".index_alert_post_fail").css("display", "block");
-          $(".index_alert_post_fail").html("Try again!");
         }
-      }
-    });
-    xhr.send(form);
+      });
+      xhr.send(form);
+    }
   })
 }
 
@@ -470,6 +498,7 @@ function deletePost(e) {
     .then((json) => {
       if (json.code === 0) {
         $(`div#${id}`).remove();
+        renderAlert()
       }
     })
     .catch((err) => console.log(err));
@@ -493,6 +522,7 @@ function addComments(e) {
           let cmt = json.cmt;
           renderCommentLikeUser(cmt)
           $(`#index_data_cmt${id}`).val("");
+          socket.emit("client-send-comment",cmt)
         }
       })
       .catch((err) => console.log(err));
@@ -507,7 +537,9 @@ function deleteComments(e) {
     .then((res) => res.json())
     .then((json) => {
       if (json.code === 0) {
+        socket.emit("client-send-delete-comment",id)
         $(`div#${id}`).remove();
+        renderAlert()
       }
     })
     .catch((err) => console.log(err));
@@ -551,6 +583,7 @@ function addNotification() {
                 let notification = json.notification
                 renderNotification(notification)
                 $("#index_modal_create_noti").modal("hide")
+                renderAlert()
                 socket.emit("client-send-notification",notification)
               }
           })
@@ -569,6 +602,7 @@ function deleteNotification(e) {
       .then((json) => {
         if (json.code === 0) {
           $(`li#${id}`).remove();
+          renderAlert()
         }
       })
       .catch((err) => console.log(err));
@@ -618,6 +652,7 @@ function editNotification(e) {
                 $(`#date${idNotification}`).html(notification.datePost)
                 $(`#faculty${idNotification}`).html(notification.faculty.name)
                 $("#index_modal_edit_noti").modal("hide")
+                renderAlert()
               }
           })
           .catch(err => console.log(err))
@@ -882,4 +917,31 @@ function renderImg(post) {
   $(`#bodyPost${post.id}`).append(`
   <img class="index_img_post" id="img${post.id}" src="/${post.user.email}/${post.nameFile}" alt="">
   `) 
+}
+
+function renderAlert() {
+  $(".alert-new-notification").append(`
+    <div id="message" class="fixed-top" >
+      <div style="padding: 5px;">
+          <div id="inner-message" class="alert alert-success">
+              <span>Success<span/>
+          </div>
+      </div>
+    </div>
+  `)
+  setTimeout(() => {
+    $("#message").remove()
+  },2000);
+}
+
+function renderLoading() {
+    $(".alert-new-notification").append(`
+      <div id="message" class="fixed-top" >
+        <div style="padding: 5px;">
+            <div id="inner-message" class="alert alert-success">
+                <span>Loading......<span/>
+            </div>
+        </div>
+      </div>
+    `)
 }

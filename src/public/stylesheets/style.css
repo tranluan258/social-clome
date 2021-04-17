@@ -115,6 +115,7 @@
 }
 .nav-index{
     display: flex;
+    flex-wrap: wrap;
 }
 .okok{
     background-color:#3498db;
@@ -272,9 +273,20 @@
     margin-left: 5%;
     display: flex;
 }
+
+.profile_da_cmt {
+    color: #000000;
+}
+
+.profile_da_cmt:hover{
+    text-decoration: none;
+    color: #000000;
+}
+
 .noidungcmt{
+    border-radius: 10px;
     width: auto;
-    padding: 1%;
+    padding: 10px;
 }
 .index_avt_cmt{
     width: 30px;
@@ -302,7 +314,8 @@
 .index_thongbaoquantrong{
     right: 0;
     position: fixed;
-    overflow: scroll;
+    height: 50%;
+    overflow-y: scroll;
     background-color: #6493b3;
 }
 
@@ -352,9 +365,6 @@
     .index_thongbaoquantrong,.index_khoa{
         display: none;
         right: 0;
-    }
-    .aa {
-        margin-top: 15%;
     }
 }
 
@@ -506,6 +516,7 @@
     width:100%;
     justify-content: center;
 }
+
 #inner-message {
     margin: 0 auto;
     text-align: center;
@@ -528,6 +539,13 @@
     width: 97%;
 }
 
+.custom-select{
+    width: 20%;
+}
+
+#select-faculty-post,#select-faculty-edit {
+    width: 43%;
+}
 
 @media screen and (max-width: 700px){
     @media screen and (min-width: 600px){
@@ -574,11 +592,36 @@
     }
     
 }
+
 @media screen and (max-width: 1000px){
     @media screen and (min-width: 900px){
         .aa{
             margin-top: 8%;
         }
         
+    }
+}
+
+@media screen and (max-width: 600px){
+    @media screen and (min-width: 500px){
+        .aa{
+            margin-top: 15%;
+        }  
+    }
+}
+
+@media screen and (max-width: 500px){
+    @media screen and (min-width: 450px){
+        .aa{
+            margin-top: 19%;
+        }  
+    }
+}
+
+@media screen and (max-width: 450px){
+    @media screen and (min-width: 400px){
+        .aa{
+            margin-top: 29%;
+        }  
     }
 }

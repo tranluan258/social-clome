@@ -26,7 +26,7 @@ router.post("/add", validatorLogin, upload.single("attachment"), async (req, res
   if (user) {
     if (file) {
       const { root } = req.vars;
-      const currentPath = `${root}/src/users/${email}`;
+      const currentPath = `${root}/users/${email}`;
 
       if (!fs.existsSync(currentPath)) {
         res.json({ code: 2, message: "Duong dan hong hop le" });
@@ -137,7 +137,7 @@ router.post("/update", validatorLogin, upload.single("image"), async (req, res) 
   if (user && post) {
     if (file) {
       const { root } = req.vars;
-      const currentPath = `${root}/src/users/${user.email}`;
+      const currentPath = `${root}/users/${user.email}`;
 
       if (!fs.existsSync(currentPath)) {
         res.json({ code: 2, message: "Duong dan hong hop le" });

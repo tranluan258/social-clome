@@ -6,7 +6,7 @@ module.exports = async (req, res, next) => {
         if(user.type == 1 || user.type == 2){
             next()
         }else{
-            res.send("You do not have permission to access this page")
+            res.render('notrole')
         }
     }else{
         res.redirect('/account/login')

@@ -27,14 +27,7 @@ router.get("/login", (req, res) => {
   }
 });
 
-router.post(
-  "/login",
-  passport.authenticate("local", {
-    successRedirect: "/",
-    failureRedirect: "login",
-    failureFlash: true,
-  })
-);
+router.post("/login",passport.authenticate("local", {successRedirect: "/",failureRedirect: "login",failureFlash: true,}));
 
 router.get("/profile/:id", validatorLogin, async (req, res) => {
   let id = req.params.id;
@@ -53,7 +46,7 @@ router.post("/update", validatorLogin, upload.single("image"), async (req, res) 
   const file = req.file;
   const user = await accountModel.findById(id)
   const { root } = req.vars;
-  const currentPath = `${root}/src/users/${user.email}`;
+  const currentPath = `${root}/users/${user.email}`;
   if (user) {
     if (!file && !name) {
       return res.json({ code: 1, message: "Không thay đổi gì cả" });

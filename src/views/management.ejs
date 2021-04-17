@@ -75,7 +75,7 @@
                     <div class="chonkhoa">
                         <br>
                         <label class="titlechonkhoa"><i class="fa fa-briefcase" aria-hidden="true"></i> Faculty </label>
-                        <select onchange="location = this.value">
+                        <select class="browser-default custom-select" onchange="location = this.value">
                             <% if( active == "all") { %>
                                 <option selected  value="/notification/management">All</option>
                                 <%if(user.type == 2){%>
@@ -169,7 +169,7 @@
                             </div>
                             <label>Faculty</label>
                             <br>
-                            <select id="select-faculty-post">
+                            <select class="browser-default custom-select" id="select-faculty-post">
                             <%if(active == "all") { %>
                                 <%if(user.type == 2){%>
                                     <%faculty.forEach(f => { %>
@@ -177,7 +177,7 @@
                                     <%})%>
                                 <%} else { %>
                                     <%user.arrFaculty.forEach(f => { %>
-                                        <option id="<%= f.idFaculty %>"><%= name %></option>
+                                        <option id="<%= f.idFaculty %>"><%= f.name %></option>
                                     <%})%>
                                 <%}%>
                             <%} else { %>
@@ -217,7 +217,7 @@
                             </div>
                             <label>Faculty</label>
                             <br>
-                            <select id="select-faculty-edit">
+                            <select class="browser-default custom-select" id="select-faculty-edit">
                             <%if(active == "all") { %>
                                 <%if(user.type == 2){%>
                                     <%faculty.forEach(f => { %>
@@ -225,7 +225,7 @@
                                     <%})%>
                                 <%} else { %>
                                     <%user.arrFaculty.forEach(f => { %>
-                                        <option id="<%= f.idFaculty %>"><%= name %></option>
+                                        <option id="<%= f.idFaculty %>"><%= f.name %></option>
                                     <%})%>
                                 <%}%>
                             <%} else { %>

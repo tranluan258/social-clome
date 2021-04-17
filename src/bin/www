@@ -30,6 +30,16 @@ io.on("connection", socket => {
         socket.broadcast.emit("server-send-notification",data)
       }
     })
+    socket.on("client-send-comment", data => {
+      if(data) {
+        socket.broadcast.emit("server-send-comment",data)
+      }
+    })
+    socket.on("client-send-delete-comment", data => {
+      if(data) {
+        socket.broadcast.emit("server-send-delete-comment",data)
+      }
+    })
 })
 
 /**

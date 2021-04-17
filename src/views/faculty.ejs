@@ -74,7 +74,7 @@
                     <div class="chonkhoa">
                         <br>
                         <label class="titlechonkhoa"><i class="fa fa-briefcase" aria-hidden="true"></i> Faculty </label>
-                        <select onchange="location = this.value">
+                        <select class="browser-default custom-select" onchange="location = this.value">
                             <% if( active == "all") { %>
                                 <option selected  value="/faculty">All</option>
                                 <% faculty.forEach(f => { %>
