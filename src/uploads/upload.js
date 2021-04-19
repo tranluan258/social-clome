@@ -1,4 +1,4 @@
-const multer = require("multer");
-const upload = multer({ dest: __dirname });
+const multer = require('multer')
+const uploads = multer({dest: __dirname})
 
-module.exports = upload
+module.exports = uploads

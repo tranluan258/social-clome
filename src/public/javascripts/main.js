@@ -41,13 +41,14 @@ function scrollLoadData() {
   var start = 1;
   let limit = 10;
   if (check.length >= 21 && path === 'profile' || check === "") {
-    $(window).scroll(function () {
+    $(window).scroll( () => {
       if (Math.abs($(window).scrollTop() - ($(document).height() - $(window).height())) < 1 ) {
         renderLoading()
         fetch("/post/load", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
+            check: check,
             start: start,
             limit: limit,
           }),
@@ -97,7 +98,6 @@ function scrollLoadData() {
                     })
                   }
                 } else {
-                  let time = moment(post.time).fromNow()
                   if (post.urlFile.length > 0) {
                     $(".index_body_post").append(renderPostImageDifferentUser(post));
                     comments.forEach((cmt) => {
@@ -848,7 +848,7 @@ function renderPostImage(post){
           </div>
         </div>
         <aside class="data-post" id="data${post.id}">${post.data}</aside>
-        <img class="index_img_post" id="img${post.id}" src="/${post.user.email}/${post.nameFile}" alt="">
+        <img class="index_img_post" id="img${post.id}" src="${post.urlFile}" alt="">
       </div>
         <button type="button" class="btn btn-light index_button_cmt" id="" name="" value="" data-toggle="collapse" href="#collapseCmt${post.id}" role="button" aria-expanded="false" aria-controls="collapseCmt${post.id}"><i class="far fa-comment-dots"></i>  Comment</button>
         <div class="collapse" id="collapseCmt${post.id}">
@@ -870,7 +870,7 @@ function renderPostImageDifferentUser(post){
           <aside id="time-post">${time}</aside>
         </div>
         <aside class="data-post">${post.data}</aside>
-        <img class="index_img_post" src="/${post.user.email}/${post.nameFile}" alt="">
+        <img class="index_img_post" src="${post.urlFile}" alt="">
       </div>
         <button type="button" class="btn btn-light index_button_cmt" id="" name="" value="" data-toggle="collapse" href="#collapseCmt${post.id}" role="button" aria-expanded="false" aria-controls="collapseCmt${post.id}"><i class="far fa-comment-dots"></i>  Comment</button>
         <div class="collapse" id="collapseCmt${post.id}">
@@ -915,7 +915,7 @@ function renderIframe(post) {
 
 function renderImg(post) {
   $(`#bodyPost${post.id}`).append(`
-  <img class="index_img_post" id="img${post.id}" src="/${post.user.email}/${post.nameFile}" alt="">
+  <img class="index_img_post" id="img${post.id}" src="${post.urlFile}" alt="">
   `) 
 }
 

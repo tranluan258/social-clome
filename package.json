@@ -7,7 +7,7 @@
     "npm": "6.x"
   },
   "scripts": {
-    "start": "node  ./src/bin/www"
+    "start": "nodemon  ./src/bin/www"
   },
   "dependencies": {
     "bcrypt": "^5.0.1",
@@ -20,6 +20,7 @@
     "express": "~4.16.1",
     "express-flash": "0.0.2",
     "express-session": "^1.17.1",
+    "firebase-admin": "^9.6.0",
     "http-errors": "~1.6.3",
     "moment": "^2.29.1",
     "mongoose": "^5.11.17",

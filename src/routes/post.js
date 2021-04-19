@@ -10,31 +10,29 @@ const fs = require("fs");
 const uuid = require("short-uuid");
 const validator = require("youtube-validator");
 const validatorLogin =  require("../middleware/validatorLogin")
+const {bucket,storage} = require("../configs/firebase")
 
 router.post("/add", validatorLogin, upload.single("attachment"), async (req, res) => {
   const {email,YoutubeId, data } = req.body;
-  const file = req.file;
+  const files = req.file;
   if (!email) {
     return res.json({ code: 1, message: "Du lieu khong hop le" });
   }
-  if(!data && !YoutubeId && ! file){
+  if(!data && !YoutubeId && ! files){
     return res.json({ code: 1, message: "Du lieu khong hop le" });
   }
 
   const user = await accountModel.findOne({ email: email });
 
   if (user) {
-    if (file) {
-      const { root } = req.vars;
-      const currentPath = `${root}/users/${email}`;
-
-      if (!fs.existsSync(currentPath)) {
-        res.json({ code: 2, message: "Duong dan hong hop le" });
-      }
-
-      let name = file.originalname;
-      let newPath = currentPath + "/" + name;
-      fs.renameSync(file.path, newPath);
+    if (files) { 
+      let tmp = files.originalname.split(".")     
+      let name = tmp[0]+new Date().getTime()+"."+tmp[1]
+      const cloudFiles = await bucket.upload(files.path, {
+        destination: email+"/"+ name
+      })
+      let link = cloudFiles[0].metadata.mediaLink
+      fs.unlinkSync(files.path)
       new postModel({
         id: uuid.generate(),
         user: {
@@ -45,7 +43,7 @@ router.post("/add", validatorLogin, upload.single("attachment"), async (req, res
         },
         data: data || "",
         time: new Date().getTime(),
-        urlFile: newPath,
+        urlFile: link,
         nameFile: name,
         idVideos: "",
       })
@@ -109,10 +107,12 @@ router.delete("/delete/:id", validatorLogin, async (req, res) => {
     postModel
       .deleteOne({ id: id })
       .then(() => {
-        commentsModel.deleteMany({ idPost: id }).then(() => {
-          if (fs.existsSync(post.urlFile)) {
-            fs.unlinkSync(post.urlFile);
-          }
+        commentsModel.deleteMany({ idPost: id }).then(async () => {
+            if (post.urlFile != "") {
+              await bucket.deleteFiles({
+                prefix: post.user.email+"/"+post.nameFile
+              })
+            }
           res.json({ code: 0, message: "Xoa thanh cong" });
         });
       })
@@ -135,24 +135,21 @@ router.post("/update", validatorLogin, upload.single("image"), async (req, res) 
   }
 
   if (user && post) {
+    const oldLink =  post.user.email + "/" + post.nameFile
     if (file) {
-      const { root } = req.vars;
-      const currentPath = `${root}/users/${user.email}`;
-
-      if (!fs.existsSync(currentPath)) {
-        res.json({ code: 2, message: "Duong dan hong hop le" });
-      }
-
-      let name = file.originalname;
-      let newPath = currentPath + "/" + name;
-      let oldPath = post.urlFile
-      fs.renameSync(file.path, newPath);
+      let tmp = file.originalname.split(".")     
+      let name = tmp[0]+new Date().getTime()+"."+tmp[1]
+      const cloudFiles = await bucket.upload(file.path, {
+        destination: user.email+"/"+ name
+      })
+      let link = cloudFiles[0].metadata.mediaLink
+      fs.unlinkSync(file.path)
       postModel.findOneAndUpdate(
         {
           id: idPost
         },
         {
-          urlFile: newPath,
+          urlFile: link,
           nameFile: name,
           idVideos: "",
           data: data || ""
@@ -163,10 +160,9 @@ router.post("/update", validatorLogin, upload.single("image"), async (req, res) 
         }
       )
       .then( doc => {
-        if (fs.existsSync(oldPath)) {
-          fs.unlinkSync(oldPath);
-        }
-        res.json({code: 0, message:"Thanh cong", post: doc}) 
+        bucket.deleteFiles({ 
+          prefix: oldLink
+        }).then(() =>  res.json({code: 0, message:"Thanh cong", post: doc}))
       })
       .catch( err => console.log(err))
     } else if (YoutubeId != null) {
@@ -211,10 +207,7 @@ router.post("/update", validatorLogin, upload.single("image"), async (req, res) 
           }
         )
         .then( doc =>{
-          if (fs.existsSync(post.urlFile)) {
-            fs.unlinkSync(post.urlFile);
-          }
-           res.json({code: 0, message:"Thanh cong", post: doc})
+          res.json({code: 0, message:"Thanh cong", post: doc})
         })
         .catch( err => console.log(err))
       } else {
@@ -239,17 +232,27 @@ router.post("/update", validatorLogin, upload.single("image"), async (req, res) 
 
 router.post("/load",  async (req, res) => {
   const id = req.session.passport.user
-  var { start, limit } = req.body;
+  var {check, start, limit } = req.body;
   postModel.count().then(numDocs => {
     if(limit*start - numDocs < limit){
       limit = limit*start - numDocs
     }
   });
-  const post = await postModel
+
+  let post = null
+  if(check != ""){
+    post = await postModel
+    .find({"user.id": check})
+    .sort({ time: -1 })
+    .skip(limit * start)
+    .limit(limit);
+  } else {
+    post = await postModel
     .find()
     .sort({ time: -1 })
     .skip(limit * start)
     .limit(limit);
+  }
   const comments = await commentsModel.find()
   const user = await accountModel.findById(id)
   if (post.length > 0) {

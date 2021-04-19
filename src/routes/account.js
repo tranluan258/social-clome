@@ -14,6 +14,7 @@ const moment = require("moment")
 const upload = require("../uploads/upload")
 const validatorLogin = require("../middleware/validatorLogin");
 const validateEmail = require("email-validator")
+const {bucket} = require("../configs/firebase")
 
 router.get("/login", (req, res) => {
   var error = req.flash("error");
@@ -45,21 +46,18 @@ router.post("/update", validatorLogin, upload.single("image"), async (req, res) 
   const id = req.session.passport.user
   const file = req.file;
   const user = await accountModel.findById(id)
-  const { root } = req.vars;
-  const currentPath = `${root}/users/${user.email}`;
   if (user) {
     if (!file && !name) {
       return res.json({ code: 1, message: "Không thay đổi gì cả" });
     }
     if (file && name) {
-      if (!fs.existsSync(currentPath)) {
-        res.json({ code: 2, message: "Duong dan hong hop le" });
-      }
-
-      let nameFile = file.originalname;
-      let newPath = currentPath + "/" + nameFile;
-      fs.renameSync(file.path, newPath);
-
+      let tmp = files.originalname.split(".")     
+      let name = tmp[0]+new Date().getTime()+"."+tmp[1]
+      const cloudFiles = await bucket.upload(file.path, {
+        destination: user.email+"/"+ name
+      })
+      let link = cloudFiles[0].metadata.mediaLink
+      fs.unlinkSync(file.path)
       accountModel
         .findOneAndUpdate(
           {
@@ -67,7 +65,7 @@ router.post("/update", validatorLogin, upload.single("image"), async (req, res) 
           },
           {
             name: name,
-            img: "/" + user.email + "/" + nameFile,
+            img: link
           },
           {
             new: true,
@@ -98,13 +96,13 @@ router.post("/update", validatorLogin, upload.single("image"), async (req, res) 
         .catch((err) => console.log(err));
     } else {
       if (file) {
-        if (!fs.existsSync(currentPath)) {
-          res.json({ code: 2, message: "Duong dan hong hop le" });
-        }
-
-        let nameFile = file.originalname;
-        let newPath = currentPath + "/" + nameFile;
-        fs.renameSync(file.path, newPath);
+        let tmp = file.originalname.split(".")     
+        let name = tmp[0]+new Date().getTime()+"."+tmp[1]
+        const cloudFiles = await bucket.upload(file.path, {
+          destination: user.email+"/"+ name
+        })
+        let link = cloudFiles[0].metadata.mediaLink
+        fs.unlinkSync(file.path)
 
         accountModel
           .findOneAndUpdate(
@@ -112,7 +110,7 @@ router.post("/update", validatorLogin, upload.single("image"), async (req, res) 
               id: user.id,
             },
             {
-              img: "/" + user.email + "/" + nameFile,
+              img: link,
             },
             {
               new: true,

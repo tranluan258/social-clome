@@ -117,7 +117,7 @@
 
 
 
-            <div class="index_content col-xs-8 col-md-8 col-sm-8 col-lg-6 col-xl-6">
+            <div class="index_content col-xs-10 col-md-10 col-sm-10 col-lg-6 col-xl-6">
                 <div class="card index_new_post">
                     <form>
                         <div class="index_post">
@@ -149,7 +149,7 @@
                                     </div>
                                 <aside class="data-post" id="data<%= p.id %>"><%= p.data %></aside>
                                 <% if(p.urlFile.length > 0) { %>
-                                    <img class="index_img_post" id="img<%= p.id %>" src="/<%= p.user.email%>/<%= p.nameFile %>" alt="">
+                                    <img class="index_img_post" id="img<%= p.id %>" src="<%= p.urlFile %>" alt="">
                                 <%} %>
                                 <% if (p.idVideos.length > 0) { %>
                                     <iframe class="index_video_post" id="iframe<%= p.id %>" src="https://www.youtube.com/embed/<%= p.idVideos %>" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
