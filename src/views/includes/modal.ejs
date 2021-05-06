@@ -1,4 +1,4 @@
-<div class="modal" id="index_modal_edit_profile">
+<div class="modal fade" id="index_modal_edit_profile">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -38,7 +38,7 @@
     </div>
 </div>
 
-<div class="modal" id="index_modal_new_post">
+<div class="modal fade" id="index_modal_new_post">
 <div class="modal-dialog">
     <div class="modal-content">
         <div class="modal-header">
@@ -48,7 +48,7 @@
     
         <div class="modal-body index_body_modal_new_post">
             <form>
-                <textarea type="" class="form-control index_modal_type" id="data-post" name="" placeholder="Hey <%= user.name %>, what do you think ..."></textarea><br>
+                <textarea type="text" class="form-control index_modal_type" id="data-post" name="" autofocus placeholder="Hey <%= user.name %>, what do you think ..."></textarea><br>
                 <div class="ba_cai_phim">
                     <button type="button" id="btn-post-ytb" class="btn btn-danger index_button_video_new_post"><i class="fab fa-youtube"></i>  Youtube</button>
                     
@@ -69,7 +69,7 @@
 </div>
 </div>
 
-<div class="modal" id="index_modal_edit_post">
+<div class="modal fade" id="index_modal_edit_post">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -78,7 +78,7 @@
             </div>
         
             <div class="modal-body index_body_modal_new_post">
-                    <textarea type="" class="form-control index_modal_type" id="data-post-edit" name="" ></textarea><br>
+                    <textarea type="text" class="form-control index_modal_type" id="data-post-edit" name="" autofocus ></textarea><br>
                     <input type="checkbox" id="clear-id-ytb"> Delete Video
                     <input type="checkbox" id="clear-id-img"> Delete Image
                     <div class="ba_cai_phim">
@@ -100,7 +100,7 @@
     </div>
     </div>
 
-<div class="modal" id="index_modal_add_user">
+<div class="modal fade" id="index_modal_add_user">
 <div class="modal-dialog">
     <div class="modal-content">
         <div class="modal-header">
@@ -117,9 +117,13 @@
                 <input type="text" class="form-control index_add_user_email" id="name_user" name="" placeholder="Enter name">
                 <label>Faculty: </label>
                 <br>
-                <% faculty.forEach(f => {%>
-                    <input type="checkbox" name="faculty" id ="<%=f.id %>" value="<%= f.name %>" placeholder="Check"> <%= f.name %>
-                <%})%>
+                <ul id="list_faculty">
+                    <% faculty.forEach(f => {%>
+                        <li>
+                            <input type="checkbox" name="faculty" id ="<%=f.id %>" value="<%= f.name %>" placeholder="Check"> <%= f.name %>
+                        </li>
+                    <%})%>
+                </ul>
                 <div class="alert alert-danger index_add_user_alert" role="alert">
                     Incorrect email or password !
                 </div>
@@ -131,7 +135,7 @@
 </div>
 </div>
 
-<div class="modal" id="index_modal_change_password">
+<div class="modal fade" id="index_modal_change_password">
 <div class="modal-dialog">
     <div class="modal-content">
         <div class="modal-header">

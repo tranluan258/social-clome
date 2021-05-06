@@ -40,7 +40,7 @@ router.get('/management/:id', validatorRole, async (req, res) => {
     res.render('management',{user, faculty, notification, active: id, facultyCurrent})
 })
 
-router.post('/add',async (req, res) => {
+router.post('/add', validatorLogin, async (req, res) => {
     const {idFaculty,datePost,title,data} = req.body
     const id = req.session.passport.user
     if(!idFaculty || !title || !data) {
@@ -48,24 +48,26 @@ router.post('/add',async (req, res) => {
     }
     const user = await accountModel.findById(id)
     const faculty =  await facultyModel.findOne({id: idFaculty})
-    new notificationModel({
-        id: uuid.generate(),
-        faculty: {
-            idFaculty: faculty.id,
-            name: faculty.name
-        },
-        user: {
-            id: user.id,
-            email: user.email,
-            name: user.name,
-        },
-        datePost: datePost,
-        time: new Date().getTime(),
-        title: title,
-        data: data
-    }).save()
-    .then(notification => res.json({ code: 0, message: "Them thanh cong", notification: notification }))
-    .catch(err => res.json({ code: 1, message: "Them that bai"}))
+    if(user && faculty) {
+        new notificationModel({
+            id: uuid.generate(),
+            faculty: {
+                idFaculty: faculty.id,
+                name: faculty.name
+            },
+            user: {
+                id: user.id,
+                email: user.email,
+                name: user.name,
+            },
+            datePost: datePost,
+            time: new Date().getTime(),
+            title: title,
+            data: data
+        }).save()
+        .then(notification => res.json({ code: 0, message: "Them thanh cong", notification: notification }))
+        .catch(err => res.json({ code: 1, message: "Them that bai"}))
+    }
 })
 
 router.post('/update', validatorLogin, async (req, res) => {

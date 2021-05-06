@@ -51,6 +51,10 @@ router.post("/update", validatorLogin, upload.single("image"), async (req, res) 
       return res.json({ code: 1, message: "Không thay đổi gì cả" });
     }
     if (file && name) {
+      if(file.mimetype.split("/")[0] != "image") {
+        fs.unlinkSync(file.path)
+        return res.json({ code: 4, message: "Du lieu khong hop le" });
+      }
       let tmp = files.originalname.split(".")     
       let name = tmp[0]+new Date().getTime()+"."+tmp[1]
       const cloudFiles = await bucket.upload(file.path, {
@@ -96,6 +100,10 @@ router.post("/update", validatorLogin, upload.single("image"), async (req, res) 
         .catch((err) => console.log(err));
     } else {
       if (file) {
+        if(file.mimetype.split("/")[0] != "image") {
+          fs.unlinkSync(file.path)
+          return res.json({ code: 4, message: "Du lieu khong hop le" });
+        }
         let tmp = file.originalname.split(".")     
         let name = tmp[0]+new Date().getTime()+"."+tmp[1]
         const cloudFiles = await bucket.upload(file.path, {
@@ -103,7 +111,6 @@ router.post("/update", validatorLogin, upload.single("image"), async (req, res) 
         })
         let link = cloudFiles[0].metadata.mediaLink
         fs.unlinkSync(file.path)
-
         accountModel
           .findOneAndUpdate(
             {
@@ -215,7 +222,7 @@ router.post("/updatePassword", validatorLogin, async (req, res) => {
 
 router.post("/add", async (req, res) => {
   const { email, name, password, arrFaculty } = req.body;
-  if (!email || !name || !password || !arrFaculty) {
+  if (!email || !name || !password || arrFaculty.length === 0) {
     res.json({ code: 1, message: "Du lieu khong hop le" });
   } else {
     let user = await accountModel.findOne({ email: email });

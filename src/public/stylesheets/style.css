@@ -125,6 +125,7 @@
     background-color: #6493b3;
     position:fixed;
     left: 0;
+    overflow-y: scroll;
 }
 .tungkhoa{
     padding: 2%;
@@ -141,11 +142,20 @@
     width: 100%;
 }
 
+#index_create_add_user{
+    cursor: pointer;
+}
+
 .index_add_user_alert{
     margin: 4px;
     text-align: center;
     display: none;
 }
+
+#list_faculty {
+    list-style-type: none;
+}
+
 .index_button_link_image_new_post{
     display: none;
 }
@@ -222,7 +232,6 @@
     width: 49%;
 }
 
-
 .index_post{
     padding: 1em;
     overflow: hidden;
@@ -252,8 +261,16 @@
 }
 
 .index_button_in_the_post{
+    border-radius: 20%;
+    margin-left: 10px;
+    padding:0;
     background: none;
     display: block;
+}
+
+.index_button_in_the_post:focus {
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(126, 239, 104, 0.6);
+     outline: 0 none;
 }
 
 .index_on_the_cmt{
@@ -267,7 +284,7 @@
 .index_cmt{
     display: flex;
     width: 100%;
-    margin-top: 2%;
+    margin: 2% 0;
 }
 .index_da_cmt{
     margin-left: 5%;
@@ -289,22 +306,27 @@
     padding: 10px;
 }
 .index_avt_cmt{
-    width: 30px;
-    height: 30px;
+    width: 35px;
+    height: 35px;
     border-radius: 25px;
 }
 .index_cmt_texbox{
+    margin: 0 5px;
+    outline: none;
     width: 100%;
     border-radius:30px;
 }
 
-
 .index_button_in_the_cmt{
     width: 100%;
-    outline: none;
     background: none;
     display: block;
     border-radius: 50px;   
+}
+
+.index_button_in_the_cmt:focus {
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(126, 239, 104, 0.6);
+     outline: 0 none;
 }
 
 .header_thongbao_quantrong{
@@ -465,7 +487,6 @@
  }
 
  .page_of_list:hover:not(.active) {
-     
     text-decoration: none;
     background-color: #ddd;
   }
@@ -627,3 +648,47 @@
         }  
     }
 }
+
+input[type="text"]:focus,
+input[type="password"]:focus,
+textarea:focus {
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(126, 239, 104, 0.6);
+  outline: 0 none;
+}
+
+.lds-ring {
+    display: inline-block;
+    position: relative;
+    width: 60px;
+    height: 60px;
+  }
+  .lds-ring div {
+    box-sizing: border-box;
+    display: block;
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    margin: 8px;
+    border: 4px solid #fff;
+    border-radius: 50%;
+    animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+    border-color:blue transparent transparent transparent;
+  }
+  .lds-ring div:nth-child(1) {
+    animation-delay: -0.45s;
+  }
+  .lds-ring div:nth-child(2) {
+    animation-delay: -0.3s;
+  }
+  .lds-ring div:nth-child(3) {
+    animation-delay: -0.15s;
+  }
+  @keyframes lds-ring {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+  

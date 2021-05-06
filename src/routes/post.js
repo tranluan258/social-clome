@@ -26,6 +26,10 @@ router.post("/add", validatorLogin, upload.single("attachment"), async (req, res
 
   if (user) {
     if (files) { 
+      if(files.mimetype.split("/")[0] != "image") {
+        fs.unlinkSync(files.path)
+        return res.json({ code: 4, message: "Du lieu khong hop le" });
+      }
       let tmp = files.originalname.split(".")     
       let name = tmp[0]+new Date().getTime()+"."+tmp[1]
       const cloudFiles = await bucket.upload(files.path, {
@@ -117,7 +121,6 @@ router.delete("/delete/:id", validatorLogin, async (req, res) => {
         });
       })
       .catch(() => res.json({ code: 1, message: "Xoa that bai" }))
-      .catch((err) => res.json({ code: 1, message: "Xoa that bai" }));
   }
 });
 
@@ -137,6 +140,10 @@ router.post("/update", validatorLogin, upload.single("image"), async (req, res) 
   if (user && post) {
     const oldLink =  post.user.email + "/" + post.nameFile
     if (file) {
+      if(file.mimetype.split("/")[0] != "image") {
+        fs.unlinkSync(file.path)
+        return res.json({ code: 4, message: "Du lieu khong hop le" });
+      }
       let tmp = file.originalname.split(".")     
       let name = tmp[0]+new Date().getTime()+"."+tmp[1]
       const cloudFiles = await bucket.upload(file.path, {
@@ -233,24 +240,18 @@ router.post("/update", validatorLogin, upload.single("image"), async (req, res) 
 router.post("/load",  async (req, res) => {
   const id = req.session.passport.user
   var {check, start, limit } = req.body;
-  postModel.count().then(numDocs => {
-    if(limit*start - numDocs < limit){
-      limit = limit*start - numDocs
-    }
-  });
-
   let post = null
   if(check != ""){
     post = await postModel
     .find({"user.id": check})
     .sort({ time: -1 })
-    .skip(limit * start)
+    .skip(10 * start)
     .limit(limit);
   } else {
     post = await postModel
     .find()
     .sort({ time: -1 })
-    .skip(limit * start)
+    .skip(10 * start)
     .limit(limit);
   }
   const comments = await commentsModel.find()

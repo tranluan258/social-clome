@@ -19,7 +19,7 @@ passport.deserializeUser((id, done) => {
 passport.use(new GoogleStrategy({
     clientID: CLIENT_ID ,
     clientSecret: CLIENT_SECRET,
-    callbackURL: '/auth/google/callback'
+    callbackURL: 'https://new-social-clone.herokuapp.com/auth/google/callback'
 }, (accessToken, refreshToken, profile, done) => {
     accountModel.findOne({id: profile.id}).then(existingUser => {
         if(profile._json.hd == "student.tdtu.edu.vn"){

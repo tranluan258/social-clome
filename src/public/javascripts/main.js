@@ -43,7 +43,6 @@ function scrollLoadData() {
   if (check.length >= 21 && path === 'profile' || check === "") {
     $(window).scroll( () => {
       if (Math.abs($(window).scrollTop() - ($(document).height() - $(window).height())) < 1 ) {
-        renderLoading()
         fetch("/post/load", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -55,86 +54,89 @@ function scrollLoadData() {
         })
           .then((response) => response.json())
           .then((json) => {
-            $("#message").remove();
-            if (json.code === 0) {
-              let id = $("#index_id_user").html();
-              start = start + 1;
-              let p = json.post;
-              let comments = json.comments;
-              p.forEach((post) => {
-                if (id === post.user.id) {
-                  if (post.urlFile.length > 0) {
-                    $(".index_body_post").append(renderPostImage(post));
-                    comments.forEach((cmt) => {
-                      if (cmt.idPost === post.id) {
-                        if(cmt.user.id === id){
-                          renderCommentLikeUser(cmt)
-                        }else {
-                          renderCommentDifferentUser(cmt)
+            setTimeout( () => {
+              $("#message").remove();
+              if (json.code === 0) {
+                let id = $("#index_id_user").html();
+                start = start + 1;
+                let p = json.post;
+                let comments = json.comments;
+                p.forEach((post) => {
+                  if (id === post.user.id) {
+                    if (post.urlFile.length > 0) {
+                      $(".index_body_post").append(renderPostImage(post));
+                      comments.forEach((cmt) => {
+                        if (cmt.idPost === post.id) {
+                          if(cmt.user.id === id){
+                            renderCommentLikeUser(cmt)
+                          }else {
+                            renderCommentDifferentUser(cmt)
+                          }
                         }
-                      }
-                    });
-                  } else if (post.idVideos.length > 0) {
-                    $(".index_body_post").append(renderPostVideo(post))
-                    comments.forEach((cmt) => {
-                      if (cmt.idPost === post.id) {
-                        if(cmt.user.id === id){
-                          renderCommentLikeUser(cmt)
-                        }else {
-                          renderCommentDifferentUser(cmt)
+                      });
+                    } else if (post.idVideos.length > 0) {
+                      $(".index_body_post").append(renderPostVideo(post))
+                      comments.forEach((cmt) => {
+                        if (cmt.idPost === post.id) {
+                          if(cmt.user.id === id){
+                            renderCommentLikeUser(cmt)
+                          }else {
+                            renderCommentDifferentUser(cmt)
+                          }
                         }
-                      }
-                    });
+                      });
+                    } else {
+                      $(".index_body_post").append(renderPostChar(post))
+                      comments.forEach((cmt) => {
+                        if (cmt.idPost === post.id) {
+                          if(cmt.user.id === id){
+                            renderCommentLikeUser(cmt)
+                          }else {
+                            renderCommentDifferentUser(cmt)
+                          }
+                        }
+                      })
+                    }
                   } else {
-                    $(".index_body_post").append(renderPostChar(post))
-                    comments.forEach((cmt) => {
-                      if (cmt.idPost === post.id) {
-                        if(cmt.user.id === id){
-                          renderCommentLikeUser(cmt)
-                        }else {
-                          renderCommentDifferentUser(cmt)
+                    if (post.urlFile.length > 0) {
+                      $(".index_body_post").append(renderPostImageDifferentUser(post));
+                      comments.forEach((cmt) => {
+                        if (cmt.idPost === post.id) {
+                          if(cmt.user.id === id){
+                            renderCommentLikeUser(cmt)
+                          }else {
+                            renderCommentDifferentUser(cmt)
+                          }
                         }
-                      }
-                    })
+                      });
+                    } else if (post.idVideos.length > 0) {
+                      $(".index_body_post").append(renderPostVideoDifferentUser(post));
+                      comments.forEach((cmt) => {
+                        if (cmt.idPost === post.id) {
+                          if(cmt.user.id === id){
+                            renderCommentLikeUser(cmt)
+                          }else {
+                            renderCommentDifferentUser(cmt)
+                          }
+                        }
+                      });
+                    } else {
+                      $(".index_body_post").append(renderPostCharDifferentUser(post))
+                      comments.forEach((cmt) => {
+                        if (cmt.idPost === post.id) {
+                          if(cmt.user.id === id){
+                            renderCommentLikeUser(cmt)
+                          }else {
+                            renderCommentDifferentUser(cmt)
+                          }
+                        }
+                      })
+                    }
                   }
-                } else {
-                  if (post.urlFile.length > 0) {
-                    $(".index_body_post").append(renderPostImageDifferentUser(post));
-                    comments.forEach((cmt) => {
-                      if (cmt.idPost === post.id) {
-                        if(cmt.user.id === id){
-                          renderCommentLikeUser(cmt)
-                        }else {
-                          renderCommentDifferentUser(cmt)
-                        }
-                      }
-                    });
-                  } else if (post.idVideos.length > 0) {
-                    $(".index_body_post").append(renderPostVideoDifferentUser(post));
-                    comments.forEach((cmt) => {
-                      if (cmt.idPost === post.id) {
-                        if(cmt.user.id === id){
-                          renderCommentLikeUser(cmt)
-                        }else {
-                          renderCommentDifferentUser(cmt)
-                        }
-                      }
-                    });
-                  } else {
-                    $(".index_body_post").append(renderPostCharDifferentUser(post))
-                    comments.forEach((cmt) => {
-                      if (cmt.idPost === post.id) {
-                        if(cmt.user.id === id){
-                          renderCommentLikeUser(cmt)
-                        }else {
-                          renderCommentDifferentUser(cmt)
-                        }
-                      }
-                    })
-                  }
-                }
-              });
-            }
+                });
+              }
+            }, 2000)
+            renderLoading()
           })
           .catch((err) => console.log(err));
       }
@@ -176,6 +178,7 @@ function addUser() {
         .then((res) => res.json())
         .then((json) => {
           if (json.code == 0) {
+            $("#btn_add_user").unbind("click")
             $("#index_modal_add_user").modal("hide");
             renderAlert()
           } else if (json.code === 1) {
@@ -262,7 +265,6 @@ function updateAccount(){
             if(xhr.status === 200 && xhr.readyState === 4 ){
               let json = JSON.parse(xhr.responseText)
               if(json.code === 0){
-                if(json.code === 0) {
                   let acc = json.acc
                   $("#profile_label_name").html(acc.name)
                   $(".profile_info_name").html(acc.name)
@@ -278,8 +280,10 @@ function updateAccount(){
                     avt.src = acc.img
                   })
                   $("#index_modal_edit_profile").modal("hide")
+              } else if (json.code === 4) {
+                  $(".index_alert_post_fail").css("display", "block");
+                  $(".index_alert_post_fail").html("Not Image!");
                 }
-              }
             }
           })
           xhr.send(form)
@@ -290,7 +294,7 @@ function updateAccount(){
 }
 
 function addPost() {
-  $("#index_create_new_post").click(function () {
+  $("#index_create_new_post").click( () => {
     $("#index_modal_new_post").modal("show");
     clearDataModalPost()
     $("#btn-post-ytb").click(() => {
@@ -300,7 +304,6 @@ function addPost() {
       $("#input-post-img").click();
       $("#input-post-img").css("display", "block");
     });
-    $("#data-post").focus()
   });
   $("#btn-create-post").click((e) => {
     let btn = e.target
@@ -360,6 +363,9 @@ function addPost() {
           } else if (json.code === 3) {
             $(".index_alert_post_fail").css("display", "block");
             $(".index_alert_post_fail").html("Link Youtube is Invalid!");
+          } else if (json.code === 4) {
+            $(".index_alert_post_fail").css("display", "block");
+            $(".index_alert_post_fail").html("Not Image!");
           }else {
             $(".index_alert_post_fail").css("display", "block");
             $(".index_alert_post_fail").html("Try again!");
@@ -478,6 +484,9 @@ function editPost(e) {
           } else if (json.code === 3) {
             $(".index_alert_post_fail").css("display", "block");
             $(".index_alert_post_fail").html("Link Youtube Invalid!");
+          } else if (json.code === 4) {
+            $(".index_alert_post_fail").css("display", "block");
+            $(".index_alert_post_fail").html("Not Image!");
           }else {
             $(".index_alert_post_fail").css("display", "block");
             $(".index_alert_post_fail").html("Try again!");
@@ -547,14 +556,15 @@ function deleteComments(e) {
 
 function addNotification() {
   $("#button_create_notification").click(() => {
+    $("#index_modal_create_noti").modal("show")
+    $(".index_add_user_alert").css("display", "none")
     $("#title-notification").val("")
     $("#data-notification").val("")
-    $("#index_modal_create_noti").modal("show")
     $("#datepicker").datepicker({         
       autoclose: true,         
       todayHighlight: true 
       }).datepicker('update', new Date())
-
+    
      $("#btn_create_notification").click(() => {
         let datePost = $("#datepicker").find("input").val()
         let title = $("#title-notification").val()
@@ -582,6 +592,7 @@ function addNotification() {
               if(json.code === 0) {
                 let notification = json.notification
                 renderNotification(notification)
+                $("#btn_create_notification").unbind("click")
                 $("#index_modal_create_noti").modal("hide")
                 renderAlert()
                 socket.emit("client-send-notification",notification)
@@ -936,12 +947,6 @@ function renderAlert() {
 
 function renderLoading() {
     $(".alert-new-notification").append(`
-      <div id="message" class="fixed-top" >
-        <div style="padding: 5px;">
-            <div id="inner-message" class="alert alert-success">
-                <span>Loading......<span/>
-            </div>
-        </div>
-      </div>
+    <div class="lds-ring fixed-top" id="message"><div></div><div></div><div></div><div></div></div>
     `)
 }

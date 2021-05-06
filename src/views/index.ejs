@@ -62,7 +62,7 @@
                             </li>
                         </div>
                         <li class="nav-item index_logout">
-                            <a class="nav-link mr-sm-2" href="/account/logout">Logout</a>
+                            <a class="nav-link mr-sm-2" href="/account/logout"><i class="fas fa-sign-out-alt"></i></a>
                         </li>
                     </ul>
                 </div>
@@ -160,7 +160,7 @@
                                 <div class="index_cmt" id="<%= p.id %>">
                                     <img class="index_avt_cmt" src="<%= user.img %>">
                                     <input type="text" class="form-control index_cmt_texbox" id="index_data_cmt<%= p.id %>" value="" placeholder="Your comment..." name="">
-                                    <button id="<%= p.id %>" class="btn btn-primary" onclick="addComments(this)">Send</button>
+                                    <button id="<%= p.id %>" class="btn btn-primary btn-sm" onclick="addComments(this)">Send</button>
                                 </div>
                                 <!--Binh luan bi an-->
                                <% comments.forEach(c => { %>

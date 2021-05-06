@@ -18,14 +18,13 @@ const facultyRouter = require('./routes/faculty')
 const notificationsRouter = require('./routes/notification')
 
 const app = express();
-
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 app.use(logger('dev'));
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({extended: false}));
 app.use(cookieParser());
 app.use(flash())
 
@@ -33,27 +32,26 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'users')));
-app.use(session({ secret: 'password_secret', path: '/', httpOnly: true, secure: false, maxAge: null }))
+app.use(session({secret: 'password_secret', path: '/', httpOnly: true, secure: false, maxAge: null}))
 
 app.use((req, res, next) => {
-  req.vars =  {root: __dirname}
+  req.vars = {root: __dirname}
   next()
 })
 
-app.use('/faculty',facultyRouter)
-app.use('/notification',notificationsRouter)
-app.use('/post',postRouter);
+app.use('/faculty', facultyRouter)
+app.use('/notification', notificationsRouter)
+app.use('/post', postRouter);
 app.use('/account', accountRouter);
 app.use('/comments', commentRouter);
 app.use('/', siteRouter);
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   next(createError(404));
 });
-
 // error handler
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
