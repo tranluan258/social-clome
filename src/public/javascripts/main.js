@@ -200,6 +200,8 @@ function addUser() {
 function changePassword() {
   $("#index_change_password").click(() => {
     $("#index_modal_change_password").modal("show");
+    $("#old_password").val("");
+    $("#new_password").val("");
     $("#btn_change_password").click(() => {
       let oldPassword = $("#old_password").val();
       let newPassword = $("#new_password").val();
@@ -213,6 +215,7 @@ function changePassword() {
       })
         .then((res) => res.json())
         .then((json) => {
+          $("#btn_change_password").unbind("click")
           if (json.code === 0) {
             $("#index_modal_change_password").modal("hide");
             renderAlert()
@@ -456,6 +459,7 @@ function editPost(e) {
       xhr.addEventListener("load", (e) => {
         if (xhr.readyState === 4 && xhr.status === 200) {
           let json = JSON.parse(xhr.responseText);
+          $("#btn-edit-post").unbind("click")
           if (json.code === 0) {
             let post = json.post;
             if (post.urlFile.length > 0) {

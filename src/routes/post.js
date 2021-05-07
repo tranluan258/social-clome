@@ -167,12 +167,9 @@ router.post("/update", validatorLogin, upload.single("image"), async (req, res) 
         }
       )
       .then( doc => {
-        bucket.deleteFiles({ 
-          prefix: oldLink
-        }).then(() =>  res.json({code: 0, message:"Thanh cong", post: doc}))
-      })
+        res.json({code: 0, message:"Thanh cong", post: doc})})
       .catch( err => console.log(err))
-    } else if (YoutubeId != null) {
+    } else if (YoutubeId) {
       validator.validateVideoID(YoutubeId, (result, err) => {
         if (err) {
           res.json({ code: 2, message: "Sai link" });
@@ -197,7 +194,7 @@ router.post("/update", validatorLogin, upload.single("image"), async (req, res) 
         }
       });
     } else {
-      if(clearImage || clearYoutube) {
+      if(clearImage === "true") {
         postModel.findOneAndUpdate(
           {
             id: idPost
@@ -217,7 +214,28 @@ router.post("/update", validatorLogin, upload.single("image"), async (req, res) 
           res.json({code: 0, message:"Thanh cong", post: doc})
         })
         .catch( err => console.log(err))
-      } else {
+      }else  if(clearYoutube === "true") {
+        postModel.findOneAndUpdate(
+          {
+            id: idPost
+          },
+          {
+            urlFile: "",
+            nameFile: "",
+            idVideos: "",
+            data: data
+          },
+          {
+            new: true,
+            runValidators: true
+          }
+        )
+        .then( doc =>{
+          res.json({code: 0, message:"Thanh cong", post: doc})
+        })
+        .catch( err => console.log(err))
+      }
+       else {
         postModel.findOneAndUpdate(
           {
             id: idPost
