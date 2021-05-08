@@ -215,8 +215,8 @@ function changePassword() {
       })
         .then((res) => res.json())
         .then((json) => {
-          $("#btn_change_password").unbind("click")
           if (json.code === 0) {
+            $("#btn_change_password").unbind("click")
             $("#index_modal_change_password").modal("hide");
             renderAlert()
           } else if (json.code === 2) {
@@ -459,8 +459,8 @@ function editPost(e) {
       xhr.addEventListener("load", (e) => {
         if (xhr.readyState === 4 && xhr.status === 200) {
           let json = JSON.parse(xhr.responseText);
-          $("#btn-edit-post").unbind("click")
           if (json.code === 0) {
+            $("#btn-edit-post").unbind("click")
             let post = json.post;
             if (post.urlFile.length > 0) {
               $(`#img${post.id}`).remove()
@@ -472,6 +472,7 @@ function editPost(e) {
             } else if (post.idVideos.length > 0) {
               $(`#img${post.id}`).remove()
               $(`#iframe${post.id}`).remove()
+              $(`#data${post.id}`).html(post.data)
               renderIframe(post)
               $("#index_modal_edit_post").modal("hide");
               renderAlert()
@@ -697,6 +698,7 @@ function clearDataModalAddUser() {
   $("#email_user").val("")
   $("#name_user").val("")
   $("#password_user").val("")
+  $(".index_add_user_alert").css("display", "none");
   $("input[name='faculty']").prop("checked",false)
 }
 
