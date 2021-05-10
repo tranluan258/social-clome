@@ -42,7 +42,7 @@ function scrollLoadData() {
   let limit = 10;
   if (check.length >= 21 && path === 'profile' || check === "") {
     $(window).scroll( () => {
-      if (Math.abs($(window).scrollTop() - ($(document).height() - $(window).height())) < 1 ) {
+      if (Math.abs($(window).scrollTop() - ($(document).height() - $(window).height())) < 2 ) {
         fetch("/post/load", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -346,18 +346,16 @@ function addPost() {
         if (xhr.readyState === 4 && xhr.status === 200) {
           let json = JSON.parse(xhr.responseText);
           if (json.code === 0) {
+            $("#index_modal_new_post").modal("hide");
             let post = json.post;
             if (post.urlFile.length > 0) {
               $(".index_body_post").prepend(renderPostImage(post))
-              $("#index_modal_new_post").modal("hide");
               renderAlert()
             } else if (post.idVideos.length > 0) {
               $(".index_body_post").prepend(renderPostVideo(post))
-              $("#index_modal_new_post").modal("hide");
               renderAlert()
             } else {
               $(".index_body_post").prepend(renderPostChar(post))
-              $("#index_modal_new_post").modal("hide");
               renderAlert()
             }
           } else if (json.code === 1) {
