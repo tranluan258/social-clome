@@ -643,6 +643,22 @@
 
 @media screen and (max-width: 450px){
     @media screen and (min-width: 400px){
+        .navbar-toggler {
+           border: 0;
+           padding: 0;
+        }
+        .aa{
+            margin-top: 29%;
+        }  
+    }
+}
+
+@media screen and (max-width: 400px){
+    @media screen and (min-width: 350px){
+        .navbar-toggler {
+           border: 0;
+           padding: 0;
+        }
         .aa{
             margin-top: 29%;
         }  
