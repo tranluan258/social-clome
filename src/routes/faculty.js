@@ -17,6 +17,7 @@ router.get('/', validatorLogin, async (req, res) => {
     notificationModel
     .find()
     .skip((limit * number) - limit)
+    .sort({ time: -1 })
     .exec((err, notification) => {
         notificationModel.countDocuments((err,count) => {
             res.render('faculty', {user,faculty, notification, currentPage: number, countPage: Math.ceil(count/limit), active: "all"})
@@ -34,6 +35,7 @@ router.get('/:id', validatorLogin, async (req, res) => {
     notificationModel
     .find({"faculty.idFaculty" : id})
     .skip((limit * number) - limit)
+    .sort({ time: -1 })
     .exec((err, notification) => {
         notificationModel.find({"faculty.idFaculty" : id}).countDocuments((err,count) => {
             res.render('faculty', {user,faculty, notification, currentPage: number, countPage: Math.ceil(count/limit), active: id })

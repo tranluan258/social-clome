@@ -503,17 +503,19 @@ function editPost(e) {
 
 function deletePost(e) {
   let id = e.id;
-  fetch("/post/delete/" + id, {
-    method: "DELETE",
-  })
-    .then((res) => res.json())
-    .then((json) => {
-      if (json.code === 0) {
-        $(`div#${id}`).remove();
-        renderAlert()
-      }
+  if(confirm("Are you sure you want to delete this post ?")) {
+    fetch("/post/delete/" + id, {
+      method: "DELETE",
     })
-    .catch((err) => console.log(err));
+      .then((res) => res.json())
+      .then((json) => {
+        if (json.code === 0) {
+          $(`div#${id}`).remove();
+          renderAlert()
+        }
+      })
+      .catch((err) => console.log(err));
+  }
 }
 
 function addComments(e) {
@@ -543,18 +545,20 @@ function addComments(e) {
 
 function deleteComments(e) {
   let id = e.id;
-  fetch("/comments/delete/" + id, {
-    method: "DELETE",
-  })
-    .then((res) => res.json())
-    .then((json) => {
-      if (json.code === 0) {
-        socket.emit("client-send-delete-comment",id)
-        $(`div#${id}`).remove();
-        renderAlert()
-      }
+  if(confirm('Are you sure you want to delete this comment')) {
+    fetch("/comments/delete/" + id, {
+      method: "DELETE",
     })
-    .catch((err) => console.log(err));
+      .then((res) => res.json())
+      .then((json) => {
+        if (json.code === 0) {
+          socket.emit("client-send-delete-comment",id)
+          $(`div#${id}`).remove();
+          renderAlert()
+        }
+      })
+      .catch((err) => console.log(err));
+  }
 }
 
 function addNotification() {
@@ -609,17 +613,19 @@ function addNotification() {
 
 function deleteNotification(e) {
     let id = e.id
-    fetch("/notification/delete/" + id, {
-      method: "DELETE",
-    })
-      .then((res) => res.json())
-      .then((json) => {
-        if (json.code === 0) {
-          $(`li#${id}`).remove();
-          renderAlert()
-        }
+    if(confirm('Are you sure you want to delete this notification')) {
+      fetch("/notification/delete/" + id, {
+        method: "DELETE",
       })
-      .catch((err) => console.log(err));
+        .then((res) => res.json())
+        .then((json) => {
+          if (json.code === 0) {
+            $(`li#${id}`).remove();
+            renderAlert()
+          }
+        })
+        .catch((err) => console.log(err));
+    }
 }
 
 function editNotification(e) {
