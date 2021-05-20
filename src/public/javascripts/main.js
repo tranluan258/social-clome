@@ -60,6 +60,7 @@ function scrollLoadData() {
                 let id = $("#index_id_user").html();
                 start = start + 1;
                 let p = json.post;
+                let user = json.user
                 let comments = json.comments;
                 p.forEach((post) => {
                   if (id === post.user.id) {
@@ -99,7 +100,7 @@ function scrollLoadData() {
                     }
                   } else {
                     if (post.urlFile.length > 0) {
-                      $(".index_body_post").append(renderPostImageDifferentUser(post));
+                      $(".index_body_post").append(renderPostImageDifferentUser(post,user));
                       comments.forEach((cmt) => {
                         if (cmt.idPost === post.id) {
                           if(cmt.user.id === id){
@@ -110,7 +111,7 @@ function scrollLoadData() {
                         }
                       });
                     } else if (post.idVideos.length > 0) {
-                      $(".index_body_post").append(renderPostVideoDifferentUser(post));
+                      $(".index_body_post").append(renderPostVideoDifferentUser(post,user));
                       comments.forEach((cmt) => {
                         if (cmt.idPost === post.id) {
                           if(cmt.user.id === id){
@@ -121,7 +122,7 @@ function scrollLoadData() {
                         }
                       });
                     } else {
-                      $(".index_body_post").append(renderPostCharDifferentUser(post))
+                      $(".index_body_post").append(renderPostCharDifferentUser(post,user))
                       comments.forEach((cmt) => {
                         if (cmt.idPost === post.id) {
                           if(cmt.user.id === id){
@@ -778,7 +779,7 @@ function renderPostChar(post){
     </div>`
 }
 
-function renderPostCharDifferentUser(post){ 
+function renderPostCharDifferentUser(post,user){ 
   let time = moment(post.time).fromNow()
   return `<div class="card index_poster" id="${post.id}">
     <div class="card index_on_the_cmt">
@@ -790,7 +791,7 @@ function renderPostCharDifferentUser(post){
       <button type="button" class="btn btn-light index_button_cmt" id="" name="" value="" data-toggle="collapse" href="#collapseCmt${post.id}" role="button" aria-expanded="false" aria-controls="collapseCmt${post.id}"><i class="far fa-comment-dots"></i>  Comment</button>
       <div class="collapse" id="collapseCmt${post.id}">
         <div class=" index_cmt" id="${post.id}>">
-          <img id="profile_avt" class="index_avt_cmt" src="${post.user.img}">
+          <img id="profile_avt" class="index_avt_cmt" src="${user.img}">
           <input type="text" class="form-control index_cmt_texbox" id="index_data_cmt${post.id}" value="" placeholder="Your comment..." name="">
           <button id="${post.id}" class="btn btn-primary" onclick="addComments(this)">Send</button>
          </div>
@@ -829,7 +830,7 @@ function renderPostVideo(post){
   </div>`
 }
 
-function renderPostVideoDifferentUser(post){
+function renderPostVideoDifferentUser(post,user){
   let time = moment(post.time).fromNow()
   return `<div class="card index_poster" id="${post.id}">
     <div class="card index_on_the_cmt">
@@ -843,7 +844,7 @@ function renderPostVideoDifferentUser(post){
     <button type="button" class="btn btn-light index_button_cmt" id="" name="" value="" data-toggle="collapse" href="#collapseCmt${post.id}" role="button" aria-expanded="false" aria-controls="collapseCmt${post.id}"><i class="far fa-comment-dots"></i>  Comment</button>
     <div class="collapse" id="collapseCmt${post.id}">
       <div class=" index_cmt" id="${post.id}>">
-        <img id="profile_avt" class="index_avt_cmt" src="${post.user.img}">
+        <img id="profile_avt" class="index_avt_cmt" src="${user.img}">
         <input type="text" class="form-control index_cmt_texbox" id="index_data_cmt${post.id}" value="" placeholder="Your comment..." name="">
         <button id="${post.id}" class="btn btn-primary" onclick="addComments(this)">Send</button>
       </div>
@@ -882,7 +883,7 @@ function renderPostImage(post){
     </div>`
 }
 
-function renderPostImageDifferentUser(post){
+function renderPostImageDifferentUser(post,user){
   let time = moment(post.time).fromNow()
    return `<div class="card index_poster" id="${post.id}">
       <div class="card index_on_the_cmt">
@@ -896,7 +897,7 @@ function renderPostImageDifferentUser(post){
         <button type="button" class="btn btn-light index_button_cmt" id="" name="" value="" data-toggle="collapse" href="#collapseCmt${post.id}" role="button" aria-expanded="false" aria-controls="collapseCmt${post.id}"><i class="far fa-comment-dots"></i>  Comment</button>
         <div class="collapse" id="collapseCmt${post.id}">
           <div class="index_cmt" id="${post.id}>">
-            <img id="profile_avt" class="index_avt_cmt" src="${post.user.img}">
+            <img id="profile_avt" class="index_avt_cmt" src="${user.img}">
             <input type="text" class="form-control index_cmt_texbox" id="index_data_cmt${post.id}" value="" placeholder="Your comment..." name="">
             <button id="${post.id}" class="btn btn-primary" onclick="addComments(this)">Send</button>
           </div>
