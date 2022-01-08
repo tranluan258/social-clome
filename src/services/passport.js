@@ -21,7 +21,7 @@ passport.use(
     {
       clientID: CLIENT_ID,
       clientSecret: CLIENT_SECRET,
-      callbackURL: "/auth/google/callback",
+      callbackURL: "https://new-social-clone.herokuapp.com/auth/google/callback",
     },
     (accessToken, refreshToken, profile, done) => {
       accountModel.findOne({ id: profile.id }).then((existingUser) => {
