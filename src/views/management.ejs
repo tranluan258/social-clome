@@ -99,7 +99,7 @@
                                     <%})%>
                                 <%} else {%>
                                     <% user.arrFaculty.forEach(f => { %>
-                                        <% if(active == f.id) {%>
+                                        <% if(active == f.idFaculty) {%>
                                             <option selected value="/notification/management/<%=f.idFaculty%>"><%= f.name %></option>
                                         <%}else {%>
                                             <option value="/notification/management/<%=f.idFaculty%>"><%= f.name %></option>
