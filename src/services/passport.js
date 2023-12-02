@@ -21,26 +21,27 @@ passport.use(
     {
       clientID: CLIENT_ID,
       clientSecret: CLIENT_SECRET,
-      callbackURL: "https://new-social-clone.herokuapp.com/auth/google/callback",
+      // callbackURL: "https://new-social-clone.herokuapp.com/auth/google/callback",
+      callbackURL: "http://localhost:8080/auth/google/callback",
     },
     (accessToken, refreshToken, profile, done) => {
       accountModel.findOne({ id: profile.id }).then((existingUser) => {
-          if (existingUser) {
-            done(null, existingUser);
-          } else {
-            new accountModel({
-              id: profile.id,
-              name: profile._json.name,
-              email: profile._json.email,
-              img: profile._json.picture,
-              type: "0",
-            })
-              .save()
-              .then((user) => done(null, user));
-          }
+        if (existingUser) {
+          done(null, existingUser);
+        } else {
+          new accountModel({
+            id: profile.id,
+            name: profile._json.name,
+            email: profile._json.email,
+            img: profile._json.picture,
+            type: "0",
+          })
+            .save()
+            .then((user) => done(null, user));
+        }
       });
-    }
-  )
+    },
+  ),
 );
 
 passport.use(
@@ -67,7 +68,6 @@ passport.use(
         }
         return done(null, user);
       });
-    }
-  )
+    },
+  ),
 );
-
